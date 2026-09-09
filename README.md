@@ -4,7 +4,7 @@ A provenance-first AI reasoning engine for defensible decisions.
 
 ## Current state (MVP, Phase 1-2 in progress)
 
-Two modules exist so far, both backend-only:
+Two reasoning modules and a thin orchestrator connecting them, all backend-only:
 
 - **Module 1 — Context Structurer** (`POST /context/structure`): turns a
   raw decision or question, on any topic, into a structured Decision
@@ -15,13 +15,13 @@ Two modules exist so far, both backend-only:
   Integrity of Systems, Temporal Alignment, Adaptive Regeneration),
   producing findings with observation, risk/opportunity, key questions,
   evidence status, and confidence.
+- **Pipeline orchestrator** (`POST /decisions/analyze`): runs Module 1 then
+  Module 2 over the same raw input in one call.
 
-No frontend, no database, no pipeline orchestrator yet — chaining the two
-endpoints (pass Module 1's `context` into Module 2's request body) is done
-by the caller for now. See `docs/adr-0001-backend-first-module1.md` and
-`docs/adr-0002-rita-engine.md` for why, and the RiseWise project's
-`constitution.md` doc (in the attached Claude project) for the full RITA
-Framework and reasoning pipeline.
+No frontend, no database yet. See `docs/adr-0001-backend-first-module1.md`,
+`docs/adr-0002-rita-engine.md`, and `docs/adr-0003-pipeline-orchestrator.md`
+for why, and the RiseWise project's `constitution.md` doc (in the attached
+Claude project) for the full RITA Framework and reasoning pipeline.
 
 ## Running locally
 
@@ -32,12 +32,12 @@ uvicorn backend.app.main:app --reload
 ```
 
 ```bash
-POST http://localhost:8000/context/structure
+POST http://localhost:8000/decisions/analyze
 {"raw_input": "Should we do X?"}
-
-POST http://localhost:8000/rita/scan
-{"context": { ...the "context" object from the response above... }}
 ```
+
+`/context/structure` and `/rita/scan` remain independently callable if you
+only want one step, or want to re-run the RITA scan on a hand-edited context.
 
 ## Testing
 

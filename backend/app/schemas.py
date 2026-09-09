@@ -121,3 +121,14 @@ class ScanRequest(BaseModel):
 class ScanResponse(BaseModel):
     scan: RitaScan
     context: DecisionContext
+
+
+class AnalyzeResponse(BaseModel):
+    """Output of the pipeline orchestrator: Module 1 followed by Module 2,
+    run over the same raw input. Reuses StructureRequest as the request
+    shape — analyzing is structuring-then-scanning, so it takes the same
+    single raw_input field."""
+
+    raw_input: str
+    context: DecisionContext
+    scan: RitaScan

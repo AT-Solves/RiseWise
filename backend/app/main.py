@@ -1,9 +1,10 @@
 """RiseWise backend — MVP entrypoint.
 
-Implements Module 1 (Context Structurer) and Module 2 (RITA Engine). See
-docs/adr-0001-backend-first-module1.md and docs/adr-0002-rita-engine.md for
-the reasoning behind each, and the RiseWise project constitution for the
-full RITA Framework and reasoning pipeline these modules are steps 1-2 of.
+Implements Module 1 (Context Structurer), Module 2 (RITA Engine), and a
+thin pipeline orchestrator that chains them. See docs/adr-0001,
+docs/adr-0002, and docs/adr-0003 for the reasoning behind each, and the
+RiseWise project constitution for the full RITA Framework and reasoning
+pipeline these are steps 1-2 of.
 """
 
 from __future__ import annotations
@@ -11,12 +12,18 @@ from __future__ import annotations
 from fastapi import Depends, FastAPI, HTTPException
 
 from .llm_client import AnthropicLLMClient, LLMClient
-from .schemas import ScanRequest, ScanResponse, StructureRequest, StructureResponse
+from .schemas import (
+    AnalyzeResponse,
+    ScanRequest,
+    ScanResponse,
+    StructureRequest,
+    StructureResponse,
+)
 
 app = FastAPI(
     title="RiseWise API",
     description="A provenance-first AI reasoning engine for defensible decisions.",
-    version="0.2.0",
+    version="0.3.0",
 )
 
 
@@ -66,3 +73,20 @@ def rita_scan(
     except RuntimeError as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
     return ScanResponse(scan=scan, context=request.context)
+
+
+@app.post("/decisions/analyze", response_model=AnalyzeResponse)
+def analyze_decision(
+    request: StructureRequest, llm: LLMClient = Depends(get_llm_client)
+) -> AnalyzeResponse:
+    """Pipeline orchestrator: run Module 1 then Module 2 over the same raw
+    input, in one call. A convenience layer only — /context/structure and
+    /rita/scan remain independently callable and independently correct;
+    this endpoint does not add any reasoning of its own (see adr-0003).
+    """
+    try:
+        context = llm.structure(request.raw_input)
+        scan = llm.rita_scan(context)
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+    return AnalyzeResponse(raw_input=request.raw_input, context=context, scan=scan)
