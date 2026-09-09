@@ -72,3 +72,52 @@ class DecisionContext(BaseModel):
 class StructureResponse(BaseModel):
     context: DecisionContext
     raw_input: str
+
+
+class RitaDimension(str, Enum):
+    """The four RITA Framework dimensions (constitution section 4)."""
+
+    RELATIONAL_INTEGRITY = "relational_integrity"
+    INTEGRITY_OF_SYSTEMS = "integrity_of_systems"
+    TEMPORAL_ALIGNMENT = "temporal_alignment"
+    ADAPTIVE_REGENERATION = "adaptive_regeneration"
+
+
+class ConfidenceLevel(str, Enum):
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+
+
+class RitaFinding(BaseModel):
+    """One finding from the RITA Scan (constitution section 6, Step 2).
+
+    Every finding must carry all five fields — a dimension tag without an
+    evidence status or confidence level is not a defensible finding.
+    """
+
+    dimension: RitaDimension
+    observation: str = Field(..., description="What was observed about the decision along this dimension.")
+    risk_or_opportunity: str = Field(..., description="The risk or opportunity this observation implies.")
+    key_questions: List[str] = Field(
+        default_factory=list, description="Open questions this finding raises, for the user or a later pipeline step."
+    )
+    evidence_status: EvidenceStatus
+    confidence: ConfidenceLevel
+
+
+class RitaScan(BaseModel):
+    """Output of Module 2 (RITA Engine). A flat, taggable list rather than a
+    fixed one-slot-per-dimension struct, since a decision may surface zero,
+    one, or several findings under any single dimension."""
+
+    findings: List[RitaFinding] = Field(default_factory=list)
+
+
+class ScanRequest(BaseModel):
+    context: DecisionContext
+
+
+class ScanResponse(BaseModel):
+    scan: RitaScan
+    context: DecisionContext

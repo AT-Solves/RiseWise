@@ -1,9 +1,9 @@
 """RiseWise backend — MVP entrypoint.
 
-Implements Module 1 (Context Structurer) only, by design: see
-docs/adr-0001-backend-first-module1.md for why the backend was built before
-any frontend or database. See the RiseWise project constitution for the
-full RITA Framework and reasoning pipeline this module is step 1 of.
+Implements Module 1 (Context Structurer) and Module 2 (RITA Engine). See
+docs/adr-0001-backend-first-module1.md and docs/adr-0002-rita-engine.md for
+the reasoning behind each, and the RiseWise project constitution for the
+full RITA Framework and reasoning pipeline these modules are steps 1-2 of.
 """
 
 from __future__ import annotations
@@ -11,18 +11,18 @@ from __future__ import annotations
 from fastapi import Depends, FastAPI, HTTPException
 
 from .llm_client import AnthropicLLMClient, LLMClient
-from .schemas import StructureRequest, StructureResponse
+from .schemas import ScanRequest, ScanResponse, StructureRequest, StructureResponse
 
 app = FastAPI(
     title="RiseWise API",
     description="A provenance-first AI reasoning engine for defensible decisions.",
-    version="0.1.0",
+    version="0.2.0",
 )
 
 
 def get_llm_client() -> LLMClient:
-    """FastAPI dependency. Overridden in tests with a fake so they run
-    without network access or a real API key."""
+    """FastAPI dependency, shared by every reasoning endpoint. Overridden in
+    tests with a fake so they run without network access or a real API key."""
     return AnthropicLLMClient()
 
 
@@ -38,8 +38,8 @@ def structure_context(
     """Structure ANY raw decision or question into a Decision Context.
 
     This endpoint makes no assumption about domain, topic, or scenario —
-    generalization is the LLM's job (see llm_client.SYSTEM_PROMPT), not
-    hardcoded logic here.
+    generalization is the LLM's job (see llm_client.STRUCTURE_SYSTEM_PROMPT),
+    not hardcoded logic here.
     """
     try:
         context = llm.structure(request.raw_input)
@@ -48,3 +48,21 @@ def structure_context(
         # than silently fabricating a structure — constitution section 16.
         raise HTTPException(status_code=503, detail=str(exc)) from exc
     return StructureResponse(context=context, raw_input=request.raw_input)
+
+
+@app.post("/rita/scan", response_model=ScanResponse)
+def rita_scan(
+    request: ScanRequest, llm: LLMClient = Depends(get_llm_client)
+) -> ScanResponse:
+    """Scan a Decision Context through the four RITA dimensions.
+
+    Takes an already-structured Decision Context (the output of
+    /context/structure) rather than raw input — this module reasons over
+    structure, not text, keeping it independent of how that structure was
+    produced (constitution section 13: keep reasoning modules independent).
+    """
+    try:
+        scan = llm.rita_scan(request.context)
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+    return ScanResponse(scan=scan, context=request.context)
