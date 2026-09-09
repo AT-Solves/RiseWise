@@ -7,9 +7,18 @@ touching main.py, and so it can be replaced with a fake in tests
 (constitution section 13: keep reasoning modules independent; avoid hidden
 hardcoded assumptions).
 
-Currently backs:
+Two providers are implemented, both behind the same LLMClient Protocol:
+- OllamaLLMClient: a self-hosted open model, the default (see
+  docs/adr-0004-self-hosted-ollama-default.md for why).
+- AnthropicLLMClient: the Anthropic API, opt-in via RISEWISE_LLM_PROVIDER.
+
+Both back the same two reasoning capabilities:
 - Module 1, Context Structurer (structure)
 - Module 2, RITA Engine (rita_scan)
+
+The system prompts below are provider-agnostic and shared by both classes —
+the choice of provider changes how the LLM is called, not what it's asked
+to do.
 """
 
 from __future__ import annotations
@@ -117,11 +126,92 @@ class LLMClient(Protocol):
         ...
 
 
-class AnthropicLLMClient:
-    """Default RiseWise LLM client, backed by the Anthropic API.
+class OllamaLLMClient:
+    """Default RiseWise LLM client: a self-hosted model served by Ollama
+    (https://ollama.com), reached over its local REST API.
 
-    Reads ANTHROPIC_API_KEY and RISEWISE_LLM_MODEL from the environment —
-    never hardcode credentials or a model name (constitution section 13).
+    Nothing here trains a model — Ollama runs an existing open-weight model
+    (e.g. Llama, Qwen, Mistral) that you pull and run yourself, so RiseWise
+    does not depend on a third-party API for its reasoning. See
+    docs/adr-0004-self-hosted-ollama-default.md.
+
+    Reads RISEWISE_OLLAMA_HOST and RISEWISE_OLLAMA_MODEL from the
+    environment. `client` is injectable so tests can pass an
+    httpx.Client(transport=httpx.MockTransport(...)) instead of hitting a
+    real server.
+    """
+
+    def __init__(
+        self,
+        host: Optional[str] = None,
+        model: Optional[str] = None,
+        client: Optional[object] = None,
+    ) -> None:
+        self.host = (host or os.environ.get("RISEWISE_OLLAMA_HOST", "http://localhost:11434")).rstrip("/")
+        self.model = model or os.environ.get("RISEWISE_OLLAMA_MODEL", "llama3.1")
+        self._injected_client = client
+
+    def _call(self, system_prompt: str, user_content: str) -> dict:
+        import httpx
+
+        http_client = self._injected_client or httpx.Client(timeout=60.0)
+        try:
+            response = http_client.post(
+                f"{self.host}/api/chat",
+                json={
+                    "model": self.model,
+                    "messages": [
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_content},
+                    ],
+                    "stream": False,
+                    "format": "json",
+                },
+            )
+            response.raise_for_status()
+        except httpx.ConnectError as exc:
+            raise RuntimeError(
+                f"Could not reach Ollama at {self.host}. Is it running? "
+                f"Try `ollama serve` (and `ollama pull {self.model}` if you "
+                "haven't already). See .env.example to point at a different host."
+            ) from exc
+        except httpx.HTTPStatusError as exc:
+            raise RuntimeError(
+                f"Ollama returned {exc.response.status_code} for model '{self.model}'. "
+                f"Has it been pulled? Try `ollama pull {self.model}`."
+            ) from exc
+        finally:
+            if self._injected_client is None:
+                http_client.close()
+
+        body = response.json()
+        content = body.get("message", {}).get("content", "")
+        try:
+            return json.loads(content)
+        except json.JSONDecodeError as exc:
+            raise RuntimeError(
+                f"Ollama model '{self.model}' did not return valid JSON. Smaller/weaker "
+                "local models sometimes fail to follow the JSON-only instruction reliably; "
+                "consider a different model or switch RISEWISE_LLM_PROVIDER=anthropic."
+            ) from exc
+
+    def structure(self, raw_input: str) -> DecisionContext:
+        payload = self._call(STRUCTURE_SYSTEM_PROMPT, raw_input)
+        return DecisionContext.model_validate(payload)
+
+    def rita_scan(self, context: DecisionContext) -> RitaScan:
+        payload = self._call(RITA_SCAN_SYSTEM_PROMPT, context.model_dump_json())
+        return RitaScan.model_validate(payload)
+
+
+class AnthropicLLMClient:
+    """Opt-in RiseWise LLM client, backed by the Anthropic API. Used when
+    RISEWISE_LLM_PROVIDER=anthropic — e.g. if a self-hosted model's output
+    quality isn't good enough for a given task.
+
+    Reads ANTHROPIC_API_KEY and RISEWISE_ANTHROPIC_MODEL from the
+    environment — never hardcode credentials or a model name (constitution
+    section 13).
     """
 
     def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None) -> None:
@@ -131,7 +221,7 @@ class AnthropicLLMClient:
         # failure inside the code path that can turn it into a clean 503
         # instead of an uncaught 500 (see main.py).
         self.api_key = api_key or os.environ.get("ANTHROPIC_API_KEY")
-        self.model = model or os.environ.get("RISEWISE_LLM_MODEL", "claude-sonnet-4-5")
+        self.model = model or os.environ.get("RISEWISE_ANTHROPIC_MODEL", "claude-sonnet-4-5")
 
     def _require_key(self) -> None:
         if not self.api_key:

@@ -9,9 +9,11 @@ pipeline these are steps 1-2 of.
 
 from __future__ import annotations
 
+import os
+
 from fastapi import Depends, FastAPI, HTTPException
 
-from .llm_client import AnthropicLLMClient, LLMClient
+from .llm_client import AnthropicLLMClient, LLMClient, OllamaLLMClient
 from .schemas import (
     AnalyzeResponse,
     ScanRequest,
@@ -28,9 +30,15 @@ app = FastAPI(
 
 
 def get_llm_client() -> LLMClient:
-    """FastAPI dependency, shared by every reasoning endpoint. Overridden in
-    tests with a fake so they run without network access or a real API key."""
-    return AnthropicLLMClient()
+    """FastAPI dependency, shared by every reasoning endpoint. Defaults to a
+    self-hosted Ollama model (docs/adr-0004-self-hosted-ollama-default.md);
+    set RISEWISE_LLM_PROVIDER=anthropic to use the Anthropic API instead.
+    Overridden in tests with a fake so they run without network access or a
+    running LLM of either kind."""
+    provider = os.environ.get("RISEWISE_LLM_PROVIDER", "ollama").lower()
+    if provider == "anthropic":
+        return AnthropicLLMClient()
+    return OllamaLLMClient()
 
 
 @app.get("/health")
