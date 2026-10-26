@@ -38,11 +38,11 @@
 
 ## Status summary
 
-Verified against the entries below (62 entries; every entry appears exactly once in the index).
+Verified against the entries below (63 entries; every entry appears exactly once in the index).
 
 | Status | Count | Entries |
 |---|---|---|
-| APPROVED | 25 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-062 |
+| APPROVED | 26 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-062, DR-063 |
 | OPEN | 17 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-052, DR-053, DR-054, DR-056, DR-057, DR-058, DR-060, DR-061 |
 | REVIEW_REQUIRED | 14 | DR-030, DR-031, DR-034, DR-035, DR-036, DR-037, DR-038, DR-039, DR-040, DR-044, DR-045, DR-046, DR-050, DR-051 |
 | BLOCKED | 1 | DR-033 |
@@ -51,7 +51,7 @@ Verified against the entries below (62 entries; every entry appears exactly once
 | RESOLVED | 2 | DR-006, DR-059 |
 | SUPERSEDED | 0 | — |
 | REJECTED | 0 | — |
-| **Total** | **62** | |
+| **Total** | **63** | |
 
 ## Index
 
@@ -119,6 +119,7 @@ Verified against the entries below (62 entries; every entry appears exactly once
 | DR-060 | Target users, personas and use cases undefined | PRODUCT | OPEN |
 | DR-061 | GENERAL domain scope undefined | PRODUCT | OPEN |
 | DR-062 | Schema technology: TypeScript + Zod (only) | TECHNICAL, ARCHITECTURE | APPROVED |
+| DR-063 | Python prototype retired as the core implementation path | TECHNICAL, ARCHITECTURE | APPROVED |
 
 ---
 
@@ -173,6 +174,7 @@ Verified against the entries below (62 entries; every entry appears exactly once
 - **Risk if ignored:** false continuity claims
 - **Revisit if:** the v0.3 code, 31 checks or field list are found — then map to them
 - **Reviewer:** product owner · **Review trigger:** if v0.3 artefacts surface
+- **Correction (2026-10-26):** The statement that the repository contained no earlier implementation was based on the repository state visible to the governance work at the time (`main` at the initial commit `22ffae5`). It is incorrect: the `main` history contains an earlier Python prototype (commits `7d3199a`, `41713d5`, `fa1c324`, `cb43582`). That prototype is now formally recorded as historical and retired as the core path by [ADR-0014](architecture/decisions/0014-retire-python-prototype-as-core-implementation.md) / DR-063. No historical implementation work should be treated as nonexistent.
 
 ### DR-006 — Product requirements are not yet recorded in the repository
 `PRODUCT` `OPERATIONAL` · **RESOLVED** · 2026-10-26
@@ -754,12 +756,23 @@ Verified against the entries below (62 entries; every entry appears exactly once
 - **Revisit if:** Zod cannot express a required model constraint, or a cross-language need arises
 - **Reviewer:** — · **Review trigger:** —
 
+### DR-063 — Python prototype retired as the core implementation path
+`TECHNICAL` `ARCHITECTURE` · **APPROVED** · 2026-10-26
+- **Decision:** The earlier Python implementation on `main` (Context Structurer, RITA Engine, pipeline orchestration, Ollama integration) was a narrower prototype that informed the evolution of the current RiseWise/Tarka design. It is retired as the core implementation path and remains recoverable through Git history: [`7d3199a`](https://github.com/AT-Solves/RiseWise/commit/7d3199a43a47ea9c5071be5e01224c28264672fd), [`41713d5`](https://github.com/AT-Solves/RiseWise/commit/41713d5614c20dbab156e52c2d940f9e902aab0f), [`fa1c324`](https://github.com/AT-Solves/RiseWise/commit/fa1c324b6b2dadbe084910a1c71c565cc6f80dd6), [`cb43582`](https://github.com/AT-Solves/RiseWise/commit/cb43582520107201119395629a551b61a8d0dd10).
+- **Why:** Records the prototype's existence and status explicitly, so it is neither lost nor mistaken for the current core path; corrects DR-005.
+- **Sources:** [ADR-0014](architecture/decisions/0014-retire-python-prototype-as-core-implementation.md); [ADR-0013](architecture/decisions/0013-typescript-and-zod-for-domain-models.md) · **Related:** DR-062, DR-005, DR-008
+- **Allowed:** referring to and recovering the prototype from history; future explicitly approved Python for supporting tooling (research tools, corpus processing, evaluation, scripts) · **Not allowed:** continuing the prototype as the core implementation path; treating this as a judgement that the prototype was wrong; treating ADR-0013 as the decision that retired Python
+- **Risk if ignored:** two competing core implementations; or prototype work forgotten
+- **Revisit if:** a supporting Python tool is proposed; or `main` and the design branch are integrated (removal of prototype files and the old `docs/adr-0001` … `0004` numbering collision are separate, undecided items)
+- **Reviewer:** — · **Review trigger:** branch integration
+
 ---
 
 ## Change log
 
 | Date | Change |
 |---|---|
+| 2026-10-26 | Added DR-063 (Python prototype retired as core path; ADR-0014). Added dated correction to DR-005 (earlier prototype exists on `main`). |
 | 2026-10-26 | Added DR-062 (TypeScript + Zod approved for domain models/schemas only; ADR-0013). DR-008 updated: remainder of stack still PROPOSED. |
 | 2026-10-26 | Status counts audited (index and entries consistent; earlier chat report had miscounted APPROVED, OPEN and REVIEW_REQUIRED). DR-006 → RESOLVED via PRODUCT_REQUIREMENTS.md. Added DR-060, DR-061 (gaps found while writing requirements). Added status summary. |
 | 2026-10-26 | Register created and seeded with DR-001 … DR-059 from the source model, ADR-0001 … ADR-0012, CONFLICTS.md, OPEN_QUESTIONS.md and recorded session decisions. No existing open question was closed. |

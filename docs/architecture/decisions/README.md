@@ -19,3 +19,4 @@ ADR-0001 … 0011 were accepted with the RiseWise Knowledge Source Model v0.1 ([
 | [0011](0011-domain-specifics-via-extensions.md) | Domain specifics only through extensions | Accepted |
 | [0012](0012-conservative-rights-policy-silence-is-not-permission.md) | Conservative rights policy — silence is not permission (refines 0006; resolves C-009) | Accepted |
 | [0013](0013-typescript-and-zod-for-domain-models.md) | TypeScript and Zod for domain models and validation schemas (only) | Accepted |
+| [0014](0014-retire-python-prototype-as-core-implementation.md) | Retire the Python prototype as the core implementation path | Accepted |
