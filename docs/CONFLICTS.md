@@ -1,5 +1,7 @@
 # Conflicts log
 
+Cross-project index: [`DECISION_REGISTER.md`](DECISION_REGISTER.md) — new conflicts and questions must also be considered for the register.
+
 Contradictions between requirements, design decisions, or sources. **Product behaviour is never changed silently**: every contradiction is recorded here with its current handling. Open items block nothing in Step 1 (documentation) but must be resolved, or explicitly deferred, before the affected area is implemented.
 
 | ID | Area | Status |

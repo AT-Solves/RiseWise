@@ -1,5 +1,7 @@
 # Open questions
 
+Cross-project index: [`DECISION_REGISTER.md`](DECISION_REGISTER.md) — new conflicts and questions must also be considered for the register.
+
 Unresolved items from the RiseWise Knowledge Source Model v0.1. **Nothing here is architectural truth.** Facts tagged [S] (search summary of an official page) or [K] (background knowledge) must be confirmed against primary sources or by an expert before they are used in implementation, fixtures or UI copy.
 
 Categories: **L** licensing/legal · **V** Vedic/Sanskrit facts and conventions · **E** engineering/model · **P** product/people.
