@@ -11,6 +11,7 @@
 | [`architecture/decisions/`](architecture/decisions/README.md) (ADRs) | Detailed architectural decisions |
 | [`CONFLICTS.md`](CONFLICTS.md) | Discovered conflicts between requirements, designs or sources |
 | [`OPEN_QUESTIONS.md`](OPEN_QUESTIONS.md) | Unresolved questions |
+| [`PRODUCT_REQUIREMENTS.md`](PRODUCT_REQUIREMENTS.md) | Product requirements (approved / provisional / open) |
 | [`architecture/source-model.md`](architecture/source-model.md) | The approved Knowledge Source Model |
 | **This register** | One entry per decision/finding: its status, significance, limits and review trigger, linking to the above |
 
@@ -31,9 +32,26 @@
 
 **Entry format:** each entry lists ID, date, classification and status in its header line, then: Decision / finding · Why it matters · Sources · Related · Allowed · Not allowed · Risk if ignored · Revisit if · Reviewer · Review trigger.
 
-**"Session"** in *Sources* means a product-owner decision made in a Claude Code session that is not yet recorded in a repository document (see DR-006).
+**"Session"** in *Sources* means the decision originated in a Claude Code session; such product decisions are now recorded in [`PRODUCT_REQUIREMENTS.md`](PRODUCT_REQUIREMENTS.md) (DR-006).
 
 ---
+
+## Status summary
+
+Verified against the entries below (61 entries; every entry appears exactly once in the index).
+
+| Status | Count | Entries |
+|---|---|---|
+| APPROVED | 24 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028 |
+| OPEN | 17 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-052, DR-053, DR-054, DR-056, DR-057, DR-058, DR-060, DR-061 |
+| REVIEW_REQUIRED | 14 | DR-030, DR-031, DR-034, DR-035, DR-036, DR-037, DR-038, DR-039, DR-040, DR-044, DR-045, DR-046, DR-050, DR-051 |
+| BLOCKED | 1 | DR-033 |
+| TEMPORARY | 1 | DR-029 |
+| PROPOSED | 2 | DR-008, DR-055 |
+| RESOLVED | 2 | DR-006, DR-059 |
+| SUPERSEDED | 0 | — |
+| REJECTED | 0 | — |
+| **Total** | **61** | |
 
 ## Index
 
@@ -44,7 +62,7 @@
 | DR-003 | LLM statements never automatically facts; status from evidence and rules | PRODUCT, ARCHITECTURE | APPROVED |
 | DR-004 | MVP domains: GENERAL and VEDIC_SANSKRIT | PRODUCT | APPROVED |
 | DR-005 | Greenfield implementation; v0.1–v0.3 are product history only | PRODUCT, RESEARCH | APPROVED |
-| DR-006 | Product requirements not yet recorded in the repository | PRODUCT, OPERATIONAL | OPEN |
+| DR-006 | Product requirements not yet recorded in the repository | PRODUCT, OPERATIONAL | RESOLVED |
 | DR-007 | Documentation-first, approval-gated delivery | OPERATIONAL | APPROVED |
 | DR-008 | Proposed technical defaults (stack) | TECHNICAL | PROPOSED |
 | DR-009 | Deployment target and cloud LLM provider | PRODUCT, PRIVACY, TECHNICAL | OPEN |
@@ -98,6 +116,8 @@
 | DR-057 | Root-text layer for non-Vedic śāstra works | TECHNICAL, DATA | OPEN |
 | DR-058 | "EVIDENCE" as epistemic kind and as entity | PRODUCT, ARCHITECTURE | OPEN |
 | DR-059 | Terminology: Source, Manifest, Version | ARCHITECTURE | RESOLVED |
+| DR-060 | Target users, personas and use cases undefined | PRODUCT | OPEN |
+| DR-061 | GENERAL domain scope undefined | PRODUCT | OPEN |
 
 ---
 
@@ -107,7 +127,7 @@
 `PRODUCT` `ARCHITECTURE` · **APPROVED** · 2026-10-26
 - **Decision:** RiseWise is a provenance-first knowledge, research and reasoning platform. Pillars: Tarka Core, Knowledge Layer, Evidence & Provenance, Domain Adapters, Evaluation, Research Workspace, Administration/Governance.
 - **Why:** Defines scope; every later design must serve provenance-first knowledge work.
-- **Sources:** Session; [source-model.md](architecture/source-model.md) §1 · **Related:** DR-002, DR-006
+- **Sources:** [PRODUCT_REQUIREMENTS.md](PRODUCT_REQUIREMENTS.md) (session origin); [source-model.md](architecture/source-model.md) §1 · **Related:** DR-002, DR-006
 - **Allowed:** knowledge, research and reasoning features that preserve provenance · **Not allowed:** features that present untraceable output as knowledge
 - **Risk if ignored:** drift into a generic chatbot product
 - **Revisit if:** product owner changes the positioning
@@ -117,7 +137,7 @@
 `PRODUCT` · **APPROVED** · 2026-10-26
 - **Decision:** Tarka examines questions through Question → Claims → Definitions → Evidence → Sources → Arguments → Counterarguments → Assumptions → Inferences → Contradictions → Uncertainty → Conclusion → Provenance. Users must see what Tarka thinks, why, supporting and contradicting evidence, assumptions, known vs inferred, and uncertainty. "Why?" and "Challenge this conclusion" are required; challenge must not manufacture artificial balance.
 - **Why:** Core product identity; drives the reasoning model and UI.
-- **Sources:** Session · **Related:** DR-003, DR-058
+- **Sources:** [PRODUCT_REQUIREMENTS.md](PRODUCT_REQUIREMENTS.md) (session origin) · **Related:** DR-003, DR-058
 - **Allowed:** structured, explainable reasoning outputs · **Not allowed:** free-form chat answers presented as conclusions; invented counterarguments
 - **Risk if ignored:** unexplainable conclusions
 - **Revisit if:** Tarka design begins (requirements must be recorded first, DR-006)
@@ -127,7 +147,7 @@
 `PRODUCT` `ARCHITECTURE` · **APPROVED** · 2026-10-26
 - **Decision:** Epistemic kinds FACT, EVIDENCE, INFERENCE, ASSUMPTION, INTERPRETATION, UNCERTAINTY and statuses SUPPORTED, PARTIALLY_SUPPORTED, CONTRADICTED, CONTESTED, UNVERIFIED, INSUFFICIENT_EVIDENCE, INFERRED. Evidence and verification rules determine a claim's status; the LLM does not.
 - **Why:** The central trust principle of RiseWise.
-- **Sources:** Session; [source-model.md](architecture/source-model.md) §3 · **Related:** DR-017, DR-058, [C-002](CONFLICTS.md)
+- **Sources:** [PRODUCT_REQUIREMENTS.md](PRODUCT_REQUIREMENTS.md) (session origin); [source-model.md](architecture/source-model.md) §3 · **Related:** DR-017, DR-058, [C-002](CONFLICTS.md)
 - **Allowed:** LLMs proposing candidate claims, labelled UNVERIFIED · **Not allowed:** any model or person setting a status directly
 - **Risk if ignored:** hallucinations presented as established facts
 - **Revisit if:** never relaxed without product-owner decision
@@ -137,7 +157,7 @@
 `PRODUCT` · **APPROVED** · 2026-10-26
 - **Decision:** The first two domains are GENERAL and VEDIC_SANSKRIT (Pāṇini, Aṣṭādhyāyī, Siddhānta Kaumudī, Vedic Sanskrit, Ṛgveda, Kṛṣṇa Yajurveda / Taittirīya Saṃhitā, linguistic analysis, commentary, translation, scholarly interpretation). Product/Business, History, Science and Law come later.
 - **Why:** Bounds MVP scope while keeping the core domain-neutral.
-- **Sources:** Session; [source-model.md](architecture/source-model.md) §11–12 · **Related:** DR-020
+- **Sources:** [PRODUCT_REQUIREMENTS.md](PRODUCT_REQUIREMENTS.md) (session origin); [source-model.md](architecture/source-model.md) §11–12 · **Related:** DR-020
 - **Allowed:** core work that serves both domains · **Not allowed:** building other domain adapters in the MVP
 - **Risk if ignored:** scope explosion
 - **Revisit if:** MVP is complete or product priorities change
@@ -147,15 +167,16 @@
 `PRODUCT` `RESEARCH` · **APPROVED** · 2026-10-26
 - **Decision / finding:** The repository contained no earlier implementation (only a README). RiseWise v0.1 (TypeScript demo, no database), v0.2 (14/14 eval checks) and v0.3 (verification rules, source-record fields, 31/31 checks) are treated as requirements history, not code to preserve. The v0.3 check list and field list are **not available**.
 - **Why:** Prevents claims of compatibility with code that does not exist; v0.3 artefacts were re-proposed, not recovered.
-- **Sources:** Session audit · **Related:** DR-006
+- **Sources:** [PRODUCT_REQUIREMENTS.md](PRODUCT_REQUIREMENTS.md) PR-004 (session audit) · **Related:** DR-006
 - **Allowed:** fresh design informed by the history · **Not allowed:** claiming to reproduce v0.3 behaviour or checks
 - **Risk if ignored:** false continuity claims
 - **Revisit if:** the v0.3 code, 31 checks or field list are found — then map to them
 - **Reviewer:** product owner · **Review trigger:** if v0.3 artefacts surface
 
 ### DR-006 — Product requirements are not yet recorded in the repository
-`PRODUCT` `OPERATIONAL` · **OPEN** · 2026-10-26
-- **Finding:** DR-001–DR-005, DR-008 and DR-009 exist only in Claude session history. The repository has no `docs/product/` requirements document; `source-model.md` covers the source layer only.
+`PRODUCT` `OPERATIONAL` · **RESOLVED** · 2026-10-26
+- **Resolution (2026-10-26):** recorded in [`PRODUCT_REQUIREMENTS.md`](PRODUCT_REQUIREMENTS.md) v0.1, each item classified APPROVED / PROVISIONAL / OPEN with its session source.
+- **Finding:** DR-001–DR-005, DR-008 and DR-009 existed only in Claude session history. The repository has no `docs/product/` requirements document; `source-model.md` covers the source layer only.
 - **Why:** Sessions are not durable project memory; later work could lose or misremember requirements.
 - **Sources:** this register · **Related:** DR-001–DR-005, DR-008, DR-009
 - **Allowed:** relying on this register's summaries meanwhile · **Not allowed:** treating unrecorded session statements as detailed specifications
@@ -167,7 +188,7 @@
 `OPERATIONAL` · **APPROVED** · 2026-10-26
 - **Decision:** Work proceeds step by step; each step stops for product-owner review. No schema, database, importers, corpus downloads, Tarka, LLM integration, embeddings, UI, auth/tiers or billing until explicitly approved.
 - **Why:** Gets the foundation right before code depends on it.
-- **Sources:** Session; [source-model.md](architecture/source-model.md) §21 · **Related:** DR-008
+- **Sources:** [PRODUCT_REQUIREMENTS.md](PRODUCT_REQUIREMENTS.md) (session origin); [source-model.md](architecture/source-model.md) §21 · **Related:** DR-008
 - **Allowed:** documentation and design · **Not allowed:** starting the next step without approval
 - **Risk if ignored:** rework on unapproved foundations
 - **Revisit if:** product owner changes the delivery mode
@@ -177,7 +198,7 @@
 `TECHNICAL` · **PROPOSED** · 2026-10-26
 - **Proposal:** TypeScript monorepo (pnpm); React + Vite SPA; Fastify API; Zod schemas; SQLite by default with Postgres for teams (both tested in CI); Ollama as default LLM provider plus a Fake provider for tests; qualitative confidence bands; no open-web retrieval in MVP; Python NLP tools only as a later sidecar.
 - **Why:** Schema design (Step 2) needs a language and validation library. These were offered as "defaults unless you object" in architecture proposal rev. 2 and have **not** been explicitly approved or written as ADRs.
-- **Sources:** Session (architecture proposal rev. 2) · **Related:** DR-009, DR-054
+- **Sources:** [PRODUCT_REQUIREMENTS.md](PRODUCT_REQUIREMENTS.md) PR-172 (session origin: architecture proposal rev. 2) · **Related:** DR-009, DR-054
 - **Allowed:** discussing them as proposals · **Not allowed:** treating them as approved
 - **Risk if ignored:** schema written in an unapproved stack
 - **Revisit if:** product owner approves or changes them
@@ -187,7 +208,7 @@
 `PRODUCT` `PRIVACY` `TECHNICAL` · **OPEN** · 2026-10-26
 - **Question:** MVP local-only vs. hosted demo; whether any cloud LLM provider is allowed and which (architecture proposal rev. 2, decisions D2/D3). Recommendation was local-only, Ollama by default, one opt-in cloud provider.
 - **Why:** Affects auth scope, data egress and external-processing rights.
-- **Sources:** Session · **Related:** DR-031, DR-010
+- **Sources:** [PRODUCT_REQUIREMENTS.md](PRODUCT_REQUIREMENTS.md) (session origin) · **Related:** DR-031, DR-010
 - **Allowed:** — · **Not allowed:** sending any content to a cloud provider before decision
 - **Risk if ignored:** unplanned data egress
 - **Revisit if:** decided
@@ -701,10 +722,31 @@
 - **Revisit if:** schema naming review
 - **Reviewer:** — · **Review trigger:** —
 
+### DR-060 — Target users, personas and use cases undefined
+`PRODUCT` · **OPEN** · 2026-10-26
+- **Finding:** No target users, personas or primary use cases have been defined. Identified while writing PRODUCT_REQUIREMENTS.md.
+- **Why:** Evaluation cases, UI and MVP priorities depend on who RiseWise serves.
+- **Sources:** [PRODUCT_REQUIREMENTS.md](PRODUCT_REQUIREMENTS.md) PR-013 · **Related:** DR-001, DR-061
+- **Allowed:** foundation work that does not depend on personas · **Not allowed:** assuming a target audience in requirements
+- **Risk if ignored:** features built for an imagined user
+- **Revisit if:** product owner defines users/use cases
+- **Reviewer:** product owner · **Review trigger:** before Tarka or UI design
+
+### DR-061 — GENERAL domain scope undefined
+`PRODUCT` · **OPEN** · 2026-10-26
+- **Finding:** GENERAL is an approved MVP domain, but its scope (question types, source types, any curated corpus) is undefined; "user-supplied sources only" is a Claude proposal, not approved.
+- **Why:** Determines what the GENERAL extension must support.
+- **Sources:** [PRODUCT_REQUIREMENTS.md](PRODUCT_REQUIREMENTS.md) PR-121, PR-122 · **Related:** DR-004, DR-020
+- **Allowed:** domain-neutral core work · **Not allowed:** treating the proposal as approved
+- **Risk if ignored:** GENERAL becomes an empty or unbounded domain
+- **Revisit if:** product owner decides
+- **Reviewer:** product owner · **Review trigger:** before GENERAL extension design
+
 ---
 
 ## Change log
 
 | Date | Change |
 |---|---|
+| 2026-10-26 | Status counts audited (index and entries consistent; earlier chat report had miscounted APPROVED, OPEN and REVIEW_REQUIRED). DR-006 → RESOLVED via PRODUCT_REQUIREMENTS.md. Added DR-060, DR-061 (gaps found while writing requirements). Added status summary. |
 | 2026-10-26 | Register created and seeded with DR-001 … DR-059 from the source model, ADR-0001 … ADR-0012, CONFLICTS.md, OPEN_QUESTIONS.md and recorded session decisions. No existing open question was closed. |
