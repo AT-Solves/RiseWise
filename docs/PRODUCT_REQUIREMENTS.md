@@ -47,7 +47,7 @@ Every item has one classification:
 | PR-001 | RiseWise is a provenance-first knowledge, research and reasoning platform. | APPROVED | PO-approval-1 | DR-001 |
 | PR-002 | The product name is RISEWISE; its core reasoning capability is called TARKA. | APPROVED | PO-brief | DR-001 |
 | PR-003 | RiseWise evolves from its original Vedic/Sanskrit knowledge-discovery focus into a general-purpose reasoning platform, keeping Vedic/Sanskrit as the first specialised domain. | APPROVED | PO-brief | DR-001, DR-004 |
-| PR-004 | The implementation is greenfield. RiseWise v0.1 (TypeScript demo, no database, AI-generated summaries), v0.2 (evaluation, 14/14 checks) and v0.3 (verification rules, source-record fields, 31/31 checks) are product history, not code to preserve. The v0.3 check list and field list are not available. | APPROVED | PO-brief (history); session audit | DR-005 |
+| PR-004 | The RiseWise/Tarka architecture is the new, current direction and is implemented greenfield. An earlier Python implementation (Context Structurer, RITA Engine, pipeline orchestration, Ollama integration) exists in `main` history as a prototype; it is retired as the core implementation path ([ADR-0014](architecture/decisions/0014-retire-python-prototype-as-core-implementation.md)), and its existence neither changes these requirements nor makes it the current architecture. RiseWise v0.1 (TypeScript demo, no database, AI-generated summaries), v0.2 (evaluation, 14/14 checks) and v0.3 (verification rules, source-record fields, 31/31 checks) are product history, not code to preserve. The v0.3 check list and field list are not available. | APPROVED | PO-brief (history); session audit; PO approval of ADR-0014 | DR-005, DR-063 |
 
 ## 2. Problem RiseWise Solves
 
