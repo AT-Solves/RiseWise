@@ -203,7 +203,7 @@ Every item has one classification:
 |---|---|---|---|---|
 | PR-170 | Local-first / open-source preference. | APPROVED | PO-brief (history) | — |
 | PR-171 | Fully offline operation with a local LLM (Ollama) by default; cloud providers opt-in. | PROVISIONAL | Claude-rev1, Claude-rev2 | DR-008, DR-009 |
-| PR-172 | Technology choices (TypeScript, React/Vite, Fastify, Zod, SQLite/Postgres). *(Implementation choices, not requirements.)* | PROVISIONAL | Claude-rev2 | DR-008 |
+| PR-172 | Technology choices *(implementation choices, not requirements)*: TypeScript + Zod for domain models and validation schemas **approved** as an architectural decision (ADR-0013, DR-062); React/Vite, Fastify, SQLite/Postgres and all other stack items remain proposals. | PROVISIONAL | Claude-rev2; PO approval of TypeScript + Zod only | DR-008, DR-062 |
 | PR-173 | Code licence. | OPEN | — | DR-042 |
 | PR-174 | Whether any cloud LLM provider is allowed, and which. | OPEN | Claude-rev2 decision D2 | DR-009 |
 

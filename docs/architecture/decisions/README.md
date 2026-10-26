@@ -18,3 +18,4 @@ ADR-0001 … 0011 were accepted with the RiseWise Knowledge Source Model v0.1 ([
 | [0010](0010-no-silent-merging-no-substitution.md) | No silent merging of editions; no substitution of unavailable sources | Accepted |
 | [0011](0011-domain-specifics-via-extensions.md) | Domain specifics only through extensions | Accepted |
 | [0012](0012-conservative-rights-policy-silence-is-not-permission.md) | Conservative rights policy — silence is not permission (refines 0006; resolves C-009) | Accepted |
+| [0013](0013-typescript-and-zod-for-domain-models.md) | TypeScript and Zod for domain models and validation schemas (only) | Accepted |

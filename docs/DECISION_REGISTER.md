@@ -38,11 +38,11 @@
 
 ## Status summary
 
-Verified against the entries below (61 entries; every entry appears exactly once in the index).
+Verified against the entries below (62 entries; every entry appears exactly once in the index).
 
 | Status | Count | Entries |
 |---|---|---|
-| APPROVED | 24 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028 |
+| APPROVED | 25 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-062 |
 | OPEN | 17 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-052, DR-053, DR-054, DR-056, DR-057, DR-058, DR-060, DR-061 |
 | REVIEW_REQUIRED | 14 | DR-030, DR-031, DR-034, DR-035, DR-036, DR-037, DR-038, DR-039, DR-040, DR-044, DR-045, DR-046, DR-050, DR-051 |
 | BLOCKED | 1 | DR-033 |
@@ -51,7 +51,7 @@ Verified against the entries below (61 entries; every entry appears exactly once
 | RESOLVED | 2 | DR-006, DR-059 |
 | SUPERSEDED | 0 | — |
 | REJECTED | 0 | — |
-| **Total** | **61** | |
+| **Total** | **62** | |
 
 ## Index
 
@@ -64,7 +64,7 @@ Verified against the entries below (61 entries; every entry appears exactly once
 | DR-005 | Greenfield implementation; v0.1–v0.3 are product history only | PRODUCT, RESEARCH | APPROVED |
 | DR-006 | Product requirements not yet recorded in the repository | PRODUCT, OPERATIONAL | RESOLVED |
 | DR-007 | Documentation-first, approval-gated delivery | OPERATIONAL | APPROVED |
-| DR-008 | Proposed technical defaults (stack) | TECHNICAL | PROPOSED |
+| DR-008 | Proposed technical defaults (stack, excluding schema technology) | TECHNICAL | PROPOSED |
 | DR-009 | Deployment target and cloud LLM provider | PRODUCT, PRIVACY, TECHNICAL | OPEN |
 | DR-010 | Commercial intent and tiers | BUSINESS, LICENSING | OPEN |
 | DR-011 | Work → Edition → Source → SourceSnapshot → Passage | ARCHITECTURE, DATA | APPROVED |
@@ -118,6 +118,7 @@ Verified against the entries below (61 entries; every entry appears exactly once
 | DR-059 | Terminology: Source, Manifest, Version | ARCHITECTURE | RESOLVED |
 | DR-060 | Target users, personas and use cases undefined | PRODUCT | OPEN |
 | DR-061 | GENERAL domain scope undefined | PRODUCT | OPEN |
+| DR-062 | Schema technology: TypeScript + Zod (only) | TECHNICAL, ARCHITECTURE | APPROVED |
 
 ---
 
@@ -197,7 +198,8 @@ Verified against the entries below (61 entries; every entry appears exactly once
 ### DR-008 — Proposed technical defaults
 `TECHNICAL` · **PROPOSED** · 2026-10-26
 - **Proposal:** TypeScript monorepo (pnpm); React + Vite SPA; Fastify API; Zod schemas; SQLite by default with Postgres for teams (both tested in CI); Ollama as default LLM provider plus a Fake provider for tests; qualitative confidence bands; no open-web retrieval in MVP; Python NLP tools only as a later sidecar.
-- **Why:** Schema design (Step 2) needs a language and validation library. These were offered as "defaults unless you object" in architecture proposal rev. 2 and have **not** been explicitly approved or written as ADRs.
+- **Why:** These were offered as "defaults unless you object" in architecture proposal rev. 2 and have **not** been explicitly approved.
+- **Update (2026-10-26):** TypeScript + Zod for domain models and validation schemas was approved separately (DR-062, ADR-0013). Everything else in this entry remains PROPOSED.
 - **Sources:** [PRODUCT_REQUIREMENTS.md](PRODUCT_REQUIREMENTS.md) PR-172 (session origin: architecture proposal rev. 2) · **Related:** DR-009, DR-054
 - **Allowed:** discussing them as proposals · **Not allowed:** treating them as approved
 - **Risk if ignored:** schema written in an unapproved stack
@@ -742,11 +744,22 @@ Verified against the entries below (61 entries; every entry appears exactly once
 - **Revisit if:** product owner decides
 - **Reviewer:** product owner · **Review trigger:** before GENERAL extension design
 
+### DR-062 — Schema technology: TypeScript + Zod (only)
+`TECHNICAL` `ARCHITECTURE` · **APPROVED** · 2026-10-26
+- **Decision:** TypeScript is the definition language and Zod the runtime validation library for RiseWise domain models and validation schemas.
+- **Why:** Step 2 (schema definitions validated by tests) needs both; removes the blocker identified in DR-008.
+- **Sources:** [ADR-0013](architecture/decisions/0013-typescript-and-zod-for-domain-models.md); product-owner approval (session) · **Related:** DR-008, DR-007
+- **Allowed:** writing domain-model types and Zod schemas once Step 2 is authorised · **Not allowed:** treating any other stack item as approved — React/Vite, Fastify, SQLite, PostgreSQL, Ollama, cloud LLM providers, embeddings, search, authentication, deployment platform, billing/tiers, monorepo/ORM/test tooling all stay PROPOSED or OPEN
+- **Risk if ignored:** scope creep from "schema technology approved" to "stack approved"
+- **Revisit if:** Zod cannot express a required model constraint, or a cross-language need arises
+- **Reviewer:** — · **Review trigger:** —
+
 ---
 
 ## Change log
 
 | Date | Change |
 |---|---|
+| 2026-10-26 | Added DR-062 (TypeScript + Zod approved for domain models/schemas only; ADR-0013). DR-008 updated: remainder of stack still PROPOSED. |
 | 2026-10-26 | Status counts audited (index and entries consistent; earlier chat report had miscounted APPROVED, OPEN and REVIEW_REQUIRED). DR-006 → RESOLVED via PRODUCT_REQUIREMENTS.md. Added DR-060, DR-061 (gaps found while writing requirements). Added status summary. |
 | 2026-10-26 | Register created and seeded with DR-001 … DR-059 from the source model, ADR-0001 … ADR-0012, CONFLICTS.md, OPEN_QUESTIONS.md and recorded session decisions. No existing open question was closed. |
