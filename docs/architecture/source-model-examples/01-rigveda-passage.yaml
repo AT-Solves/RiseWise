@@ -1,0 +1,183 @@
+example: 01-rigveda-passage
+design_section: 13
+purpose: >
+  Parallel layers for one locus, each a separate Source with its own licence;
+  translation with two licence layers; commentary that is scan-only; no merging.
+hypothetical: false
+no_corpus_text: true
+
+works:
+  - id: work:rv
+    workKind: PRIMARY_TEXT
+    title: "Ṛgveda Saṃhitā"
+    ext.vedic-sanskrit:
+      vedaAffiliation: "Ṛgveda"
+      shakha: { value: "<Śākala — expert to confirm>", tag: S, open_question: OQ-V01 }
+  - id: work:rv.griffith
+    workKind: TRANSLATION
+    title: "<Griffith's English translation of the Ṛgveda>"
+    relations: [ { predicate: TRANSLATION_OF, object: work:rv } ]
+  - id: work:rv.sayana-bhashya
+    workKind: COMMENTARY
+    title: "<Sāyaṇa's commentary on the Ṛgveda>"
+    relations: [ { predicate: COMMENTARY_ON, object: work:rv } ]
+    attribution: { traditional: "Sāyaṇa", note: "traditional attribution, flagged as such" }
+
+editions:
+  - id: ed:rv.vnh-1994
+    work: work:rv
+    editors: ["B. A. van Nooten", "G. B. Holland"]
+    publisher: { value: "Harvard University Press (Harvard Oriental Series)", tag: S }
+    year: { value: 1994, tag: S }
+  - id: ed:rv.aufrecht-lineage
+    work: work:rv
+    description: "<Aufrecht-based text as entered by van Nooten & Holland, modified by Gunkel & Ryan>"
+    tag: V   # per VedaWeb TEI header
+  - id: ed:rv.griffith-1890
+    work: work:rv.griffith
+    publisher: { value: "E. J. Lazarus, Benares", tag: V }
+    year: { value: 1890, tag: V }
+  - id: ed:rv.sayana.mueller
+    work: work:rv.sayana-bhashya
+    editors: ["F. Max Müller"]
+    years: { value: "1849–74", tag: S, open_question: OQ-V10 }
+
+sources:
+  - id: src:vedaweb.vnh
+    edition: ed:rv.vnh-1994
+    kind: DIGITAL_TEXT
+    layer: SAMHITA_PATHA
+    provider: agent:vedaweb
+    format: TEI
+  - id: src:vedaweb.aufrecht
+    edition: ed:rv.aufrecht-lineage
+    kind: DIGITAL_TEXT
+    layer: SAMHITA_PATHA
+    provider: agent:vedaweb
+  - id: src:vedaweb.padapatha
+    edition: "<padapāṭha edition — GRETIL / Sansknet input>"
+    kind: DIGITAL_TEXT
+    layer: PADAPATHA
+    provider: agent:vedaweb
+    tag: V
+  - id: src:vedaweb.zurich
+    edition: "<Zurich morphological annotation dataset>"
+    kind: DIGITAL_TEXT
+    layer: ANNOTATION_MORPHOLOGY
+    provider: agent:vedaweb
+    tag: V
+  - id: src:vedaweb.griffith
+    edition: ed:rv.griffith-1890
+    kind: DIGITAL_TEXT
+    layer: TRANSLATION
+    provider: agent:vedaweb
+  - id: src:scan.sayana.mueller
+    edition: ed:rv.sayana.mueller
+    kind: SCAN
+    layer: COMMENTARY
+    host: "<scan host, e.g. Internet Archive or HathiTrust>"
+
+licences:
+  - attachedTo: src:vedaweb.vnh
+    licenceId: CC-BY-NC-SA-4.0
+    scope: digital-representation
+    evidence: { where: "vedaweb_corpus.tei teiHeader", tag: V }
+    verificationStatus: PROVIDER_STATED
+    upstreamConstraints:
+      - terms: "research use, not commercial"
+        statedBy: "UT Austin LRC notice (van Nooten & Holland diskette)"
+        tag: S
+  - attachedTo: src:vedaweb.aufrecht
+    licenceId: CC-BY-NC-SA-4.0
+    evidence: { where: "teiHeader", tag: V }
+    verificationStatus: PROVIDER_STATED
+  - attachedTo: src:vedaweb.padapatha
+    licenceId: CC-BY-NC-SA-4.0
+    evidence: { where: "teiHeader", tag: V }
+    verificationStatus: PROVIDER_STATED
+  - attachedTo: src:vedaweb.zurich
+    licenceId: CC-BY-4.0
+    evidence: { where: "teiHeader", tag: V }
+    verificationStatus: PROVIDER_STATED
+  - attachedTo: work:rv.griffith
+    licenceId: PUBLIC_DOMAIN
+    scope: underlying-work
+    tag: K
+    verificationStatus: UNVERIFIED
+    open_question: OQ-L09
+  - attachedTo: src:vedaweb.griffith
+    licenceId: CC-BY-NC-SA-4.0
+    scope: digital-representation
+    evidence: { where: "teiHeader", tag: V }
+    verificationStatus: PROVIDER_STATED
+  - attachedTo: ed:rv.sayana.mueller
+    licenceId: PUBLIC_DOMAIN
+    scope: edition
+    tag: S
+    verificationStatus: UNVERIFIED
+    note: "scan-host terms recorded separately; uploader-assigned labels are not trusted"
+
+acquisitions:
+  - id: acq:vedaweb.<n>
+    provider: agent:vedaweb
+    method: GIT_REPOSITORY
+    providerVersion: "<commit sha>"
+    manifestHash: "<sha256>"
+    produces: [ snap:vedaweb.vnh@v1, snap:vedaweb.aufrecht@v1, snap:vedaweb.padapatha@v1,
+                snap:vedaweb.zurich@v1, snap:vedaweb.griffith@v1 ]
+    note: "Illustrative only — no acquisition has been performed."
+
+passages:
+  - id: psg:vedaweb.vnh@v1/rv.msr:1.1.1
+    snapshot: snap:vedaweb.vnh@v1
+    loci: [ { locus: "rv.msr:1.1.1", mapping: EXACT } ]
+    text:
+      original: "<as in source file>"
+      encoding: "<as declared by source>"
+      contentState: STORED
+      contentHash: "<sha256>"
+    accentProfile: { accented: unknown, verified: false, open_question: OQ-V07 }
+  - id: psg:vedaweb.aufrecht@v1/rv.msr:1.1.1
+    snapshot: snap:vedaweb.aufrecht@v1
+    loci: [ { locus: "rv.msr:1.1.1", mapping: EXACT } ]
+    text: { original: "<as in source file>", contentState: STORED, contentHash: "<sha256>" }
+  - id: psg:vedaweb.padapatha@v1/rv.msr:1.1.1
+    snapshot: snap:vedaweb.padapatha@v1
+    loci: [ { locus: "rv.msr:1.1.1", mapping: EXACT } ]
+    text: { original: "<as in source file>", contentState: STORED, contentHash: "<sha256>" }
+  - id: psg:vedaweb.griffith@v1/rv.msr:1.1.1
+    snapshot: snap:vedaweb.griffith@v1
+    loci: [ { locus: "rv.msr:1.1.1", mapping: "<EXACT or PARTIAL — alignment to be confirmed>" } ]
+    text: { original: "<as in source file>", contentState: STORED, contentHash: "<sha256>" }
+
+annotations:
+  - target: { passage: psg:vedaweb.vnh@v1/rv.msr:1.1.1, tokens: "<token range>" }
+    kind: morph
+    producer: src:vedaweb.zurich
+    origin: DATASET
+    body: "<per vedic-sanskrit morph schema>"
+    open_question: OQ-E06   # which text version the Zurich tokens align to
+
+availability:
+  - subject: work:rv.sayana-bhashya
+    holding: IMAGE_ONLY
+    origin: CURATED_IMPORT
+    reason: NO_DIGITAL_TEXT
+
+computed:
+  effectiveRights.src:vedaweb.vnh: { commercial: PROHIBITED, derivatives: SHARE_ALIKE, attribution: REQUIRED }
+  accessClass.src:vedaweb.vnh:
+    # Depends on how a silent upstream term is read (CONFLICT C-009):
+    if_silent_upstream_terms_add_no_restriction:
+      LOCAL_PERSONAL: INTERNAL_USE_ONLY   # pending rights policy (OQ-L01)
+      HOSTED_PAID_PROFESSIONAL: USER_IMPORT_ONLY
+    if_silent_upstream_terms_are_UNKNOWN:
+      ALL_CONTEXTS: LICENCE_PENDING       # upstream notice does not state redistribution terms
+  accessClass.src:vedaweb.zurich: { ALL_CONTEXTS: REDISTRIBUTABLE }
+  displayLabel.work:rv.sayana-bhashya: SCAN_ONLY
+  evidenceEligible.psg:vedaweb.vnh@v1/rv.msr:1.1.1: "only in contexts where the access class permits (G1–G5); none until C-009 is resolved"
+  evidenceEligible.work:rv.sayana-bhashya: "no — no text held (G1)"
+  variantHandling: >
+    If the vnh and aufrecht passages differ at rv.msr:1.1.1, both are shown as variants;
+    neither is preferred unless an AuthorityAssessment records a preference (ADR-0010).
+  translationGuard: "Griffith passages can never be cited as the root text (VR-101)."

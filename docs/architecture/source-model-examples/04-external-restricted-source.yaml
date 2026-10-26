@@ -1,0 +1,63 @@
+example: 04-external-restricted-source
+design_section: 16
+paper_test_case: 2   # copyrighted source RiseWise cannot redistribute
+purpose: >
+  Modern copyrighted translation: REFERENCE_ONLY in the shared corpus; only a private,
+  user-imported copy is possible, confined to that user's workspace.
+hypothetical: false
+no_corpus_text: true
+
+works:
+  - id: work:rv.jamison-brereton
+    workKind: TRANSLATION
+    title: "<Jamison & Brereton, The Rigveda (English translation)>"
+    relations: [ { predicate: TRANSLATION_OF, object: work:rv } ]
+
+editions:
+  - id: ed:rv.jb-2014
+    work: work:rv.jamison-brereton
+    publisher: "Oxford University Press"
+    year: 2014
+    note: "bibliographic facts; standard citation"
+
+sources:
+  - id: src:ref.rv.jb-2014
+    edition: ed:rv.jb-2014
+    kind: PRINT_REFERENCE   # no content held, no snapshots
+
+licences:
+  - attachedTo: ed:rv.jb-2014
+    licenceId: ALL_RIGHTS_RESERVED
+    rightsHolder: "<publisher / authors>"
+    verificationStatus: CURATOR_VERIFIED   # to be performed; shown as the target state
+
+availability:
+  - subject: ed:rv.jb-2014
+    holding: METADATA_ONLY
+    origin: CURATED_IMPORT
+    reason: LICENCE_RESTRICTED
+
+permitted:
+  - "store bibliographic metadata"
+  - "cite as a pointer: 'Jamison & Brereton on RV <locus>'"
+  - "allow a user to attach their own licensed copy or excerpts to a PRIVATE workspace"
+not_permitted:
+  - "store or redistribute its text in the shared corpus"
+  - "send its text to external processors unless the user's own rights allow"
+  - "use it to build shared first-party data"
+
+private_import_variant:
+  source: { id: "src:user.<id>.rv.jb", origin: USER_SUPPLIED, workspace: "<private ws>" }
+  accessClass: { in_owner_workspace: INTERNAL_USE_ONLY, elsewhere: "not visible" }
+
+related_case:
+  note: >
+    TITUS-only material would carry scholarlyOnly: true and commercial: PROHIBITED (tag S):
+    possibly INTERNAL_USE_ONLY for local research and USER_IMPORT_ONLY or UNAVAILABLE in hosted
+    tiers, once confirmed in writing (OQ-L10).
+
+computed:
+  accessClass.shared: UNAVAILABLE
+  displayLabel.shared: REFERENCE_ONLY
+  evidenceEligible.shared: "no — gate G1 fails (no text held)"
+  evidenceEligible.private_import: "only inside the owner's workspace (G3), labelled user-supplied"

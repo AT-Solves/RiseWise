@@ -1,0 +1,111 @@
+example: 03-panini-rule
+design_section: 15
+paper_test_case: 3   # source with uncertain licence
+purpose: >
+  Informal licence + undocumented edition ⇒ LICENCE_PENDING, so no passage is evidence;
+  commentary and sub-commentary chains; edition-specific scheme aligned to a work-level scheme;
+  grammar relations as attributed interpretations; tool derivations not evidence-eligible.
+hypothetical: false
+no_corpus_text: true
+
+works:
+  - id: work:asht
+    workKind: PRIMARY_TEXT
+    title: "Aṣṭādhyāyī"
+    attribution: { traditional: "Pāṇini" }
+  - id: work:kashika
+    workKind: COMMENTARY
+    title: "Kāśikāvṛtti"
+    relations: [ { predicate: COMMENTARY_ON, object: work:asht } ]
+  - id: work:nyasa
+    workKind: COMMENTARY
+    title: "Nyāsa"
+    relations: [ { predicate: COMMENTARY_ON, object: work:kashika } ]
+  - id: work:padamanjari
+    workKind: COMMENTARY
+    title: "Padamañjarī"
+    relations: [ { predicate: COMMENTARY_ON, object: work:kashika } ]
+  - id: work:sk
+    workKind: PRIMARY_TEXT
+    title: "Siddhānta Kaumudī"
+    relations:
+      - { predicate: REARRANGEMENT_OF, object: work:asht, tag: K, open_question: OQ-V05 }
+  - id: work:balamanorama
+    workKind: COMMENTARY
+    title: "Bālamanoramā"
+    relations: [ { predicate: COMMENTARY_ON, object: work:sk } ]
+
+editions:
+  - id: ed:asht.unknown-ashtadhyayicom
+    work: work:asht
+    description: "<edition not documented by provider>"
+    open_question: OQ-L11
+  - id: ed:asht.boehtlingk-1887
+    work: work:asht
+    role: "candidate public-domain print for EDITION_COLLATION"
+    tag: K
+    open_question: OQ-V13
+
+loci:
+  - scheme: asht.aps
+    locus: "asht.aps:1.1.1"
+  - scheme: sk.num
+    locus: "sk.num:<n>"
+    note: "edition-specific numbering (OQ-V04); scope of edition-specific loci open (OQ-E04)"
+    mapsTo: [ { locus: "asht.aps:1.1.1", mapping: EXACT } ]
+
+sources:
+  - id: src:ashtadhyayicom.sutras
+    edition: ed:asht.unknown-ashtadhyayicom
+    kind: DIGITAL_TEXT
+    layer: ROOT_TEXT   # provisional: §11c lists no root-text layer for non-Vedic śāstra works (OQ-E07)
+    provider: agent:ashtadhyayi.com
+
+licences:
+  - attachedTo: src:ashtadhyayicom.sutras
+    licenceId: CUSTOM
+    terms: "free to use … provided that appropriate credits are mentioned"
+    evidence: { where: "github.com/ashtadhyayi-com/data README", tag: V }
+    permittedUse:
+      commercial: UNKNOWN
+      redistribution: UNKNOWN
+      derivatives: UNKNOWN
+      attribution: REQUIRED
+    verificationStatus: PROVIDER_STATED
+    upstreamConstraints:
+      - terms: "rights of the typed commentary editions are undocumented"
+        tag: V
+        conflict: C-008
+
+lifecycle:
+  src:ashtadhyayicom.sutras: RIGHTS_REVIEW   # no acquisition approved; no passages exist
+
+interpretations:   # values deliberately not supplied
+  - kind: SUTRA_TYPE
+    target: "asht.aps:1.1.1"
+    value: "<value>"
+    attributedTo: "<commentary or scholar>"
+    anchor: "<commentary passage>"
+    origin: SOURCE_EXTRACTED
+  - kind: ANUVRTTI_FROM
+    target: "asht.aps:<x>"
+    value: "<source sūtra locus>"
+    attributedTo: "<commentary>"
+    origin: SOURCE_EXTRACTED
+
+annotations:
+  - kind: derivation
+    target: "<passage once one exists>"
+    producer: "agent:vidyut-prakriya@<version>"
+    origin: TOOL
+    body: "[<sūtra loci applied>]"
+    evidenceEligible: false   # until verified (ADR-0009)
+
+computed:
+  effectiveRights.src:ashtadhyayicom.sutras: { commercial: UNKNOWN, redistribution: UNKNOWN }
+  accessClass.src:ashtadhyayicom.sutras: { ALL_CONTEXTS: LICENCE_PENDING }
+  displayLabel.work:asht: LICENCE_PENDING
+  evidenceEligible: "no — gate G2 fails (LICENCE_PENDING); also no passages exist"
+  substitution: >
+    Tarka may not fall back to another unverified copy of the sūtra text or to LLM recollection
+    (ADR-0010); claims depending on the text end as insufficient evidence until resolved.

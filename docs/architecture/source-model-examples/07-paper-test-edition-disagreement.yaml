@@ -1,0 +1,47 @@
+example: 07-paper-test-edition-disagreement
+design_section: 22
+paper_test_case: 5   # two editions disagree at the same locus
+purpose: >
+  Both readings are kept; Locus holds no text; evidence binds to one passage and hash;
+  any preference is an attributed AuthorityAssessment, never an overwrite.
+hypothetical: true   # no claim is made that any real editions differ at any particular locus
+no_corpus_text: true
+
+works:
+  - id: "work:<W>"
+    workKind: PRIMARY_TEXT
+
+editions:
+  - { id: "ed:<W>.A", work: "work:<W>", editors: ["<editor A>"] }
+  - { id: "ed:<W>.B", work: "work:<W>", editors: ["<editor B>"] }
+
+sources:
+  - { id: "src:<W>.A", edition: "ed:<W>.A", kind: DIGITAL_TEXT }
+  - { id: "src:<W>.B", edition: "ed:<W>.B", kind: DIGITAL_TEXT }
+
+loci:
+  - locus: "<scheme>:<L>"   # holds no text
+
+passages:
+  - id: "psg:<W>.A@v1/<L>"
+    snapshot: "snap:<W>.A@v1"
+    loci: [ { locus: "<scheme>:<L>", mapping: EXACT } ]
+    text: { original: "<reading A>", contentHash: "<hA>", normalisationProfile: "<p@1>" }
+  - id: "psg:<W>.B@v1/<L>"
+    snapshot: "snap:<W>.B@v1"
+    loci: [ { locus: "<scheme>:<L>", mapping: EXACT } ]
+    text: { original: "<reading B>", contentHash: "<hB>", normalisationProfile: "<p@1>" }
+
+authorityAssessments:   # optional; never merges or overwrites
+  - subject: "ed:<W>.A"
+    purpose: "wording of the root text"
+    tier: "<tier from extension rubric>"
+    rationale: "<why>"
+    assessor: "<curator>"
+
+computed:
+  disagreement: "hA != hB under the same normalisation profile → both passages shown as variants at <L>"
+  canonicalText: "none — Locus has no text field (ADR-0002)"
+  evidenceAnchor: "binds to exactly one passage + hash; citation names the edition and snapshot"
+  reasoningLayer: "Tarka must surface the disagreement (e.g. CONTESTED) when the claim depends on the differing wording"
+  evidenceEligible: "each passage separately, if G1–G5 pass"
