@@ -1,0 +1,132 @@
+example: 02-taittiriya-samhita-passage
+design_section: 14
+purpose: >
+  Multi-step derivation chain recorded as unverified upstream claims; upstream terms
+  carried into effective rights; partial and never-published commentary coverage.
+hypothetical: false
+no_corpus_text: true
+
+works:
+  - id: work:ts
+    workKind: PRIMARY_TEXT
+    title: "Taittirīya Saṃhitā"
+    ext.vedic-sanskrit:
+      vedaAffiliation: "Kṛṣṇa Yajurveda"
+      shakha: "Taittirīya"
+    relations:
+      - { predicate: PART_OF, object: "work:krsna-yajurveda-corpus", note: "grouping record; structure expert-confirmed (OQ-V09)" }
+  - id: work:ts.bhattabhaskara
+    workKind: COMMENTARY
+    title: "<Bhaṭṭa Bhāskara's commentary on the TS>"
+    relations: [ { predicate: COMMENTARY_ON, object: work:ts } ]
+  - id: work:ts.sayana
+    workKind: COMMENTARY
+    title: "<Sāyaṇa's commentary on the TS>"
+    relations: [ { predicate: COMMENTARY_ON, object: work:ts } ]
+  - id: work:ts.keith
+    workKind: TRANSLATION
+    title: "<Keith's English translation of the TS>"
+    relations: [ { predicate: TRANSLATION_OF, object: work:ts } ]
+    tag: K
+    open_question: OQ-V11
+
+editions:
+  - id: ed:ts.weber
+    work: work:ts
+    editors: ["A. Weber"]
+    years: { value: "1871–72", tag: S }
+  - id: ed:ts.bhattabhaskara.mysore
+    work: work:ts.bhattabhaskara
+    publisher: { value: "Government Oriental Library, Mysore (Bibliotheca Sanskrita)", tag: S }
+    years: { value: "1894–98", tag: S }
+  - id: ed:ts.sayana.anandashrama
+    work: work:ts.sayana
+    years: { value: "1900–08", tag: S }
+
+sources:
+  - id: src:sl.ts
+    edition: ed:ts.weber
+    kind: DIGITAL_TEXT
+    layer: SAMHITA_PATHA
+    provider: agent:sanskrit-library
+    format: TEI
+    version: { value: "0.1 (2010)", tag: S }
+  - id: src:scan.ts.bhattabhaskara
+    edition: ed:ts.bhattabhaskara.mysore
+    kind: SCAN
+    layer: COMMENTARY
+
+provenance:
+  upstream_claims:   # stored as claims, not accepted as true until verified
+    - claim: "src:sl.ts DERIVED_FROM src:titus.ts"
+      tag: S
+      verificationStatus: UNVERIFIED
+    - claim: "src:titus.ts DERIVED_FROM data entry by M. Fushimi"
+      tag: S
+      verificationStatus: UNVERIFIED
+    - claim: "data entry by M. Fushimi DERIVED_FROM ed:ts.weber"
+      tag: S
+      verificationStatus: UNVERIFIED
+
+licences:
+  - attachedTo: src:sl.ts
+    licenceId: CC-BY-NC-SA-3.0
+    evidence: { where: "Sanskrit Library catalogue page", tag: S }
+    verificationStatus: PROVIDER_STATED
+    upstreamConstraints:
+      - link: agent:titus
+        statedTerms: "free for scholarly use with citation; no commercial use"
+        tag: S
+        terms: { COMMERCIAL_USE: PROHIBITED, REDISTRIBUTE: UNKNOWN, DERIVE: UNKNOWN }   # silent ⇒ UNKNOWN
+        conflict: C-006
+      - link: "data entry by M. Fushimi"
+        tag: S
+        terms: UNKNOWN
+  - attachedTo: ed:ts.bhattabhaskara.mysore
+    licenceId: PUBLIC_DOMAIN
+    scope: edition
+    tag: K
+    verificationStatus: UNVERIFIED
+
+passages:
+  - id: psg:sl.ts@v1/<locus>
+    snapshot: snap:sl.ts@v1
+    loci: [ { locus: "ts.kpa:<k.p.a…>", mapping: EXACT, note: "lowest unit per chosen edition (OQ-V03)" } ]
+    text:
+      original: "<as in source file>"
+      encoding: { value: "<SLP1?>", tag: K, open_question: OQ-V08 }
+      contentState: STORED
+      contentHash: "<sha256>"
+    accentProfile: { accented: unknown, expectation: "Weber's edition is accented", tag: K, verified: false, open_question: OQ-V08 }
+
+availability:
+  - subject: { work: work:ts, layer: PADAPATHA }
+    holding: NONE
+    reason: UNKNOWN
+    note: "whether the Sanskrit Library file contains a padapāṭha is unverified (OQ-V12)"
+  - subject: work:ts.bhattabhaskara
+    holding: IMAGE_ONLY
+    coverage:
+      missing:
+        - { range: "kāṇḍa 4 commentary", reason: NO_DIGITAL_TEXT, tag: S }
+        - { range: "volumes 6–7", reason: NOT_PUBLISHED, tag: S }
+  - subject: work:ts.sayana
+    holding: NONE
+    reason: NOT_ACQUIRED
+  - subject: work:ts.keith
+    holding: IMAGE_ONLY
+    reason: NO_DIGITAL_TEXT
+    tag: K
+
+computed:
+  policy: "RiseWise conservative product policy (source-model.md §7.1, ADR-0012) — not legal advice"
+  effectiveTerms.src:sl.ts: { COMMERCIAL_USE: PROHIBITED, REDISTRIBUTE: UNKNOWN, DERIVE: UNKNOWN, conditions: [ATTRIBUTION, SHARE_ALIKE, NON_COMMERCIAL] }
+  accessClass.src:sl.ts: { shared_and_public_contexts: LICENCE_PENDING, reason: "downstream CC grant broader than upstream TITUS terms (R4); redistribution silent upstream (R3)" }
+  privatePathway: "a user's own legitimately obtained copy → USER_SUPPLIED, INTERNAL_USE_ONLY in that workspace (R6)"
+  displayLabels:
+    work:ts (samhita, via src:sl.ts): LICENCE_PENDING
+    work:ts (padapatha): NOT_AVAILABLE
+    work:ts.bhattabhaskara: "SCAN_ONLY (coverage partial)"
+    work:ts.sayana: NOT_AVAILABLE
+    work:ts.keith: SCAN_ONLY
+  evidenceEligible: "no TS layer is shared/public evidence today (G2 / G1); a private USER_SUPPLIED copy is usable only in its workspace"

@@ -1,0 +1,46 @@
+example: 05-user-supplied-source
+design_section: 17
+paper_test_case: 4   # user-uploaded private source
+purpose: >
+  User-attested licence (unverified); workspace-private; mandatory origin badge;
+  promotion to the shared corpus only through curator review.
+hypothetical: true
+no_corpus_text: true
+
+works:
+  - id: "work:user.<id>.doc"
+    workKind: DOCUMENT
+    title: "<user's title>"
+
+sources:
+  - id: "src:user.<id>.doc"
+    kind: "<DIGITAL_TEXT | SCAN>"
+    origin: USER_SUPPLIED
+    workspace: "<private workspace id>"
+
+acquisitions:
+  - id: "acq:user.<id>"
+    method: USER_UPLOAD
+    by: "agent:user:<id>"
+    fileHash: "<sha256>"
+
+licences:
+  - attachedTo: "src:user.<id>.doc"
+    licenceId: "<as declared by user>"
+    verificationStatus: UNVERIFIED
+    evidence: { where: "user attestation", at: "<timestamp>" }
+
+authority: { tier: USER_SUPPLIED, assessed: false }   # UNASSESSED
+verification: { state: INTEGRITY_CHECKED }
+
+availability:
+  - subject: "src:user.<id>.doc"
+    holding: FULL_TEXT
+    origin: USER_SUPPLIED
+
+computed:
+  accessClass: { owner_workspace: INTERNAL_USE_ONLY, other_workspaces: "not visible", shared_corpus: "not included" }
+  displayLabel: "AVAILABLE + 'User-supplied' badge"
+  externalProcessing: "only with the user's explicit consent"
+  evidenceEligible: "only inside the owner's workspace, always labelled user-supplied (G3)"
+  promotion: "only via curator licence review → new CURATED_IMPORT acquisition"

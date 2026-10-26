@@ -1,0 +1,61 @@
+example: 06-paper-test-public-domain
+design_section: 22
+paper_test_case: 1   # fully available public-domain source
+purpose: >
+  A first-party, verified transcription of a public-domain printed edition.
+  Shows that "available + public domain" is usable but still reports verification separately.
+hypothetical: true   # no such transcription exists yet
+no_corpus_text: true
+
+works:
+  - id: "work:<pd-work>"
+    workKind: "<PRIMARY_TEXT | BOOK>"
+    title: "<public-domain work>"
+
+editions:
+  - id: "ed:<pd-edition>"
+    work: "work:<pd-work>"
+    year: "<publication year>"
+
+sources:
+  - id: "src:risewise.<pd-edition>"
+    edition: "ed:<pd-edition>"
+    kind: DIGITAL_TEXT
+    origin: FIRST_PARTY
+    derivedFrom: "src:scan.<pd-edition>"   # page images used for collation
+
+licences:
+  - attachedTo: "work:<pd-work>"
+    licenceId: PUBLIC_DOMAIN
+    scope: underlying-work
+    verificationStatus: LEGAL_REVIEWED   # required, incl. edition-rights check (OQ-L08)
+  - attachedTo: "ed:<pd-edition>"
+    licenceId: PUBLIC_DOMAIN
+    scope: edition
+    verificationStatus: LEGAL_REVIEWED
+  - attachedTo: "src:risewise.<pd-edition>"
+    licenceId: "<RiseWise first-party licence>"   # OQ-L05
+    scope: digital-representation
+    verificationStatus: CURATOR_VERIFIED
+
+verification:
+  - target: "snap:risewise.<pd-edition>@v1"
+    checkType: INTEGRITY_HASH
+    result: PASS
+  - target: "passages in <collated sections>"
+    checkType: EDITION_COLLATION
+    method: HUMAN_COLLATION
+    result: PASS
+    evidenceRef: "<scan page refs>"
+
+availability:
+  - subject: "ed:<pd-edition>"
+    holding: FULL_TEXT
+    origin: FIRST_PARTY
+
+computed:
+  accessClass: { ALL_CONTEXTS: REDISTRIBUTABLE }
+  displayLabel: AVAILABLE
+  verificationState: { collated_sections: HUMAN_VERIFIED, other_sections: INTEGRITY_CHECKED }
+  evidenceEligible: "yes — G1–G5 pass"
+  guard: "Authority and verification are reported separately; public domain does not imply accurate or authoritative."

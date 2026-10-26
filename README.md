@@ -1,42 +1,53 @@
 # RiseWise
-
 A provenance-first AI reasoning engine for defensible decisions.
 
-## Current state (MVP, Phase 1-2 in progress)
+RiseWise is a provenance-first knowledge, research and reasoning platform. Every important conclusion should be traceable to the exact source passages behind it, and RiseWise says honestly when it does not have a source.
 
-Two reasoning modules and a thin orchestrator connecting them, all backend-only:
+**Tarka** is the structured reasoning capability within RiseWise. It is not a chatbot: it examines a question through claims, evidence, arguments, counterarguments, assumptions, contradictions and uncertainty, and supports "Why?" and "Challenge this conclusion". An LLM-generated statement is never automatically treated as a fact.
 
-- **Module 1 — Context Structurer** (`POST /context/structure`): turns a
-  raw decision or question, on any topic, into a structured Decision
-  Context (decision, objective, constraints, stakeholders, time horizon,
-  system boundary, known evidence, unknown information).
-- **Module 2 — RITA Engine** (`POST /rita/scan`): takes a Decision Context
-  and scans it through the four RITA dimensions (Relational Integrity,
-  Integrity of Systems, Temporal Alignment, Adaptive Regeneration),
-  producing findings with observation, risk/opportunity, key questions,
-  evidence status, and confidence.
-- **Pipeline orchestrator** (`POST /decisions/analyze`): runs Module 1 then
-  Module 2 over the same raw input in one call.
+The first two domains are **GENERAL** and **VEDIC_SANSKRIT** (Pāṇini, Siddhānta Kaumudī, Ṛgveda, Taittirīya Saṃhitā and related scholarship).
 
-Reasoning is LLM-backed, not rule-based, so it generalizes across any
-domain rather than being scoped to one demo scenario. By default the LLM
-is a **self-hosted open model served by Ollama** — no third-party API
-dependency. The Anthropic API is available as an opt-in alternative. See
-`docs/adr-0004-self-hosted-ollama-default.md` for why, and
-`docs/adr-0001`–`0003` for the modules and pipeline. The RiseWise project's
-`constitution.md` doc (in the attached Claude project) has the full RITA
-Framework and reasoning pipeline.
+## Current state
 
-No frontend, no database yet.
+- **Design phase.** The Knowledge Source Model v0.1 is approved; the product requirements and decisions are documented. No schema, database or reasoning engine has been implemented yet for the current architecture.
+- **Earlier Python backend retired.** The previous Python backend was an earlier prototype and is retired as the core implementation path ([ADR-0014](docs/architecture/decisions/0014-retire-python-prototype-as-core-implementation.md)). See [Historical Python Prototype](#historical-python-prototype) below.
+- **Schema technology approved.** TypeScript is the language and Zod the runtime validation library for RiseWise domain models and validation schemas ([ADR-0013](docs/architecture/decisions/0013-typescript-and-zod-for-domain-models.md)).
+- **Everything else is still provisional or open,** including the web framework, API server, database, local or cloud LLM providers, embeddings, search, authentication, deployment and billing. See the Decision Register.
 
-## Running locally
+## Development status
+
+Implementation setup for the current RiseWise/Tarka architecture is being established. There are currently no supported instructions for running it locally.
+
+## Project documents
+
+| Document | Purpose |
+|---|---|
+| [Product requirements](docs/PRODUCT_REQUIREMENTS.md) | What RiseWise must do (approved / provisional / open) |
+| [Decision Register](docs/DECISION_REGISTER.md) | Central index of decisions, open items and review points |
+| [Source model](docs/architecture/source-model.md) | The approved Knowledge Source Model |
+| [Architecture decisions](docs/architecture/decisions/) | ADRs |
+| [Open questions](docs/OPEN_QUESTIONS.md) | Unresolved questions |
+| [Conflicts](docs/CONFLICTS.md) | Recorded conflicts and how they are handled |
+
+## Historical Python Prototype
+
+An earlier Python prototype of RiseWise is still in this repository (`backend/`, `tests/`, `requirements.txt`, `pytest.ini`, `.env.example`). It contained:
+
+- **Module 1, Context Structurer** (`POST /context/structure`): turned a raw decision or question into a structured decision context.
+- **Module 2, RITA Engine** (`POST /rita/scan`): scanned a decision context and produced findings.
+- **Pipeline orchestrator** (`POST /decisions/analyze`): ran Module 1 then Module 2 in one call.
+- **Ollama integration**: a self-hosted model served by Ollama as the default LLM backend, with the Anthropic API as an opt-in alternative.
+
+The prototype is **retired as the core implementation path** ([ADR-0014](docs/architecture/decisions/0014-retire-python-prototype-as-core-implementation.md)). It is not the current architecture, and it remains recoverable in Git history (commits `7d3199a`, `41713d5`, `fa1c324`, `cb43582`). Its own design notes are in `docs/adr-0001` … `docs/adr-0004`; they use a separate, historical numbering from the current ADR series. Python is not prohibited for future, explicitly approved supporting tooling.
+
+### Running the retired prototype (historical reference only)
+
+> These instructions apply **only to the retired Python prototype**. They are not setup instructions for the current RiseWise/Tarka architecture.
 
 **LLM backend (choose one):**
 
-- Self-hosted (default): install [Ollama](https://ollama.com), run
-  `ollama serve`, then `ollama pull llama3.1` (or your chosen model).
-- Anthropic API: set `RISEWISE_LLM_PROVIDER=anthropic` and
-  `ANTHROPIC_API_KEY` in `.env`.
+- Self-hosted (prototype default): install [Ollama](https://ollama.com), run `ollama serve`, then `ollama pull llama3.1` (or your chosen model).
+- Anthropic API: set `RISEWISE_LLM_PROVIDER=anthropic` and `ANTHROPIC_API_KEY` in `.env`.
 
 ```bash
 pip install -r requirements.txt
@@ -49,15 +60,13 @@ POST http://localhost:8000/decisions/analyze
 {"raw_input": "Should we do X?"}
 ```
 
-`/context/structure` and `/rita/scan` remain independently callable if you
-only want one step, or want to re-run the RITA scan on a hand-edited context.
+`/context/structure` and `/rita/scan` were also independently callable.
 
-## Testing
+### Testing the retired prototype (historical reference only)
 
 ```bash
 pip install -r requirements.txt
 pytest
 ```
 
-Tests run offline against fake/mocked LLM clients — no running Ollama
-server or Anthropic API key required.
+The prototype's tests run offline against fake/mocked LLM clients; no running Ollama server or Anthropic API key is required.
