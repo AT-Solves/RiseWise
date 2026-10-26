@@ -66,11 +66,8 @@ licences:
     licenceId: CUSTOM
     terms: "free to use … provided that appropriate credits are mentioned"
     evidence: { where: "github.com/ashtadhyayi-com/data README", tag: V }
-    permittedUse:
-      commercial: UNKNOWN
-      redistribution: UNKNOWN
-      derivatives: UNKNOWN
-      attribution: REQUIRED
+    terms: { STORE: UNKNOWN, REDISTRIBUTE: UNKNOWN, DERIVE: UNKNOWN, COMMERCIAL_USE: UNKNOWN }   # "free to use" does not establish these uses individually; silence ⇒ UNKNOWN (ADR-0012)
+    conditions: [ATTRIBUTION]
     verificationStatus: PROVIDER_STATED
     upstreamConstraints:
       - terms: "rights of the typed commentary editions are undocumented"
@@ -102,7 +99,7 @@ annotations:
     evidenceEligible: false   # until verified (ADR-0009)
 
 computed:
-  effectiveRights.src:ashtadhyayicom.sutras: { commercial: UNKNOWN, redistribution: UNKNOWN }
+  effectiveTerms.src:ashtadhyayicom.sutras: { REDISTRIBUTE: UNKNOWN, COMMERCIAL_USE: UNKNOWN }
   accessClass.src:ashtadhyayicom.sutras: { ALL_CONTEXTS: LICENCE_PENDING }
   displayLabel.work:asht: LICENCE_PENDING
   evidenceEligible: "no — gate G2 fails (LICENCE_PENDING); also no passages exist"

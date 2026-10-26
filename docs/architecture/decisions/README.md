@@ -2,7 +2,7 @@
 
 Format: Context → Decision → Consequences. ADRs are immutable once accepted; a change is a new ADR that supersedes the old one.
 
-All ADRs below were accepted with the RiseWise Knowledge Source Model v0.1 ([`../source-model.md`](../source-model.md)), approved by the product owner on 2026-10-26. They freeze the **shape** of the model only. No Vedic scholarly fact, citation convention or licence value is frozen by any ADR; those live in [`../../OPEN_QUESTIONS.md`](../../OPEN_QUESTIONS.md).
+ADR-0001 … 0011 were accepted with the RiseWise Knowledge Source Model v0.1 ([`../source-model.md`](../source-model.md)), approved by the product owner on 2026-10-26. They freeze the **shape** of the model only. No Vedic scholarly fact, citation convention or licence value is frozen by any ADR; those live in [`../../OPEN_QUESTIONS.md`](../../OPEN_QUESTIONS.md).
 
 | ADR | Title | Status |
 |---|---|---|
@@ -17,3 +17,4 @@ All ADRs below were accepted with the RiseWise Knowledge Source Model v0.1 ([`..
 | [0009](0009-llm-output-is-never-a-source.md) | LLM output is never a source | Accepted |
 | [0010](0010-no-silent-merging-no-substitution.md) | No silent merging of editions; no substitution of unavailable sources | Accepted |
 | [0011](0011-domain-specifics-via-extensions.md) | Domain specifics only through extensions | Accepted |
+| [0012](0012-conservative-rights-policy-silence-is-not-permission.md) | Conservative rights policy — silence is not permission (refines 0006; resolves C-009) | Accepted |

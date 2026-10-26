@@ -4,7 +4,8 @@
 |---|---|
 | **Status** | Approved design (product owner, 2026-10-26). Documentation only — nothing here is implemented. |
 | **Scope** | The domain-neutral source/knowledge layer that Tarka will later reason over. |
-| **Frozen decisions** | ADR-0001 … ADR-0011 in [`decisions/`](decisions/README.md). |
+| **Frozen decisions** | ADR-0001 … ADR-0012 in [`decisions/`](decisions/README.md). |
+| **Revisions** | 2026-10-26: §7 rights determination policy added (resolves CONFLICT C-009, ADR-0012); §22 paper test extended with real-source check. |
 | **Worked examples** | Metadata-only YAML in [`source-model-examples/`](source-model-examples/README.md). |
 | **Unresolved items** | [`../OPEN_QUESTIONS.md`](../OPEN_QUESTIONS.md) and [`../CONFLICTS.md`](../CONFLICTS.md). |
 
@@ -197,15 +198,16 @@ Conclusion (Tarka, later)
 | `licenceUrl` / `licenceText` | URL plus a captured copy (hash + capture date) of the exact wording |
 | `rightsHolder` | If known; `UNKNOWN` allowed |
 | `scope` | What it covers: underlying work / edition apparatus / digital representation / annotation layer |
-| `permittedUse` | `commercial` (ALLOWED / PROHIBITED / UNKNOWN), `derivatives` (ALLOWED / SHARE_ALIKE / PROHIBITED / UNKNOWN), `redistribution` (ALLOWED / CONDITIONAL / PROHIBITED / UNKNOWN), `attribution` (required? + text template), `scholarlyOnly`, `membersOnly` |
-| `upstreamConstraints[]` | Inherited terms, e.g. the van Nooten–Holland "research but not commercial" notice carried into VedaWeb's version [S] |
+| `terms` | One value per **use** (see §7.1): `PERMITTED` / `PROHIBITED` / `UNKNOWN`, each backed by evidence. A use the licence does not mention is `UNKNOWN`, never `PERMITTED`. |
+| `conditions[]` | Restrictions attached to permitted uses: `ATTRIBUTION` (+ text template), `SHARE_ALIKE`, `NON_COMMERCIAL`, `SCHOLARLY_ONLY`, `MEMBERS_ONLY`, `NO_DERIVATIVES`, … |
+| `upstreamConstraints[]` | Inherited terms from each disclosed upstream link in the rights chain, e.g. the van Nooten–Holland "research but not commercial" notice carried into VedaWeb's version [S]. A disclosed upstream link with **no documented terms** contributes `UNKNOWN` for every use. |
 | `acquisitionMethod` | `PUBLIC_DOWNLOAD` / `API` / `GIT_REPOSITORY` / `WRITTEN_PERMISSION` / `PURCHASED_LICENCE` / `USER_UPLOAD` / `FIRST_PARTY_TRANSCRIPTION` / `PRINT_REFERENCE` |
 | `evidence[]` | Where each term was stated (URL, file, TEI header element, email) plus captured hash |
 | `verificationStatus` | `UNVERIFIED` · `PROVIDER_STATED` · `CURATOR_VERIFIED` · `LEGAL_REVIEWED` · `DISPUTED` |
 | `effectiveFrom` / `supersedes` | For licence changes |
 | `checksumRef` | Hash of the content the licence applies to |
 
-**Effective rights** are computed, not stored. They combine all applicable licence records (Work ∧ Edition ∧ Source ∧ upstream), taking the most restrictive value for each term. **Any `UNKNOWN` term puts the item under review (`LICENCE_PENDING`).** They are then evaluated against a **use context** by a configurable rights policy:
+**Effective rights** are computed, not stored, by the rights determination policy in §7.1. They are then evaluated against a **use context**:
 
 | Use context (configurable) | Example question |
 |---|---|
@@ -221,15 +223,54 @@ The output is a **RightsDecision**: `canStore` · `canDisplayFull` · `canDispla
 
 | Class | Meaning | Typical case |
 |---|---|---|
-| `REDISTRIBUTABLE` | RiseWise may store, display and redistribute, subject to attribution / share-alike | CC BY 4.0 material (DCS [S]; VedaWeb Zurich morphology [V]); public-domain first-party transcriptions |
+| `REDISTRIBUTABLE` | RiseWise may store, display and redistribute, subject to attribution / share-alike | openly licensed material whose **whole rights chain** is documented and reviewed; public-domain first-party transcriptions. (DCS and VedaWeb's CC BY 4.0 layers do not qualify yet: their upstream links are undocumented — §22.6.) |
 | `INTERNAL_USE_ONLY` | RiseWise may store and use for reasoning and limited display, but not redistribute or export | written permission that excludes redistribution; NC material in a context that does not allow redistribution |
 | `USER_IMPORT_ONLY` | RiseWise ships an importer, manifest and checksums only; each user obtains and stores their own copy under its terms | NC or scholarly-only sources in commercial tiers; copyrighted works the user has licensed |
 | `UNAVAILABLE` | Cannot be held: restricted, not extant, or not digitised | modern copyrighted scholarship with no import route; unpublished volumes |
 | `LICENCE_PENDING` | Not yet decided. Content may not be used as evidence. | ashtadhyayi.com data before written permission |
 
-**Open rule (CONFLICT C-009, OQ-L12):** whether an upstream constraint that is *silent* on a term counts as `UNKNOWN` (⇒ pending) or as "no additional restriction" is not yet decided. Until it is, affected sources are treated as `LICENCE_PENDING`.
-
 The class depends on context: a CC BY-NC-SA source may be `REDISTRIBUTABLE` in a free non-commercial tier but `USER_IMPORT_ONLY` in a paid tier. That mapping needs legal review (OQ-L01). **Conservative default until then:** NC and scholarly-only material is `USER_IMPORT_ONLY` in every hosted or paid context.
+
+### 7.1 Rights determination policy (resolves CONFLICT C-009)
+
+> **RiseWise conservative product policy — not legal advice.** This section defines what RiseWise will and will not do with source material. It does not state what any licence legally permits; questions of law go to legal review (OQ-L01, OQ-L08).
+
+**Principle.** If RiseWise cannot establish that a particular use is permitted, RiseWise does not assume permission. **Silence in a licence never means permission**, and RiseWise never claims otherwise.
+
+**Uses evaluated** (each a separate term): `STORE` · `DISPLAY_FULL` · `DISPLAY_EXCERPT` · `REDISTRIBUTE` (incl. making available to other users) · `DERIVE` (annotations, corrections, indexes, embeddings) · `COMMERCIAL_USE` · `EXTERNAL_PROCESSING` (sending text to a third-party service).
+
+**Rules**
+
+| # | Situation | Result |
+|---|---|---|
+| R1 | A use is **explicitly permitted** by evidence | `PERMITTED`, subject to all attached conditions and every other applicable restriction |
+| R2 | A use is **explicitly prohibited** | `PROHIBITED` |
+| R3 | The licence is **silent**, or the term is otherwise unknown | `UNKNOWN` → pending review |
+| R4 | Licence statements **conflict** (two statements for the same record, or a downstream grant broader than an upstream term) | The more restrictive interpretation applies until clarified |
+| R5 | A source whose rights for a use are **unresolved** | Must not become shared or public evidence |
+| R6 | A user's own, legitimately obtained copy | May be used through the private `USER_SUPPLIED` pathway, subject to the user's own rights and workspace restrictions |
+| R7 | Communication | RiseWise never presents silence as permission (UI, API, exports, documentation) |
+
+**Combination across the rights chain.** The rights chain of a Source is every LicenceRecord that applies to it: Work, Edition, Source, and **each disclosed upstream link** in its provenance (e.g. data entry → intermediate archive → provider). For each use:
+
+1. If any link says `PROHIBITED` → `PROHIBITED`.
+2. Else if any link is `UNKNOWN` — including a disclosed upstream link with no documented terms → `UNKNOWN`.
+3. Else (every link `PERMITTED`) → `PERMITTED`, with the **union** of all conditions.
+4. Conflicting statements about one link are first reduced by R4 (order of restrictiveness: `PROHIBITED` > `UNKNOWN` > `PERMITTED`; conditions are unioned).
+
+**From terms to access class (context-dependent).** Each use context requires a set of uses (configurable; e.g. a hosted free tier requires `STORE`, `DISPLAY_*`, `REDISTRIBUTE`; a paid tier additionally `COMMERCIAL_USE`; an external LLM call requires `EXTERNAL_PROCESSING`). For a RiseWise-held Source in a given context:
+
+- any required use `PROHIBITED` → `UNAVAILABLE` or `USER_IMPORT_ONLY` (if users can lawfully obtain their own copy) in that context;
+- else any required use `UNKNOWN` → **`LICENCE_PENDING`** in that context;
+- else the class follows from the permitted uses and conditions (`REDISTRIBUTABLE` / `INTERNAL_USE_ONLY`).
+
+Uses not required by a context do not affect it (e.g. an `UNKNOWN` commercial term does not block a non-commercial context). The five access classes are unchanged.
+
+**Resolution.** Rights for a use become *resolved* only when every link of the chain has evidence establishing the term (R1 or R2) and the licence record has been reviewed (`CURATOR_VERIFIED` or `LEGAL_REVIEWED`; who may review is OQ-L04). Typical evidence that resolves an `UNKNOWN`: a written clarification from the provider or upstream rights holder, a documented licence for the upstream link, or legal review. Each clarification is stored as **licence evidence** — not as provenance and not as a verification record.
+
+**Private pathway (R6).** A user who has their own legitimately obtained copy may import it as a `USER_SUPPLIED` Source in their workspace: `INTERNAL_USE_ONLY` there, licence `UNVERIFIED` (user attestation), never shared, redistributed or externally processed without the user's explicit consent, always labelled. The RiseWise-held record of the same source stays `LICENCE_PENDING`.
+
+**Unchanged by this policy:** licence evidence remains separate from provenance and verification (ADR-0008); LLM output remains excluded as source evidence (ADR-0009).
 
 ## 8. Verification Model
 
@@ -442,7 +483,7 @@ Tracked with ids in [`../OPEN_QUESTIONS.md`](../OPEN_QUESTIONS.md):
 
 **Purpose:** show that the model cannot accidentally treat unavailable, unverified or restricted material as trustworthy evidence. Each case traces the records the model would hold and the gate that decides evidence eligibility.
 
-**Evidence-eligibility gate (as defined above).** A passage may back an `EvidenceAnchor` only if **all** hold:
+**Evidence-eligibility gate (as defined above; G2 applies the rights policy in §7.1).** A passage may back an `EvidenceAnchor` only if **all** hold:
 
 | # | Condition | Defined in |
 |---|---|---|
@@ -477,7 +518,7 @@ See [`04-external-restricted-source.yaml`](source-model-examples/04-external-res
 See [`03-panini-rule.yaml`](source-model-examples/03-panini-rule.yaml) (ashtadhyayi.com data).
 
 - LicenceRecord: `CUSTOM`, terms "free to use … with appropriate credits" [V]; `commercial: UNKNOWN`, `redistribution: UNKNOWN` (upstream edition rights undocumented).
-- Effective rights: any `UNKNOWN` ⇒ access `LICENCE_PENDING` in **every** use context → label `LICENCE_PENDING`.
+- Effective rights (§7.1 R3): the README is silent on commercial use and redistribution, and the upstream editions are undocumented ⇒ those uses are `UNKNOWN` ⇒ access `LICENCE_PENDING` in every context that requires them (all shared/public contexts) → label `LICENCE_PENDING`.
 - Lifecycle: stops at `RIGHTS_REVIEW`; no acquisition is approved, so no passages exist. Even if content had been obtained earlier, **G2 fails** → **cannot be evidence.**
 - Tarka would receive `LICENCE_PENDING` and, by the no-substitution rule, may not fall back to an unverified copy elsewhere or to LLM recollection of the sūtra; the honest outcome is insufficient evidence for claims that depend on it.
 
@@ -501,6 +542,30 @@ See [`05-user-supplied-source.yaml`](source-model-examples/05-user-supplied-sour
 - Tarka (later) sees both readings; when the claim depends on the differing wording, the reasoning layer must surface the disagreement (e.g. `CONTESTED`), not silently pick one.
 - Gate: both passages may individually pass G1–G5; the disagreement is preserved as information, not hidden.
 
+### 22.6 Real-source check under the §7.1 policy
+
+The two real Vedic examples were re-evaluated. Facts carry their research tags; the outcome is RiseWise policy, not a legal conclusion.
+
+**VedaWeb Ṛgveda** ([`01-rigveda-passage.yaml`](source-model-examples/01-rigveda-passage.yaml))
+
+| Layer | Provider licence [V] | Disclosed upstream link | Upstream terms known? | Result for shared/public use |
+|---|---|---|---|---|
+| `vnh` (metrically restored text) | CC BY-NC-SA 4.0 | van Nooten & Holland electronic text via UT Austin LRC | Partly: "research, not commercial" [S]; silent on redistribution and derivatives | `REDISTRIBUTE`, `DERIVE` = `UNKNOWN` (R3), and the downstream grant is broader than the upstream wording (R4) ⇒ **`LICENCE_PENDING`** |
+| `aufrecht` | CC BY-NC-SA 4.0 | GRETIL e-text; data entry by van Nooten & Holland [V] | No (GRETIL per-file terms unconfirmed, OQ-L07) | **`LICENCE_PENDING`** |
+| `padapatha` | CC BY-NC-SA 4.0 | GRETIL; Sansknet project input [V] | No | **`LICENCE_PENDING`** |
+| `lubotsky` concordance | CC BY-NC-SA 4.0 | A. Lubotsky, shared 2010 [V] | No | **`LICENCE_PENDING`** |
+| `zurich` morphology | CC BY 4.0 | Lubotsky's annotation at Zurich, supplied by Widmer & Scarlata [V] | No | **`LICENCE_PENDING`** |
+| `griffith` translation | CC BY-NC-SA 4.0 | Griffith 1890 print [V]; underlying public domain [K] | Underlying status unverified (OQ-L09) | **`LICENCE_PENDING`** |
+| `geldner` translation | CC BY-NC-SA 4.0 | HOS 63 (2003) [V] | No (C-004) | **`LICENCE_PENDING`** |
+
+**Sanskrit Library Taittirīya Saṃhitā** ([`02-taittiriya-samhita-passage.yaml`](source-model-examples/02-taittiriya-samhita-passage.yaml))
+
+| Layer | Provider licence | Disclosed upstream link | Upstream terms known? | Result for shared/public use |
+|---|---|---|---|---|
+| TS text (v0.1) | CC BY-NC-SA 3.0 [S] | TITUS file ← Fushimi data entry ← Weber edition [S] | TITUS: scholarly use, no commercial [S]; silent on redistribution | Downstream grant broader than upstream terms (R4) and redistribution `UNKNOWN` (R3) ⇒ **`LICENCE_PENDING`** |
+
+**Outcome.** Every real VedaWeb and Sanskrit Library layer **remains blocked** from shared or public evidence (G2 fails). This is a deliberate consequence of R3–R5, not a judgement that these licences are invalid. Each layer becomes eligible only after its rights chain is resolved (§7.1 "Resolution"), e.g. by written clarification from the provider or upstream rights holder (OQ-L10, OQ-L14). Until then, a user may use their own legitimately obtained copy privately through the `USER_SUPPLIED` pathway (R6); it is evidence-eligible only in that workspace and always labelled.
+
 ### Paper-test result
 
 | Case | Label | Evidence-eligible? | Blocking gate |
@@ -510,5 +575,7 @@ See [`05-user-supplied-source.yaml`](source-model-examples/05-user-supplied-sour
 | 3 Uncertain licence | `LICENCE_PENDING` | No | G2 |
 | 4 User-uploaded private | e.g. `AVAILABLE` + `User-supplied` badge | Only in owner's workspace, labelled | G3 |
 | 5 Editions disagree | `AVAILABLE` (each) | Yes, each separately; disagreement preserved | — (P5 no-merge) |
+| Real: VedaWeb RV (all layers) | `LICENCE_PENDING` | No (shared/public); private `USER_SUPPLIED` copy only in its workspace | G2 (R3/R4) |
+| Real: Sanskrit Library TS | `LICENCE_PENDING` | No (shared/public); private `USER_SUPPLIED` copy only in its workspace | G2 (R3/R4) |
 
-In none of the five cases does unavailable, unverified-licence or restricted material become usable shared evidence, and in no case is LLM output admitted (G5).
+In none of the cases does unavailable, unresolved-licence or restricted material become usable shared evidence; silence is never read as permission; and in no case is LLM output admitted (G5).

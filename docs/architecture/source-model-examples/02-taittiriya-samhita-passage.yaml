@@ -74,10 +74,14 @@ licences:
     evidence: { where: "Sanskrit Library catalogue page", tag: S }
     verificationStatus: PROVIDER_STATED
     upstreamConstraints:
-      - terms: "scholarly use only; no commercial use"
-        statedBy: agent:titus
+      - link: agent:titus
+        statedTerms: "free for scholarly use with citation; no commercial use"
         tag: S
+        terms: { COMMERCIAL_USE: PROHIBITED, REDISTRIBUTE: UNKNOWN, DERIVE: UNKNOWN }   # silent ⇒ UNKNOWN
         conflict: C-006
+      - link: "data entry by M. Fushimi"
+        tag: S
+        terms: UNKNOWN
   - attachedTo: ed:ts.bhattabhaskara.mysore
     licenceId: PUBLIC_DOMAIN
     scope: edition
@@ -115,12 +119,14 @@ availability:
     tag: K
 
 computed:
-  effectiveRights.src:sl.ts: { commercial: PROHIBITED, derivatives: SHARE_ALIKE, attribution: REQUIRED, redistribution: "UNKNOWN until C-006 resolved" }
-  accessClass.src:sl.ts: { ALL_CONTEXTS: LICENCE_PENDING, reason: "upstream TITUS terms vs downstream CC grant unresolved (C-006); silent-term rule open (C-009)" }
+  policy: "RiseWise conservative product policy (source-model.md §7.1, ADR-0012) — not legal advice"
+  effectiveTerms.src:sl.ts: { COMMERCIAL_USE: PROHIBITED, REDISTRIBUTE: UNKNOWN, DERIVE: UNKNOWN, conditions: [ATTRIBUTION, SHARE_ALIKE, NON_COMMERCIAL] }
+  accessClass.src:sl.ts: { shared_and_public_contexts: LICENCE_PENDING, reason: "downstream CC grant broader than upstream TITUS terms (R4); redistribution silent upstream (R3)" }
+  privatePathway: "a user's own legitimately obtained copy → USER_SUPPLIED, INTERNAL_USE_ONLY in that workspace (R6)"
   displayLabels:
     work:ts (samhita, via src:sl.ts): LICENCE_PENDING
     work:ts (padapatha): NOT_AVAILABLE
     work:ts.bhattabhaskara: "SCAN_ONLY (coverage partial)"
     work:ts.sayana: NOT_AVAILABLE
     work:ts.keith: SCAN_ONLY
-  evidenceEligible: "none of the TS layers are evidence-eligible today"
+  evidenceEligible: "no TS layer is shared/public evidence today (G2 / G1); a private USER_SUPPLIED copy is usable only in its workspace"

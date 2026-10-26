@@ -4,7 +4,7 @@ Unresolved items from the RiseWise Knowledge Source Model v0.1. **Nothing here i
 
 Categories: **L** licensing/legal · **V** Vedic/Sanskrit facts and conventions · **E** engineering/model · **P** product/people.
 
-**Before schema design (Step 2)** at minimum: OQ-L12, OQ-E01, OQ-E02, OQ-E04, OQ-E05, OQ-E08 should be resolved or given an explicit provisional answer.
+**Before schema design (Step 2)** at minimum: OQ-E01, OQ-E02, OQ-E04, OQ-E05, OQ-E08 should be resolved or given an explicit provisional answer.
 
 ---
 
@@ -23,7 +23,9 @@ Categories: **L** licensing/legal · **V** Vedic/Sanskrit facts and conventions 
 | OQ-L09 | Confirm public-domain status of the underlying works behind VedaWeb translations (e.g. Griffith 1890 [K]) and the rights status of the Geldner HOS 2003 layer (C-004). | Curator + legal | ex. 01 |
 | OQ-L10 | Sanskrit Library / TITUS: written confirmation of TS redistribution terms (C-006); TITUS terms for any other Vedic text [S]. | Product owner (correspondence) | ex. 02, 04 |
 | OQ-L11 | ashtadhyayi.com: written permission (commercial use, redistribution) and the source edition for each commentary file (C-008). | Product owner (correspondence) | ex. 03 |
-| OQ-L12 | **Silent upstream terms (C-009):** does an upstream notice that is silent on a term count as `UNKNOWN` (⇒ pending) or as "no additional restriction"? | Product owner + legal | C-009 |
+| ~~OQ-L12~~ | **Resolved 2026-10-26** — silent upstream terms are `UNKNOWN` and pending review (ADR-0012; RiseWise conservative product policy, not legal advice). | — | C-009 |
+| OQ-L14 | Clarification requests to VedaWeb (per layer: vnh, aufrecht, padapāṭha, Lubotsky, Zurich, translations) on upstream rights, needed before any VedaWeb layer can be shared evidence (ADR-0012). | Product owner (correspondence) | §22.6 |
+| OQ-L15 | Required uses per use context (which of STORE / DISPLAY / REDISTRIBUTE / DERIVE / COMMERCIAL_USE / EXTERNAL_PROCESSING each context needs) — policy configuration, part of OQ-L01. | Product owner + legal | §7.1 |
 | OQ-L13 | DCS: confirm licence version (3.0 vs 4.0, C-005). Vidyut: confirm the data-bundle licence (code is MIT [V]). Sanskrit Heritage: confirm LGPLLR terms [S]. Cologne dictionaries: confirm per-dictionary terms under the repository's CC BY-SA 4.0 [V]. | Curator | research |
 
 ## V — Vedic/Sanskrit facts and conventions (provisional in the `vedic-sanskrit` extension)

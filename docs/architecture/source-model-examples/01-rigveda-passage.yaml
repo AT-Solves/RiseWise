@@ -84,21 +84,34 @@ licences:
     evidence: { where: "vedaweb_corpus.tei teiHeader", tag: V }
     verificationStatus: PROVIDER_STATED
     upstreamConstraints:
-      - terms: "research use, not commercial"
-        statedBy: "UT Austin LRC notice (van Nooten & Holland diskette)"
+      - link: "van Nooten & Holland electronic text via UT Austin LRC"
+        statedTerms: "research use, not commercial"
         tag: S
+        terms: { COMMERCIAL_USE: PROHIBITED, REDISTRIBUTE: UNKNOWN, DERIVE: UNKNOWN }   # silent ⇒ UNKNOWN
   - attachedTo: src:vedaweb.aufrecht
     licenceId: CC-BY-NC-SA-4.0
     evidence: { where: "teiHeader", tag: V }
     verificationStatus: PROVIDER_STATED
+    upstreamConstraints:
+      - link: "GRETIL e-text; data entry by van Nooten & Holland"
+        tag: V
+        terms: UNKNOWN   # not documented (OQ-L07) → UNKNOWN for every use (ADR-0012)
   - attachedTo: src:vedaweb.padapatha
     licenceId: CC-BY-NC-SA-4.0
     evidence: { where: "teiHeader", tag: V }
     verificationStatus: PROVIDER_STATED
+    upstreamConstraints:
+      - link: "GRETIL; Sansknet project input"
+        tag: V
+        terms: UNKNOWN
   - attachedTo: src:vedaweb.zurich
     licenceId: CC-BY-4.0
     evidence: { where: "teiHeader", tag: V }
     verificationStatus: PROVIDER_STATED
+    upstreamConstraints:
+      - link: "Lubotsky's annotation at University of Zurich, supplied by Widmer & Scarlata"
+        tag: V
+        terms: UNKNOWN
   - attachedTo: work:rv.griffith
     licenceId: PUBLIC_DOMAIN
     scope: underlying-work
@@ -164,19 +177,24 @@ availability:
     origin: CURATED_IMPORT
     reason: NO_DIGITAL_TEXT
 
-computed:
-  effectiveRights.src:vedaweb.vnh: { commercial: PROHIBITED, derivatives: SHARE_ALIKE, attribution: REQUIRED }
-  accessClass.src:vedaweb.vnh:
-    # Depends on how a silent upstream term is read (CONFLICT C-009):
-    if_silent_upstream_terms_add_no_restriction:
-      LOCAL_PERSONAL: INTERNAL_USE_ONLY   # pending rights policy (OQ-L01)
-      HOSTED_PAID_PROFESSIONAL: USER_IMPORT_ONLY
-    if_silent_upstream_terms_are_UNKNOWN:
-      ALL_CONTEXTS: LICENCE_PENDING       # upstream notice does not state redistribution terms
-  accessClass.src:vedaweb.zurich: { ALL_CONTEXTS: REDISTRIBUTABLE }
+computed:   # RiseWise conservative product policy (source-model.md §7.1, ADR-0012) — not legal advice
+  effectiveTerms.src:vedaweb.vnh:
+    COMMERCIAL_USE: PROHIBITED
+    REDISTRIBUTE: UNKNOWN    # provider grants it; upstream notice is silent (R3) and narrower (R4)
+    DERIVE: UNKNOWN
+    conditions: [ATTRIBUTION, SHARE_ALIKE, NON_COMMERCIAL]
+  accessClass:
+    src:vedaweb.vnh:       { shared_and_public_contexts: LICENCE_PENDING }
+    src:vedaweb.aufrecht:  { shared_and_public_contexts: LICENCE_PENDING }
+    src:vedaweb.padapatha: { shared_and_public_contexts: LICENCE_PENDING }
+    src:vedaweb.zurich:    { shared_and_public_contexts: LICENCE_PENDING }   # CC BY 4.0, but upstream link undocumented
+    src:vedaweb.griffith:  { shared_and_public_contexts: LICENCE_PENDING }   # OQ-L09
+  privatePathway: "a user's own legitimately obtained copy → USER_SUPPLIED, INTERNAL_USE_ONLY in that workspace (R6)"
   displayLabel.work:rv.sayana-bhashya: SCAN_ONLY
-  evidenceEligible.psg:vedaweb.vnh@v1/rv.msr:1.1.1: "only in contexts where the access class permits (G1–G5); none until C-009 is resolved"
-  evidenceEligible.work:rv.sayana-bhashya: "no — no text held (G1)"
+  evidenceEligible:
+    shared_or_public: "no — every VedaWeb layer fails G2 until its rights chain is resolved (OQ-L14)"
+    private_user_supplied_copy: "yes, only in the owner's workspace, labelled user-supplied"
+    work:rv.sayana-bhashya: "no — no text held (G1)"
   variantHandling: >
     If the vnh and aufrecht passages differ at rv.msr:1.1.1, both are shown as variants;
     neither is preferred unless an AuthorityAssessment records a preference (ADR-0010).
