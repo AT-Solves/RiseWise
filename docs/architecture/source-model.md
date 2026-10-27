@@ -5,7 +5,7 @@
 | **Status** | Approved design (product owner, 2026-10-26). Documentation only — nothing here is implemented. |
 | **Scope** | The domain-neutral source/knowledge layer that Tarka will later reason over. |
 | **Frozen decisions** | ADR-0001 … ADR-0012 in [`decisions/`](decisions/README.md). |
-| **Revisions** | 2026-10-26: §7 rights determination policy added (resolves CONFLICT C-009, ADR-0012); §22 paper test extended with real-source check. |
+| **Revisions** | 2026-10-26: §7 rights determination policy added (resolves CONFLICT C-009, ADR-0012); §22 paper test extended with real-source check. 2026-10-27: DR-052 … DR-057 recorded (ADR-0015 … ADR-0021) — offsets, scheme scope and locus mappings, identifiers, snapshot granularity, annotation alignment, ROOT_TEXT designation, decoded passage text (§3, §4, §5, §11, §19, §21). |
 | **Worked examples** | Metadata-only YAML in [`source-model-examples/`](source-model-examples/README.md). |
 | **Unresolved items** | [`../OPEN_QUESTIONS.md`](../OPEN_QUESTIONS.md) and [`../CONFLICTS.md`](../CONFLICTS.md). |
 
@@ -42,7 +42,7 @@ Domain specifics (śākhā, maṇḍala/sūkta/ṛc, kāṇḍa/prapāṭhaka/an
 | # | Principle | Consequence |
 |---|---|---|
 | P1 | **Provenance is first-class** | Every content entity has a provenance chain from day one. There are no anonymous passages. |
-| P2 | **The original is preserved** | Text is stored exactly as received, where the licence allows. Normalised forms are additional derived fields, never replacements. |
+| P2 | **The original is preserved** | Acquired bytes are preserved exactly as received and hashed; Passage `original` is their faithful decoded Unicode text, with the decoding recorded and undecodable material quarantined (ADR-0021), where the licence allows storage. Normalised forms are additional derived fields, never replacements. |
 | P3 | **Immutability for anything reasoning cites** | Snapshots, passages and annotations are never edited in place. A change creates a new version. |
 | P4 | **Unknown is never treated as permitted** | A licence that hasn't been confirmed means the content is held for review and cannot be used as evidence. |
 | P5 | **No silent merging** | Conflicting editions and readings are kept side by side. Any "preferred edition" choice is a recorded, attributed assessment. |
@@ -64,16 +64,16 @@ Domain specifics (śākhā, maṇḍala/sūkta/ṛc, kāṇḍa/prapāṭhaka/an
 | **Acquisition** | One act of obtaining material from a provider: method, time, provider version (release or commit), raw licence statements captured, file hashes. Its file list is the **Manifest**. | The content itself |
 | **Manifest** | The immutable description of what an Acquisition obtained: files, sizes, SHA-256 hashes, formats, encodings, provider version, captured licence text, and which Sources it contains. | A licence decision |
 | **SourceSnapshot** | One immutable version of a Source's content, produced by an Acquisition or by a RiseWise derivation such as a correction. The unit reasoning cites. | A mutable record |
-| **CitationScheme** | A named, versioned addressing scheme declared by an extension (e.g. `rv.msr`). May be work-level or edition-specific. | Hard-coded structure |
-| **Locus** | One address under a CitationScheme (e.g. `rv.msr:1.1.1`). Contains no text. | A passage |
-| **Passage** | The concrete text unit at one or more loci inside one SourceSnapshot: original text (or only a hash if the licence forbids storage), normalised forms, script/encoding info, content hash. | A Locus, or a claim |
-| **Text (content)** | The textual payload of a Passage: `original` (exact), `script`, `encoding` / `transliterationScheme`, `normalisations[]`, `contentState` (`STORED` / `HASH_ONLY` / `WITHHELD`). | Metadata |
+| **CitationScheme** | A named, versioned addressing scheme declared by an extension (e.g. `rv.msr`). Declares its **scope: `WORK` or `EDITION`** ([ADR-0016](decisions/0016-citation-scheme-scope-and-locus-mappings.md)). | Hard-coded structure |
+| **Locus** | One address under a CitationScheme (e.g. `rv.msr:1.1.1`), belonging to that scheme's scope. Contains no text. Locus strings are never embedded in entity IDs ([ADR-0017](decisions/0017-identifier-scheme.md)). | A passage |
+| **Passage** | The concrete text unit at one or more loci inside exactly one SourceSnapshot: original text (or only a hash if the licence forbids storage), normalised forms, script/encoding info, content hash. Identified by an opaque ID, not by its locus. | A Locus, or a claim |
+| **Text (content)** | The textual payload of a Passage: `original` (the faithful decoded Unicode text of the acquired bytes; decoding recorded as provenance; undecodable material quarantined, never replaced — [ADR-0021](decisions/0021-acquired-bytes-and-decoded-passage-text.md)), `script`, `encoding` / `transliterationScheme`, `normalisations[]`, `contentState` (`STORED` / `HASH_ONLY` / `WITHHELD`). | Metadata |
 | **Translation** | A Work with kind `TRANSLATION`, linked `TRANSLATION_OF` its target. Its passages align to the target's loci. | The original |
 | **Commentary** | A Work with kind `COMMENTARY`, linked `COMMENTARY_ON` its target; sub-commentaries are `COMMENTARY_ON` another commentary. It is a text with its own loci. | Interpretation, or the root text |
 | **Interpretation** | An attributed reading of a locus ("commentator X reads Y as Z"), anchored to the passage where that author says it. Origin: `SOURCE_EXTRACTED`, `HUMAN_CURATED` or `LLM_PROPOSED`. Only anchored, non-LLM interpretations may serve as evidence. | Commentary text; a fact |
-| **Annotation** | Structured data about a passage span or token: linguistic (lemma, morphology, sandhi split, derivation), metrical, alignment notes. Has a producer (dataset, tool, human, LLM), an `origin`, and an extension-defined body schema. | Original text |
-| **Relation** | A typed link between entities, carrying its own provenance. | — |
-| **EvidenceAnchor** | A pointer from future reasoning objects to exact text: `{passageId, contentHash, span(start,end), quotedTextHash}`. Claims and conclusions belong to Tarka; the source model only guarantees the anchor can be resolved and checked. | A conclusion |
+| **Annotation** | A separate, versioned object about a passage, span, structural unit or another annotation: linguistic (lemma, morphology, sandhi split, derivation), metrical, alignment notes. Bound to a specific SourceSnapshot and Passage; never migrated silently; LLM annotations stay proposals unless verified ([ADR-0019](decisions/0019-annotation-alignment.md)). Has a producer (dataset, tool, human, LLM), an `origin`, and an extension-defined body schema. | Original text |
+| **Relation** | A typed link between entities, carrying its own provenance. Constrained predicates include `LOCUS_MAPS_TO` (ADR-0016) and `DESIGNATED_ROOT_TEXT_FOR` (ADR-0020). | — |
+| **EvidenceAnchor** | A pointer from future reasoning objects to exact text: `{passageId, contentHash, span(start,end), quotedTextHash}`. Offsets are Unicode scalar values, zero-based, half-open `[start,end)`, over the stored `original` — never bytes, never normalised text ([ADR-0015](decisions/0015-evidence-span-offsets.md)). Claims and conclusions belong to Tarka; the source model only guarantees the anchor can be resolved and checked. | A conclusion |
 | **Citation** | A human- and machine-readable reference derived from Work + Edition + Source + Snapshot + Locus + span, formatted by the extension. | Stored free text |
 | **ProvenanceRecord** | Who or what produced an entity, by which activity, from which inputs (W3C PROV style: entity, activity, agent). | Authority |
 | **LicenceRecord** | Licence and rights information, each term backed by evidence of where it was stated, with a verification status. | Usage permission — that is computed from licence plus context |
@@ -124,6 +124,7 @@ Domain specifics (śākhā, maṇḍala/sūkta/ṛc, kāṇḍa/prapāṭhaka/an
 - A Source has 1..* Snapshots once acquired; a print-reference Source has none.
 - An Acquisition produces 1..* Snapshots (one fetch from a multi-layer provider yields many Sources, each with its own licence).
 - A Passage belongs to exactly one Snapshot and maps to 1..* Loci with a mapping type: `EXACT` / `PARTIAL` / `SPLIT` / `MERGED`.
+- Loci in different schemes are related only through explicit `LOCUS_MAPS_TO` Relations with type, basis and provenance, and only where a correspondence is established. Matching or sequential numbering is never sufficient ([ADR-0016](decisions/0016-citation-scheme-scope-and-locus-mappings.md)).
 - Licence records attach at **Work** (underlying rights, e.g. public domain), **Edition** (editorial rights), **Source** (digital representation licence) and optionally **annotation dataset** level. Effective rights combine them using the most restrictive term (section 7).
 
 **Relation predicates (core set; extensions may add)**
@@ -139,7 +140,9 @@ Domain specifics (śākhā, maṇḍala/sūkta/ṛc, kāṇḍa/prapāṭhaka/an
 | `DERIVED_FROM` | Source/Snapshot → Source/Snapshot/Edition | Sanskrit Library TEI → TITUS file → Fushimi data entry → Weber edition [S] |
 | `CORRECTS` | Snapshot → Snapshot | RiseWise-corrected snapshot → imported snapshot |
 | `ATTRIBUTED_TO` | Work/Interpretation → Agent | commentary → commentator (traditional attribution flagged as such) |
-| `ALIGNS_WITH` | Passage → Passage | padapāṭha passage ↔ saṃhitā passage (via loci) |
+| `ALIGNS_WITH` | Passage → Passage | padapāṭha passage ↔ saṃhitā passage (explicit, typed, provenance-bearing; never positional — ADR-0019) |
+| `LOCUS_MAPS_TO` | Locus → Locus | an established correspondence between schemes, with mapping type, basis and provenance (ADR-0016) |
+| `DESIGNATED_ROOT_TEXT_FOR` | SourceSnapshot → Work or Edition context | reviewed ROOT_TEXT designation, with reviewer, date and rationale (ADR-0020) |
 
 ## 5. Source Lifecycle
 
@@ -155,7 +158,7 @@ REGISTERED ──► RIGHTS_REVIEW ──► APPROVED_FOR_ACQUISITION ──► 
 1. **Registered** — Work/Edition/Source exist as metadata. Possible without any content, so absences can be recorded.
 2. **Rights review** — licence evidence captured and checked; access class decided (section 7). Pending ⇒ content cannot be used.
 3. **Acquisition** — only for approved access classes. The Manifest records method, time, provider version and hashes.
-4. **Parse** — files become Passages under the extension's citation scheme. Original text kept; normalisations added; passage hashes computed.
+4. **Parse** — acquired bytes (preserved and hashed in the Manifest) are decoded into Passages under the extension's citation scheme. The decoding method is recorded as provenance; undecodable material is quarantined, never replaced with substitute characters (ADR-0021). Decoded original text kept; normalisations added; passage hashes computed.
 5. **Verify** — automated integrity checks, then optional human/expert checks (section 8).
 6. **Active** — the snapshot is included in the current CorpusState.
 7. **Change** — re-import, correction or licence change creates new versions or state transitions. Nothing already used in reasoning is deleted without a tombstone.
@@ -314,7 +317,7 @@ Verification concerns **source fidelity and integrity**, not truth.
 | **Changed licence** | New LicenceRecord revision with `effectiveFrom`; access class recomputed. If it becomes restricted: class changes and content may be tombstoned (purged; hashes and metadata kept). | Past results remain *identifiable* (ids, hashes) even if their text can no longer be shown |
 | **Corpus update across many sources** | New **CorpusState** (immutable set of active snapshot ids) | Every reasoning run stores its CorpusState id |
 
-**Passage identity across versions.** *Lineage key* = `(sourceId, primaryLocus)`. *Version identity* = `passageId` (unique per snapshot) + `contentHash`. Unchanged passages share a `contentHash` between snapshots, so stale-evidence detection is a hash comparison.
+**Passage identity across versions.** Each passage has its own opaque ID (ADR-0017). *Lineage key* = `(sourceId, primaryLocus)` — a lookup key for following a passage across snapshots, never an identifier. *Version identity* = `passageId` (unique per snapshot) + `contentHash`. Unchanged passages share a `contentHash` between snapshots, so stale-evidence detection is a hash comparison.
 
 **What a reasoning run records:** `corpusStateId`; for each evidence anchor `passageId`, `contentHash`, `snapshotId`, `manifestHash`, `licenceRevisionId`, `extensionVersion` (citation scheme + normalisation profile versions).
 
@@ -370,13 +373,13 @@ The `vedic-sanskrit` extension **declares** structures. Values always come from 
 | Scheme id | Levels | Notes |
 |---|---|---|
 | `rv.msr` | maṇḍala.sūkta.ṛc[.pāda] | |
-| `rv.aas` | aṣṭaka.adhyāya.varga.ṛc | Alternative traditional division [K]; mapped to `rv.msr` (OQ-V02) |
+| `rv.aas` | aṣṭaka.adhyāya.varga.ṛc | Alternative traditional division [K]; related to `rv.msr` only through explicit, established mappings (OQ-V02, ADR-0016) |
 | `ts.kpa` | kāṇḍa.prapāṭhaka.anuvāka[.further unit] | Lowest unit and its name follow the chosen edition [K] (OQ-V03) |
 | `asht.aps` | adhyāya.pāda.sūtra | Aṣṭādhyāyī |
-| `sk.num` | sūtra serial number | **Edition-specific**; numbering may differ between editions [K] (OQ-V04). Mapped to `asht.aps` by alignment |
+| `sk.num` | sūtra serial number | **Edition-specific**; numbering may differ between editions [K] (OQ-V04). Related to `asht.aps` only through explicit, established `LOCUS_MAPS_TO` mappings (ADR-0016) |
 | `commentary.local` | the commentary's own structure | plus `COMMENTARY_ON` locus links |
 
-**c) Layer types** (each layer is its own Source with its own licence): `SAMHITA_PATHA` · `PADAPATHA` · (other recitation forms only if sources exist) · `TRANSLATION` · `COMMENTARY` · `SUB_COMMENTARY` · `ANNOTATION_MORPHOLOGY` · `ANNOTATION_METRE` · `ANNOTATION_DERIVATION`.
+**c) Layer types** (each layer is its own Source with its own licence): `SAMHITA_PATHA` · `PADAPATHA` · (other recitation forms only if sources exist) · `TRANSLATION` · `COMMENTARY` · `SUB_COMMENTARY` · `ANNOTATION_MORPHOLOGY` · `ANNOTATION_METRE` · `ANNOTATION_DERIVATION`. **`ROOT_TEXT` is not a layer type:** it is a separate, reviewed designation (`DESIGNATED_ROOT_TEXT_FOR`, ADR-0020) that may be given to a suitable layer, such as a `SAMHITA_PATHA` snapshot, for a stated Work/Edition context. The layer type for non-Vedic base texts (e.g. sūtra texts) is open (DR-066). Every scheme in §11b must also declare its scope (`WORK` or `EDITION`); the scopes above are provisional until expert confirmation (DR-045).
 
 **d) Text representation rules.** Original script and encoding stored exactly (Devanāgarī, IAST, SLP1 …). Display forms derived through a **verified round-trip** transliteration (`ENCODING_ROUNDTRIP`). **Accents are part of the text, never an annotation.** An `accentProfile` on the passage records `accented: true | false | unknown`, `accentSystem` (as encoded by the source), and whether accents were verified. Normalisation profiles are versioned and may strip accents *for search keys only*.
 
@@ -384,7 +387,7 @@ The `vedic-sanskrit` extension **declares** structures. Values always come from 
 
 **f) Grammar-specific relations** (each sourced, never asserted by RiseWise): `ANUVRTTI_FROM` (sūtra → sūtra) · `ADHIKARA_SCOPE` (heading sūtra → range) · `SUTRA_TYPE` assignment (stored as an Interpretation attributed to a commentary or scholar, since classifications can be contested) · `CITES_SUTRA` (commentary passage → sūtra locus).
 
-**g) Source roles / authority rubric** (configurable tiers, applied per purpose): `ROOT_TEXT_EDITION` · `TRADITIONAL_COMMENTARY` · `CRITICAL_SCHOLARSHIP` · `SECONDARY_SCHOLARSHIP` · `REFERENCE` · `TOOL_OUTPUT` · `USER_SUPPLIED` · `UNASSESSED`.
+**g) Source roles / authority rubric** (configurable tiers, applied per purpose): `ROOT_TEXT_EDITION` · `TRADITIONAL_COMMENTARY` · `CRITICAL_SCHOLARSHIP` · `SECONDARY_SCHOLARSHIP` · `REFERENCE` · `TOOL_OUTPUT` · `USER_SUPPLIED` · `UNASSESSED`. *Note (2026-10-27):* `ROOT_TEXT_EDITION` names a text role rather than a degree of authority and overlaps with the ROOT_TEXT designation (ADR-0020). It is retained provisionally, must not be read as a designation, and its rename or removal is decided with the rubric (DR-049).
 
 **h) Domain verification rules.** VR-101 a translation may not be cited as the root text · VR-102 a commentary statement is attributed to the commentator, not the root text · VR-103 accent preservation · VR-104 a padapāṭha may not be cited as the saṃhitā text · VR-105 recension must match the requested śākhā.
 
@@ -439,7 +442,7 @@ A first-party corpus is the long-term path to a redistributable source layer. **
 
 - **Integrity** — SHA-256 for every file (manifest), passage and snapshot; hashes checked on read for evidence anchors. Provenance, licence and verification logs are append-only.
 - **Safe import** — untrusted files are parsed without executing anything: XML external entities disabled, size/depth/archive-bomb limits, MIME checks. Unparseable files go to quarantine.
-- **Unicode safety** — original preserved; invisible characters, bidi controls and confusables detected and flagged; normalisation never destructive. The raw original is the reference, so canonical reordering of combining marks (relevant to accents) cannot corrupt it (policy to be confirmed: OQ-E03).
+- **Unicode safety** — acquired bytes preserved and hashed; Passage `original` is decoded Unicode with the decoding recorded, and undecodable material is quarantined, never replaced with U+FFFD (ADR-0021). Invisible characters, bidi controls and confusables are detected and flagged; normalisation never destructive. Evidence offsets use the stored `original` (ADR-0015), so canonical reordering of combining marks in any working copy cannot shift them (working-copy policy still open: OQ-E03).
 - **Prompt injection** — all source text is untrusted data when shown to any LLM. It cannot change records. LLM output never writes to Passage, Text or LicenceRecord.
 - **Rights enforcement** — the RightsDecision is checked at every exit point: API responses, exports, UI display, search snippets, embeddings, caches and **calls to external LLM or embedding services**. Derived artefacts (embeddings, indexes) inherit the restrictions of their source.
 - **Tenant isolation** — user-supplied and internal-only content is scoped to its workspace and never enters shared indexes.
@@ -465,8 +468,8 @@ Tracked with ids in [`../OPEN_QUESTIONS.md`](../OPEN_QUESTIONS.md):
 | Acquisition (+ embedded Manifest) | — |
 | SourceSnapshot | Immutable, hashed |
 | Passage | Text content + hash + accent profile + loci via PassageLocus |
-| Locus + CitationScheme | Scheme defined by the extension |
-| Relation | Typed, with provenance |
+| Locus + CitationScheme | Scheme defined by the extension; declares scope `WORK` or `EDITION` |
+| Relation | Typed, with provenance; includes `LOCUS_MAPS_TO` and `DESIGNATED_ROOT_TEXT_FOR` |
 | Annotation | Generic; body schema per extension; origin + producer |
 | LicenceRecord | Append-only revisions, evidence-backed |
 | ProvenanceRecord | Upstream claims + RiseWise activities |

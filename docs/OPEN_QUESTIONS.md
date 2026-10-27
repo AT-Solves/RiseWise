@@ -6,7 +6,7 @@ Unresolved items from the RiseWise Knowledge Source Model v0.1. **Nothing here i
 
 Categories: **L** licensing/legal · **V** Vedic/Sanskrit facts and conventions · **E** engineering/model · **P** product/people.
 
-**Before schema design (Step 2)** at minimum: OQ-E01, OQ-E02, OQ-E04, OQ-E05, OQ-E08 should be resolved or given an explicit provisional answer.
+**Before schema design (Step 2)** at minimum: OQ-E08 should be resolved or given an explicit provisional answer (OQ-E01, OQ-E02, OQ-E04, OQ-E05 were resolved on 2026-10-27; OQ-E03, OQ-E07 and OQ-E10 remain open).
 
 ---
 
@@ -54,16 +54,16 @@ Categories: **L** licensing/legal · **V** Vedic/Sanskrit facts and conventions 
 
 | ID | Question | Notes |
 |---|---|---|
-| OQ-E01 | Identifier scheme: opaque ids (e.g. ULID) plus human-readable keys (`work:rv`)? Proposed: both. | §20.9 |
-| OQ-E02 | **Span offsets** for EvidenceAnchor: measured in which unit (Unicode code points of the raw original? NFC working copy? grapheme clusters?). Must be fixed before anchors exist. | pre-schema |
-| OQ-E03 | Unicode policy for the working copy of Vedic text (NFC vs none) given canonical reordering of combining accent marks; raw original remains the reference. | §11d, §19 |
-| OQ-E04 | **Locus scope:** a Locus is defined as an address in a Work, but edition-specific schemes (`sk.num`) address an Edition. Should Locus/CitationScheme carry an optional edition scope? | ADR-0002 |
-| OQ-E05 | **Locus-to-locus mapping** between schemes (`rv.aas` ↔ `rv.msr`, `sk.num` ↔ `asht.aps`): a separate mapping record, or Relations between Loci? | ADR-0002 |
-| OQ-E06 | Annotation targets across versions: which text version's tokenisation does a dataset (e.g. Zurich morphology) align to, and how is that alignment recorded? | ex. 01 |
-| OQ-E07 | Root-text layer type for non-Vedic śāstra works (e.g. sūtra texts): add a generic `ROOT_TEXT` layer to the core or the extension? | ex. 03 |
-| OQ-E08 | **Passage granularity:** one level (e.g. ṛc) or hierarchical (sūkta ⊃ ṛc ⊃ pāda)? How do evidence spans cross passage boundaries? | pre-schema |
-| OQ-E09 | Snapshot granularity for multi-layer providers: one snapshot per Source (proposed) under a shared Acquisition — confirm. | §4 |
-| OQ-E10 | Evidence eligibility of human-curated annotation datasets (e.g. Zurich morphology): eligible after `ANNOTATION_SPOT_CHECK`, or immediately with origin `DATASET`? | ex. 01 |
+| ~~OQ-E01~~ | **Resolved 2026-10-27** — opaque ULID primary IDs; readable keys are aliases only (DR-054, [ADR-0017](architecture/decisions/0017-identifier-scheme.md)). | §20.9 |
+| ~~OQ-E02~~ | **Resolved 2026-10-27** — Unicode scalar-value offsets, zero-based half-open, over the stored decoded `original` (DR-052, [ADR-0015](architecture/decisions/0015-evidence-span-offsets.md), [ADR-0021](architecture/decisions/0021-acquired-bytes-and-decoded-passage-text.md)). Passage granularity stays open as OQ-E08. | pre-schema |
+| OQ-E03 | Unicode policy for the working copy of Vedic text (NFC vs none) given canonical reordering of combining accent marks; raw original remains the reference. *(Still open. Since 2026-10-27 offsets no longer depend on it — DR-052.)* | §11d, §19 |
+| ~~OQ-E04~~ | **Resolved 2026-10-27** — every CitationScheme declares scope `WORK` or `EDITION` (DR-053, [ADR-0016](architecture/decisions/0016-citation-scheme-scope-and-locus-mappings.md)). | ADR-0002 |
+| ~~OQ-E05~~ | **Resolved 2026-10-27** — a constrained Relation `LOCUS_MAPS_TO` with type, basis and provenance, only where established (DR-053, [ADR-0016](architecture/decisions/0016-citation-scheme-scope-and-locus-mappings.md)). | ADR-0002 |
+| ~~OQ-E06~~ | **Resolved 2026-10-27** — every annotation is bound to a specific SourceSnapshot and Passage; no silent migration (DR-056, [ADR-0019](architecture/decisions/0019-annotation-alignment.md)). Which snapshot the Zurich data actually aligns to is a fact to establish at import. | ex. 01 |
+| OQ-E07 | Layer type for non-Vedic base texts (e.g. sūtra texts). *(Partly resolved 2026-10-27: `ROOT_TEXT` is a reviewed designation, not a layer — DR-057, [ADR-0020](architecture/decisions/0020-root-text-designation.md). The layer-type question remains open as DR-066.)* | ex. 03 |
+| OQ-E08 | **Passage granularity:** one level (e.g. ṛc) or hierarchical (sūkta ⊃ ṛc ⊃ pāda)? How do evidence spans cross passage boundaries? May span boundaries fall inside grapheme clusters? *(Still open — DR-064.)* | pre-schema |
+| ~~OQ-E09~~ | **Resolved 2026-10-27** — SourceSnapshot is the immutable version boundary per Source; metadata-only changes create no new snapshot (DR-055, [ADR-0018](architecture/decisions/0018-sourcesnapshot-granularity.md)). | §4 |
+| OQ-E10 | Evidence eligibility of human-curated annotation datasets (e.g. Zurich morphology): eligible after `ANNOTATION_SPOT_CHECK`, or immediately with origin `DATASET`? *(Still open — DR-065.)* | ex. 01 |
 
 ## P — Product and people
 

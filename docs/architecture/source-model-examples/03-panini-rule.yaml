@@ -46,19 +46,38 @@ editions:
     tag: K
     open_question: OQ-V13
 
+citationSchemes:
+  - id: asht.aps
+    scope: { value: WORK, status: "provisional — expert confirmation required (DR-045)" }
+  - id: sk.num
+    scope: { value: EDITION, edition: "<which Siddhānta Kaumudī edition's numbering — OQ-V04>" }
+
 loci:
   - scheme: asht.aps
     locus: "asht.aps:1.1.1"
   - scheme: sk.num
     locus: "sk.num:<n>"
-    note: "edition-specific numbering (OQ-V04); scope of edition-specific loci open (OQ-E04)"
-    mapsTo: [ { locus: "asht.aps:1.1.1", mapping: EXACT } ]
+    note: "edition-specific numbering (OQ-V04)"
+
+locusMappings: []   # none established (ADR-0016)
+
+unresolvedCorrespondences:   # NOT mappings — recorded so the gap is visible
+  - from: "sk.num:<n>"
+    to: "asht.aps:1.1.1"
+    status: UNRESOLVED
+    basis: none recorded
+    note: >
+      A correspondence is expected but has not been established from any cited source.
+      It becomes a LOCUS_MAPS_TO Relation only with a mapping type, a documented basis
+      (e.g. the edition's own sūtra cross-reference) and provenance. Matching or
+      sequential numbers are not evidence.
 
 sources:
   - id: src:ashtadhyayicom.sutras
     edition: ed:asht.unknown-ashtadhyayicom
     kind: DIGITAL_TEXT
-    layer: ROOT_TEXT   # provisional: §11c lists no root-text layer for non-Vedic śāstra works (OQ-E07)
+    layer: "<OPEN — DR-066>"   # ROOT_TEXT is a reviewed designation, not a layer (ADR-0020)
+    rootTextDesignation: none   # no review has taken place (ADR-0020, DR-048)
     provider: agent:ashtadhyayi.com
 
 licences:

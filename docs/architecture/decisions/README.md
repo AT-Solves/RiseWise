@@ -1,6 +1,6 @@
 # Architecture Decision Records
 
-Format: Context → Decision → Consequences. ADRs are immutable once accepted; a change is a new ADR that supersedes the old one.
+Format: Context → Decision → Consequences. ADRs are immutable once accepted; a change is a new ADR that supersedes the old one. The only permitted edit to an accepted ADR is adding a dated cross-reference to its status line (e.g. "Amended by ADR-0021").
 
 ADR-0001 … 0011 were accepted with the RiseWise Knowledge Source Model v0.1 ([`../source-model.md`](../source-model.md)), approved by the product owner on 2026-10-26. They freeze the **shape** of the model only. No Vedic scholarly fact, citation convention or licence value is frozen by any ADR; those live in [`../../OPEN_QUESTIONS.md`](../../OPEN_QUESTIONS.md).
 
@@ -20,3 +20,10 @@ ADR-0001 … 0011 were accepted with the RiseWise Knowledge Source Model v0.1 ([
 | [0012](0012-conservative-rights-policy-silence-is-not-permission.md) | Conservative rights policy — silence is not permission (refines 0006; resolves C-009) | Accepted |
 | [0013](0013-typescript-and-zod-for-domain-models.md) | TypeScript and Zod for domain models and validation schemas (only) | Accepted |
 | [0014](0014-retire-python-prototype-as-core-implementation.md) | Retire the Python prototype as the core implementation path | Accepted |
+| [0015](0015-evidence-span-offsets.md) | Evidence span offsets | Accepted |
+| [0016](0016-citation-scheme-scope-and-locus-mappings.md) | Citation-scheme scope and explicit locus mappings (amends 0002) | Accepted |
+| [0017](0017-identifier-scheme.md) | Identifier scheme | Accepted |
+| [0018](0018-sourcesnapshot-granularity.md) | SourceSnapshot granularity (refines 0004) | Accepted |
+| [0019](0019-annotation-alignment.md) | Annotation alignment | Accepted |
+| [0020](0020-root-text-designation.md) | ROOT_TEXT is a reviewed designation, not a layer or an authority tier | Accepted |
+| [0021](0021-acquired-bytes-and-decoded-passage-text.md) | Acquired bytes and decoded passage text (amends 0005) | Accepted |

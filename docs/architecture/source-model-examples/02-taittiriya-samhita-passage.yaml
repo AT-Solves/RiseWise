@@ -88,8 +88,15 @@ licences:
     tag: K
     verificationStatus: UNVERIFIED
 
+citationSchemes:
+  - id: ts.kpa
+    scope: { value: "<WORK or EDITION — open; lowest unit follows the chosen edition (OQ-V03, DR-045)>" }
+
+rootTextDesignations: []   # none: no reviewed ROOT_TEXT designation exists for any TS source (ADR-0020)
+
 passages:
-  - id: psg:sl.ts@v1/<locus>
+  - id: "<ULID>"                      # opaque primary ID (ADR-0017)
+    alias: "psg:sl.ts@v1/<locus>"      # human-readable alias only — not identity
     snapshot: snap:sl.ts@v1
     loci: [ { locus: "ts.kpa:<k.p.a…>", mapping: EXACT, note: "lowest unit per chosen edition (OQ-V03)" } ]
     text:

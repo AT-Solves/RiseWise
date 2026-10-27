@@ -140,8 +140,15 @@ acquisitions:
                 snap:vedaweb.zurich@v1, snap:vedaweb.griffith@v1 ]
     note: "Illustrative only — no acquisition has been performed."
 
+citationSchemes:
+  - id: rv.msr
+    scope: { value: WORK, status: "provisional — expert confirmation required (DR-045, ADR-0016)" }
+
+rootTextDesignations: []   # none: no source here has been reviewed for a ROOT_TEXT designation (ADR-0020)
+
 passages:
-  - id: psg:vedaweb.vnh@v1/rv.msr:1.1.1
+  - id: "<ULID>"                                  # opaque primary ID (ADR-0017)
+    alias: "psg:vedaweb.vnh@v1/rv.msr:1.1.1"     # human-readable alias only — not identity
     snapshot: snap:vedaweb.vnh@v1
     loci: [ { locus: "rv.msr:1.1.1", mapping: EXACT } ]
     text:
@@ -150,26 +157,38 @@ passages:
       contentState: STORED
       contentHash: "<sha256>"
     accentProfile: { accented: unknown, verified: false, open_question: OQ-V07 }
-  - id: psg:vedaweb.aufrecht@v1/rv.msr:1.1.1
+  - id: "<ULID>"                                  # opaque primary ID (ADR-0017)
+    alias: "psg:vedaweb.aufrecht@v1/rv.msr:1.1.1"     # human-readable alias only — not identity
     snapshot: snap:vedaweb.aufrecht@v1
     loci: [ { locus: "rv.msr:1.1.1", mapping: EXACT } ]
     text: { original: "<as in source file>", contentState: STORED, contentHash: "<sha256>" }
-  - id: psg:vedaweb.padapatha@v1/rv.msr:1.1.1
+  - id: "<ULID>"                                  # opaque primary ID (ADR-0017)
+    alias: "psg:vedaweb.padapatha@v1/rv.msr:1.1.1"     # human-readable alias only — not identity
     snapshot: snap:vedaweb.padapatha@v1
     loci: [ { locus: "rv.msr:1.1.1", mapping: EXACT } ]
     text: { original: "<as in source file>", contentState: STORED, contentHash: "<sha256>" }
-  - id: psg:vedaweb.griffith@v1/rv.msr:1.1.1
+  - id: "<ULID>"                                  # opaque primary ID (ADR-0017)
+    alias: "psg:vedaweb.griffith@v1/rv.msr:1.1.1"     # human-readable alias only — not identity
     snapshot: snap:vedaweb.griffith@v1
     loci: [ { locus: "rv.msr:1.1.1", mapping: "<EXACT or PARTIAL — alignment to be confirmed>" } ]
     text: { original: "<as in source file>", contentState: STORED, contentHash: "<sha256>" }
 
-annotations:
-  - target: { passage: psg:vedaweb.vnh@v1/rv.msr:1.1.1, tokens: "<token range>" }
+annotations:   # separate, versioned objects; never modify passage text (ADR-0019)
+  - id: "<ULID>"
+    version: 1
     kind: morph
+    target:
+      snapshot: snap:vedaweb.vnh@v1              # bound to this exact snapshot
+      passageId: "<ULID>"                        # passage alias: psg:vedaweb.vnh@v1/rv.msr:1.1.1
+      passageContentHash: "<sha256>"             # must match the passage it was made against
+      span: { start: "<int>", end: "<int>" }     # Unicode scalar offsets, [start,end), over the stored original (ADR-0015)
     producer: src:vedaweb.zurich
     origin: DATASET
     body: "<per vedic-sanskrit morph schema>"
-    open_question: OQ-E06   # which text version the Zurich tokens align to
+    provenance: "<ProvenanceRecord: annotate activity, inputs incl. the Zurich dataset snapshot>"
+    alignmentBasis: "<to be established at import: which text version the Zurich tokens were made against>"
+    migration: "none — if the target snapshot changes, a new annotation version must be created explicitly (ADR-0019)"
+    evidenceEligible: "OPEN — human-curated dataset policy undecided (DR-065, OQ-E10)"
 
 availability:
   - subject: work:rv.sayana-bhashya

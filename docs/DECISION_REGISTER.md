@@ -38,20 +38,20 @@
 
 ## Status summary
 
-Verified against the entries below (63 entries; every entry appears exactly once in the index).
+Verified against the entries below (66 entries; every entry appears exactly once in the index).
 
 | Status | Count | Entries |
 |---|---|---|
-| APPROVED | 26 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-062, DR-063 |
-| OPEN | 17 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-052, DR-053, DR-054, DR-056, DR-057, DR-058, DR-060, DR-061 |
+| APPROVED | 32 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-062, DR-063 |
+| OPEN | 15 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-058, DR-060, DR-061, DR-064, DR-065, DR-066 |
 | REVIEW_REQUIRED | 14 | DR-030, DR-031, DR-034, DR-035, DR-036, DR-037, DR-038, DR-039, DR-040, DR-044, DR-045, DR-046, DR-050, DR-051 |
 | BLOCKED | 1 | DR-033 |
 | TEMPORARY | 1 | DR-029 |
-| PROPOSED | 2 | DR-008, DR-055 |
+| PROPOSED | 1 | DR-008 |
 | RESOLVED | 2 | DR-006, DR-059 |
 | SUPERSEDED | 0 | — |
 | REJECTED | 0 | — |
-| **Total** | **63** | |
+| **Total** | **66** | |
 
 ## Index
 
@@ -108,18 +108,21 @@ Verified against the entries below (63 entries; every entry appears exactly once
 | DR-049 | Vedic authority rubric | SCHOLARLY | OPEN |
 | DR-050 | Corpus research was partly indirect | RESEARCH | REVIEW_REQUIRED |
 | DR-051 | Vedic Unicode and accent handling | TECHNICAL, SCHOLARLY | REVIEW_REQUIRED |
-| DR-052 | Evidence span offsets and passage granularity | TECHNICAL, DATA | OPEN |
-| DR-053 | Citation-scheme mapping and locus scope | TECHNICAL, DATA | OPEN |
-| DR-054 | Identifier scheme | TECHNICAL | OPEN |
-| DR-055 | Snapshot granularity for multi-layer providers | TECHNICAL, DATA | PROPOSED |
-| DR-056 | Annotation alignment and dataset evidence eligibility | TECHNICAL, DATA | OPEN |
-| DR-057 | Root-text layer for non-Vedic śāstra works | TECHNICAL, DATA | OPEN |
+| DR-052 | Evidence span offsets | TECHNICAL, DATA | APPROVED |
+| DR-053 | Citation-scheme scope and locus mappings | TECHNICAL, DATA | APPROVED |
+| DR-054 | Identifier scheme | TECHNICAL | APPROVED |
+| DR-055 | SourceSnapshot granularity | TECHNICAL, DATA | APPROVED |
+| DR-056 | Annotation alignment | TECHNICAL, DATA | APPROVED |
+| DR-057 | ROOT_TEXT designation | TECHNICAL, DATA, SCHOLARLY | APPROVED |
 | DR-058 | "EVIDENCE" as epistemic kind and as entity | PRODUCT, ARCHITECTURE | OPEN |
 | DR-059 | Terminology: Source, Manifest, Version | ARCHITECTURE | RESOLVED |
 | DR-060 | Target users, personas and use cases undefined | PRODUCT | OPEN |
 | DR-061 | GENERAL domain scope undefined | PRODUCT | OPEN |
 | DR-062 | Schema technology: TypeScript + Zod (only) | TECHNICAL, ARCHITECTURE | APPROVED |
 | DR-063 | Python prototype retired as the core implementation path | TECHNICAL, ARCHITECTURE | APPROVED |
+| DR-064 | Passage granularity and cross-passage spans | TECHNICAL, DATA | OPEN |
+| DR-065 | Evidence eligibility of human-curated annotation datasets | TECHNICAL, DATA, SCHOLARLY | OPEN |
+| DR-066 | Layer type for non-Vedic base texts | TECHNICAL, DATA | OPEN |
 
 ---
 
@@ -279,6 +282,7 @@ Verified against the entries below (63 entries; every entry appears exactly once
 - **Risk if ignored:** corrupted Vedic texts
 - **Revisit if:** DR-051 is decided
 - **Reviewer:** — · **Review trigger:** —
+- **Amendment (2026-10-27):** "Exactly as received" applies to the acquired bytes (preserved and hashed); Passage `original` is the faithful decoded Unicode text, decoding recorded, undecodable material quarantined ([ADR-0021](architecture/decisions/0021-acquired-bytes-and-decoded-passage-text.md)).
 
 ### DR-016 — Provenance, licence, verification, authority and availability are separate
 `ARCHITECTURE` · **APPROVED** · 2026-10-26
@@ -623,6 +627,7 @@ Verified against the entries below (63 entries; every entry appears exactly once
 - **Risk if ignored:** arbitrary weighting of sources
 - **Revisit if:** expert input
 - **Reviewer:** Sanskrit expert · **Review trigger:** before authority assessments are recorded
+- **Note (2026-10-27):** The provisional tier `ROOT_TEXT_EDITION` overlaps with the DR-057 ROOT_TEXT designation (it names a text role, not a degree of authority). Retained, not renamed; its rename or removal is decided here ([ADR-0020](architecture/decisions/0020-root-text-designation.md)).
 
 ### DR-050 — Corpus research was partly indirect
 `RESEARCH` · **REVIEW_REQUIRED** · 2026-10-26
@@ -645,66 +650,73 @@ Verified against the entries below (63 entries; every entry appears exactly once
 - **Risk if ignored:** silent accent corruption; offset mismatches
 - **Revisit if:** expert + engineering decision
 - **Reviewer:** Sanskrit expert + engineering · **Review trigger:** schema design (affects DR-052)
+- **Note (2026-10-27):** Offsets no longer depend on this policy (DR-052 uses the stored `original`), but the working-copy normalisation policy remains open.
 
-### DR-052 — Evidence span offsets and passage granularity
-`TECHNICAL` `DATA` · **OPEN** · 2026-10-26
-- **Question:** Unit for evidence span offsets (raw code points, normalised copy, grapheme clusters); flat vs hierarchical passages; spans crossing passage boundaries.
-- **Why:** Hard to change once anchors exist.
-- **Sources:** OQ-E02, OQ-E08 · **Related:** DR-014, DR-051
-- **Allowed:** — · **Not allowed:** creating evidence anchors before decided
-- **Risk if ignored:** anchors that cannot be re-verified; costly migration
-- **Revisit if:** decided
-- **Reviewer:** engineering · **Review trigger:** before schema design
+### DR-052 — Evidence span offsets
+`TECHNICAL` `DATA` · **APPROVED** · 2026-10-27
+- **Decision (approved 2026-10-27):** Evidence spans use Unicode scalar-value (code-point) offsets, zero-based and half-open `[start,end)`, over the exact stored `original` Passage text. Normalised/search text is never the coordinate system. `quotedTextHash` verifies the span; `contentHash` verifies the passage. Spans never split invalid Unicode sequences. Reconciled with ADR-0005 by ADR-0021: acquired bytes are preserved and hashed; `original` is decoded Unicode with the decoding recorded; undecodable material is quarantined, never replaced. Unicode offsets are not byte offsets.
+- **Why:** Anchors must be re-verifiable and are costly to migrate.
+- **Sources:** [ADR-0015](architecture/decisions/0015-evidence-span-offsets.md); [ADR-0021](architecture/decisions/0021-acquired-bytes-and-decoded-passage-text.md) · **Related:** DR-014, DR-015, DR-051, DR-064
+- **Allowed:** evidence anchors in the approved coordinate system · **Not allowed:** byte offsets, grapheme offsets or normalised-text offsets; U+FFFD substitution in citable text
+- **Risk if ignored:** anchors that cannot be re-verified
+- **Revisit if:** a script or source requires a different unit (new decision required)
+- **Reviewer:** — · **Review trigger:** —
+- **History:** opened 2026-10-26 as "Evidence span offsets and passage granularity" (OQ-E02, OQ-E08). Passage granularity and cross-passage spans were not part of the approval and moved to DR-064 (OPEN).
 
-### DR-053 — Citation-scheme mapping and locus scope
-`TECHNICAL` `DATA` · **OPEN** · 2026-10-26
-- **Question:** Edition-scoped loci for schemes like `sk.num`; locus-to-locus mapping between schemes (`rv.aas` ↔ `rv.msr`, `sk.num` ↔ `asht.aps`).
-- **Why:** Required by ADR-0002.
-- **Sources:** OQ-E04, OQ-E05; [ADR-0002](architecture/decisions/0002-locus-distinct-from-passage.md) · **Related:** DR-012, DR-045
-- **Allowed:** — · **Not allowed:** schema for Locus before decided
-- **Risk if ignored:** model cannot express edition-specific numbering
-- **Revisit if:** decided
-- **Reviewer:** engineering (+ expert for schemes) · **Review trigger:** before schema design
+### DR-053 — Citation-scheme scope and locus mappings
+`TECHNICAL` `DATA` · **APPROVED** · 2026-10-27
+- **Decision (approved 2026-10-27):** Every CitationScheme declares scope `WORK` or `EDITION`; a Locus belongs to its scheme's scope. Work-scoped loci support cross-edition addressing only where genuinely valid; edition-scoped loci preserve edition numbering. Locus mappings are not automatically required; they exist only where established and are explicit, typed and provenance-bearing (a constrained Relation `LOCUS_MAPS_TO` with type, basis and provenance). Never inferred from matching or sequential numbers. A Locus is an address; a Passage is evidence.
+- **Why:** Edition numberings differ; inferred correspondences would mis-cite.
+- **Sources:** [ADR-0016](architecture/decisions/0016-citation-scheme-scope-and-locus-mappings.md) (amends [ADR-0002](architecture/decisions/0002-locus-distinct-from-passage.md)); [C-012](CONFLICTS.md) · **Related:** DR-012, DR-045
+- **Allowed:** recording unresolved suspected correspondences as notes · **Not allowed:** mappings without basis or provenance; mappings from numbering alone
+- **Risk if ignored:** systematic mis-citation across editions
+- **Revisit if:** schema design needs a different mapping representation
+- **Reviewer:** — (scheme scopes still need expert confirmation, DR-045) · **Review trigger:** —
+- **History:** opened 2026-10-26 as "Citation-scheme mapping and locus scope" (OQ-E04, OQ-E05).
 
 ### DR-054 — Identifier scheme
-`TECHNICAL` · **OPEN** · 2026-10-26
-- **Question:** Opaque ids (e.g. ULID) plus human-readable keys (`work:rv`)? Proposed: both.
+`TECHNICAL` · **APPROVED** · 2026-10-27
+- **Decision (approved 2026-10-27):** Every persisted entity has an immutable opaque primary ID (MVP: ULID). Human-readable keys may exist as separate scoped aliases and are never identity. Content hashes identify immutable content and are distinct from entity IDs. Citation/locus identifiers are governed by their CitationScheme and never embedded in primary IDs. IDs are never reused.
 - **Why:** Identifiers are referenced everywhere.
-- **Sources:** OQ-E01 · **Related:** DR-008
-- **Allowed:** illustrative keys in docs · **Not allowed:** treating example keys as final
-- **Risk if ignored:** unstable identifiers
-- **Revisit if:** decided
-- **Reviewer:** engineering · **Review trigger:** before schema design
+- **Sources:** [ADR-0017](architecture/decisions/0017-identifier-scheme.md) · **Related:** DR-008, DR-062
+- **Allowed:** readable aliases, clearly labelled · **Not allowed:** aliases or locus strings as identity; ID reuse
+- **Risk if ignored:** unstable or overloaded identifiers
+- **Revisit if:** ULID proves unsuitable (format change needs a new decision)
+- **Reviewer:** — · **Review trigger:** —
+- **History:** opened 2026-10-26 as an OPEN question (OQ-E01); the "both" proposal is what was approved, with ULID chosen.
 
-### DR-055 — Snapshot granularity for multi-layer providers
-`TECHNICAL` `DATA` · **PROPOSED** · 2026-10-26
-- **Proposal:** One SourceSnapshot per Source under a shared Acquisition.
-- **Why:** Each layer can have its own licence.
-- **Sources:** OQ-E09; [source-model.md](architecture/source-model.md) §4 · **Related:** DR-011
-- **Allowed:** using as working assumption in schema design · **Not allowed:** treating as approved
-- **Risk if ignored:** per-layer licences become hard to apply
-- **Revisit if:** schema design
-- **Reviewer:** engineering · **Review trigger:** schema design
+### DR-055 — SourceSnapshot granularity
+`TECHNICAL` `DATA` · **APPROVED** · 2026-10-27
+- **Decision (approved 2026-10-27):** A SourceSnapshot is the immutable version boundary for citable source content. A Source may have multiple snapshots; every Passage belongs to exactly one. Snapshots have a deterministic content hash. Changed citable content creates a new snapshot; metadata-only changes do not. Reasoning runs are traceable to the exact snapshot/content used.
+- **Why:** Reproducibility and per-layer licensing.
+- **Sources:** [ADR-0018](architecture/decisions/0018-sourcesnapshot-granularity.md) (refines [ADR-0004](architecture/decisions/0004-immutable-content-addressed-snapshots.md)) · **Related:** DR-011, DR-014
+- **Allowed:** one Acquisition producing snapshots for several Sources · **Not allowed:** modifying a snapshot; new textual snapshots for metadata-only changes
+- **Risk if ignored:** irreproducible reasoning
+- **Revisit if:** schema design defines the canonical serialisation for hashing
+- **Reviewer:** — · **Review trigger:** —
+- **History:** recorded 2026-10-26 as PROPOSED ("one SourceSnapshot per Source under a shared Acquisition", OQ-E09).
 
-### DR-056 — Annotation alignment and dataset evidence eligibility
-`TECHNICAL` `DATA` · **OPEN** · 2026-10-26
-- **Question:** Which text version a dataset's tokens align to (e.g. Zurich morphology); whether human-curated annotation datasets are evidence-eligible immediately or after spot checks.
-- **Why:** Linguistic analysis is part of the Vedic knowledge model.
-- **Sources:** OQ-E06, OQ-E10 · **Related:** DR-017, DR-022
-- **Allowed:** — · **Not allowed:** treating dataset annotations as evidence before decided
+### DR-056 — Annotation alignment
+`TECHNICAL` `DATA` · **APPROVED** · 2026-10-27
+- **Decision (approved 2026-10-27):** Annotations are separate, versioned objects that never modify SourceSnapshot or Passage content. They may target passages, exact spans (DR-052 coordinates), structural units or other annotations, and every reference is bound to a specific SourceSnapshot and Passage. Cross-text alignments (e.g. Sanskrit ↔ translation/commentary) are explicit, typed and provenance-bearing, never inferred from position. Content changes never silently migrate annotations. LLM-generated annotations remain proposals unless independently verified.
+- **Why:** Analysis must stay attached to the exact text it describes.
+- **Sources:** [ADR-0019](architecture/decisions/0019-annotation-alignment.md) · **Related:** DR-017, DR-022, DR-065
+- **Allowed:** explicit, recorded re-targeting as a new annotation version · **Not allowed:** silent migration; positional alignment; LLM annotations as evidence without verification
 - **Risk if ignored:** misaligned or unvetted linguistic evidence
-- **Revisit if:** decided
-- **Reviewer:** engineering + Sanskrit expert · **Review trigger:** before annotation import
+- **Revisit if:** —
+- **Reviewer:** — · **Review trigger:** —
+- **History:** opened 2026-10-26 as "Annotation alignment and dataset evidence eligibility" (OQ-E06, OQ-E10). Human-curated dataset evidence eligibility was not part of the approval and moved to DR-065 (OPEN).
 
-### DR-057 — Root-text layer for non-Vedic śāstra works
-`TECHNICAL` `DATA` · **OPEN** · 2026-10-26
-- **Question:** Add a generic `ROOT_TEXT` layer (core or extension) for works like the Aṣṭādhyāyī.
-- **Why:** Layer type drives VR rules.
-- **Sources:** OQ-E07; example [03](architecture/source-model-examples/03-panini-rule.yaml) · **Related:** DR-020
-- **Allowed:** provisional use in examples · **Not allowed:** reusing `SAMHITA_PATHA` for sūtra texts
-- **Risk if ignored:** mislabelled layers
-- **Revisit if:** decided
-- **Reviewer:** engineering · **Review trigger:** schema design
+### DR-057 — ROOT_TEXT designation
+`TECHNICAL` `DATA` `SCHOLARLY` · **APPROVED** · 2026-10-27
+- **Decision (approved 2026-10-27):** `ROOT_TEXT` is an explicit, reviewed source-role designation for the authoritative textual layer of a specified Work or Edition context. Never inferred from language, origin, OCR, website labels, agreement with another source or LLM generation. Multiple legitimate representations across editions/recensions stay distinct. Derived representations (translation, commentary, transliteration, normalised text, OCR, reconstruction) never silently replace it. Vedic accents are textual content. Represented as a constrained Relation `DESIGNATED_ROOT_TEXT_FOR` with reviewer provenance — distinct from layer type and from authority assessment.
+- **Why:** Prevents unreviewed text being treated as authoritative.
+- **Sources:** [ADR-0020](architecture/decisions/0020-root-text-designation.md); [C-011](CONFLICTS.md) · **Related:** DR-020, DR-048, DR-049, DR-066
+- **Allowed:** designations made through review · **Not allowed:** `ROOT_TEXT` as a layer type; inferred designations; reading the `ROOT_TEXT_EDITION` authority tier as a designation
+- **Risk if ignored:** unreviewed or derived text cited as the authoritative text
+- **Revisit if:** —
+- **Reviewer:** Sanskrit expert for each Vedic designation · **Review trigger:** each designation
+- **History:** opened 2026-10-26 as "Root-text layer for non-Vedic śāstra works" (OQ-E07). The remaining question — which layer type non-Vedic base texts use — moved to DR-066 (OPEN). `ROOT_TEXT_EDITION` tier naming moved to DR-049.
 
 ### DR-058 — "EVIDENCE" as epistemic kind and as entity
 `PRODUCT` `ARCHITECTURE` · **OPEN** · 2026-10-26
@@ -766,12 +778,43 @@ Verified against the entries below (63 entries; every entry appears exactly once
 - **Revisit if:** a supporting Python tool is proposed; or `main` and the design branch are integrated (removal of prototype files and the old `docs/adr-0001` … `0004` numbering collision are separate, undecided items)
 - **Reviewer:** — · **Review trigger:** branch integration
 
+### DR-064 — Passage granularity and cross-passage spans
+`TECHNICAL` `DATA` · **OPEN** · 2026-10-27
+- **Question:** Flat vs hierarchical passages (e.g. sūkta ⊃ ṛc ⊃ pāda); how evidence spans crossing passage boundaries are represented; whether span boundaries inside grapheme clusters are allowed.
+- **Why:** Split from DR-052, whose approval covered offsets only.
+- **Sources:** [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md) OQ-E08; [ADR-0015](architecture/decisions/0015-evidence-span-offsets.md) · **Related:** DR-052
+- **Allowed:** — · **Not allowed:** fixing passage granularity in schema without a decision
+- **Risk if ignored:** evidence that cannot span verses or sentences
+- **Revisit if:** decided
+- **Reviewer:** engineering (+ Sanskrit expert) · **Review trigger:** before schema design
+
+### DR-065 — Evidence eligibility of human-curated annotation datasets
+`TECHNICAL` `DATA` `SCHOLARLY` · **OPEN** · 2026-10-27
+- **Question:** Whether human-curated annotation datasets (e.g. the Zurich Ṛgveda morphology) are evidence-eligible immediately (origin `DATASET`) or only after review such as `ANNOTATION_SPOT_CHECK`.
+- **Why:** Split from DR-056, whose approval covered alignment and LLM annotations only.
+- **Sources:** [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md) OQ-E10; [ADR-0019](architecture/decisions/0019-annotation-alignment.md) · **Related:** DR-056, DR-022
+- **Allowed:** — · **Not allowed:** treating dataset annotations as evidence before decided
+- **Risk if ignored:** unvetted linguistic evidence
+- **Revisit if:** decided
+- **Reviewer:** engineering + Sanskrit expert · **Review trigger:** before annotation import
+
+### DR-066 — Layer type for non-Vedic base texts
+`TECHNICAL` `DATA` · **OPEN** · 2026-10-27
+- **Question:** Which layer/artifact type a Source uses when it represents the text of a non-Vedic work itself (e.g. the Aṣṭādhyāyī sūtrapāṭha), now that `ROOT_TEXT` is a designation and not a layer.
+- **Why:** Remainder of the original DR-057 question.
+- **Sources:** [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md) OQ-E07; [ADR-0020](architecture/decisions/0020-root-text-designation.md); example [03](architecture/source-model-examples/03-panini-rule.yaml) · **Related:** DR-057, DR-020
+- **Allowed:** placeholder in examples · **Not allowed:** `ROOT_TEXT` or `SAMHITA_PATHA` as the layer for sūtra texts
+- **Risk if ignored:** mislabelled layers
+- **Revisit if:** decided
+- **Reviewer:** engineering (+ Sanskrit expert) · **Review trigger:** schema design
+
 ---
 
 ## Change log
 
 | Date | Change |
 |---|---|
+| 2026-10-27 | DR-052 … DR-057 approved (ADR-0015 … ADR-0020); ADR-0021 reconciles ADR-0005 with DR-052. Unapproved remainders split out as DR-064 (passage granularity), DR-065 (dataset evidence eligibility), DR-066 (layer type for non-Vedic base texts). Notes added to DR-015, DR-049, DR-051. |
 | 2026-10-26 | Added DR-063 (Python prototype retired as core path; ADR-0014). Added dated correction to DR-005 (earlier prototype exists on `main`). |
 | 2026-10-26 | Added DR-062 (TypeScript + Zod approved for domain models/schemas only; ADR-0013). DR-008 updated: remainder of stack still PROPOSED. |
 | 2026-10-26 | Status counts audited (index and entries consistent; earlier chat report had miscounted APPROVED, OPEN and REVIEW_REQUIRED). DR-006 → RESOLVED via PRODUCT_REQUIREMENTS.md. Added DR-060, DR-061 (gaps found while writing requirements). Added status summary. |

@@ -15,6 +15,9 @@ Contradictions between requirements, design decisions, or sources. **Product beh
 | C-007 | Ambuda: permissive intent vs missing licence metadata | Open |
 | C-008 | ashtadhyayi.com: informal permission vs undocumented upstream editions | Open |
 | C-009 | How a silent upstream term combines with the most-restrictive rule | Resolved (ADR-0012, 2026-10-26) |
+| C-010 | "Stored exactly as received" vs Unicode scalar offsets | Resolved (ADR-0021, 2026-10-27) |
+| C-011 | `ROOT_TEXT` used as layer, designation and authority tier | Resolved (ADR-0020, 2026-10-27); tier rename deferred to DR-049 |
+| C-012 | ADR-0002 implied mandatory locus mappings | Resolved (ADR-0016, 2026-10-27) |
 
 ---
 
@@ -69,3 +72,18 @@ Contradictions between requirements, design decisions, or sources. **Product beh
 - **Problem found in the paper test:** an upstream notice often states only some terms (e.g. van Nooten–Holland: "research, not commercial" [S]; TITUS: "scholarly use, no commercial" [S]) and is silent on redistribution or derivatives. If a silent upstream term counts as `UNKNOWN`, almost every derived source (including all VedaWeb Ṛgveda text layers) becomes `LICENCE_PENDING`. If it counts as "no additional restriction", RiseWise relies on the downstream provider having had the right to grant what it grants.
 - **Resolution (2026-10-26):** product owner adopted a conservative rule — *silence is not permission*. A silent or unknown term is `UNKNOWN` and pending review; conflicting statements take the more restrictive interpretation; unresolved rights never become shared/public evidence; users may use their own copies via the private `USER_SUPPLIED` pathway. Recorded in ADR-0012 and source-model.md §7.1. **This is RiseWise's conservative product policy, not legal advice.**
 - **Effect:** all real VedaWeb Ṛgveda layers and the Sanskrit Library TS remain `LICENCE_PENDING` for shared/public use (source-model.md §22.6; examples 01, 02).
+
+## C-010 — "Stored exactly as received" vs Unicode scalar offsets
+
+- **Conflict:** ADR-0005 stores passage text "exactly as received"; DR-052 counts evidence offsets in Unicode scalar values over the stored `original`. Acquired material that is not valid Unicode cannot satisfy both.
+- **Resolution (2026-10-27):** [ADR-0021](architecture/decisions/0021-acquired-bytes-and-decoded-passage-text.md) amends ADR-0005. Acquired bytes are preserved and hashed as the original artifact; Passage `original` is the faithful decoded Unicode text with the decoding recorded as provenance; undecodable material is quarantined, never replaced with U+FFFD. Unicode offsets are not byte offsets.
+
+## C-011 — `ROOT_TEXT` used as layer, designation and authority tier
+
+- **Conflict:** "Root text" appeared as a layer type (example 03 `layer: ROOT_TEXT`), as an authority tier (`ROOT_TEXT_EDITION`, source-model.md §11g), and — after DR-057 — as a reviewed designation.
+- **Resolution (2026-10-27):** [ADR-0020](architecture/decisions/0020-root-text-designation.md) separates the three. `ROOT_TEXT` is only the reviewed designation (Relation `DESIGNATED_ROOT_TEXT_FOR`). Example 03's layer is withdrawn (layer type open: DR-066). `ROOT_TEXT_EDITION` overlaps with the designation; it is retained for now and must not be read as a designation; rename or removal is decided under DR-049.
+
+## C-012 — ADR-0002 implied mandatory locus mappings
+
+- **Conflict:** ADR-0002 said edition-specific schemes "are aligned to work-level ones by mappings"; DR-053 allows mappings only where genuinely established, explicit, typed and provenance-bearing. Example 03 contained an unexplained `EXACT` `sk.num` → `asht.aps` mapping.
+- **Resolution (2026-10-27):** [ADR-0016](architecture/decisions/0016-citation-scheme-scope-and-locus-mappings.md) amends ADR-0002; mappings are constrained Relations `LOCUS_MAPS_TO` with type, basis and provenance. Example 03's mapping is marked unresolved.

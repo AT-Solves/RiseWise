@@ -7,7 +7,7 @@ These YAML files walk real and hypothetical cases through the RiseWise Knowledge
 - **No corpus text.** Every textual payload is a `<placeholder>`. Nothing was downloaded or ingested to write these files.
 - **Verification tags.** Any fact about a real source carries `tag: V | S | K` (see the legend in `source-model.md`). `S` and `K` facts are unverified and are tracked in [`../../OPEN_QUESTIONS.md`](../../OPEN_QUESTIONS.md); they must not be copied into implementation as truth.
 - **Hypothetical examples** are marked `hypothetical: true` and use placeholder names.
-- **Identifiers** such as `work:rv` are illustrative human-readable keys; the identifier scheme is still open (OQ-E01).
+- **Identifiers.** Every entity's identity is an opaque ULID (ADR-0017). For readability, references such as `work:rv`, `ed:…`, `src:…` and `snap:…` are **human-readable aliases**, not identity. Passages show both an opaque `id` placeholder and a separate `alias`; locus strings never appear in an `id`.
 - Field names follow the design document but are **not frozen**; schema design (Step 2) may rename them.
 - Computed values (effective rights, access class, display label, evidence eligibility) are shown under `computed:` to make the paper test explicit. They are not stored fields.
 

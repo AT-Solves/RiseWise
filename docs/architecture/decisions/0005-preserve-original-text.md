@@ -1,6 +1,6 @@
 # ADR-0005: Preserve the original text; normalisation is additive; accents are text
 
-- **Status:** Accepted (2026-10-26)
+- **Status:** Accepted (2026-10-26) · **Amended by** ADR-0021 (2026-10-27): "exactly as received" applies to the acquired bytes; Passage `original` is the faithful decoded Unicode text
 - **Design reference:** source-model.md §2 (P2), §11d, §19
 
 ## Context

@@ -23,11 +23,13 @@ loci:
   - locus: "<scheme>:<L>"   # holds no text
 
 passages:
-  - id: "psg:<W>.A@v1/<L>"
+  - id: "<ULID-A>"                 # opaque primary ID (ADR-0017)
+    alias: "psg:<W>.A@v1/<L>"       # human-readable alias only — not identity
     snapshot: "snap:<W>.A@v1"
     loci: [ { locus: "<scheme>:<L>", mapping: EXACT } ]
     text: { original: "<reading A>", contentHash: "<hA>", normalisationProfile: "<p@1>" }
-  - id: "psg:<W>.B@v1/<L>"
+  - id: "<ULID-B>"
+    alias: "psg:<W>.B@v1/<L>"
     snapshot: "snap:<W>.B@v1"
     loci: [ { locus: "<scheme>:<L>", mapping: EXACT } ]
     text: { original: "<reading B>", contentHash: "<hB>", normalisationProfile: "<p@1>" }

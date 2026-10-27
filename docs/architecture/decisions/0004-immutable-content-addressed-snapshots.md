@@ -1,6 +1,6 @@
 # ADR-0004: Immutable, content-addressed snapshots and passages
 
-- **Status:** Accepted (2026-10-26)
+- **Status:** Accepted (2026-10-26) · **Refined by** ADR-0018 (2026-10-27)
 - **Design reference:** source-model.md §6, §9
 
 ## Context
