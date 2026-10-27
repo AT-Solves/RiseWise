@@ -4,7 +4,7 @@
 |---|---|
 | **Status** | v0.1 — records requirements established so far. Documentation only. |
 | **Created** | 2026-10-26 |
-| **Counts** | 101 items: 68 APPROVED · 18 PROVISIONAL · 15 OPEN (§23 consolidates the OPEN items and related open decisions). |
+| **Counts** | 101 items: 69 APPROVED · 18 PROVISIONAL · 14 OPEN (§23 consolidates the OPEN items and related open decisions). |
 | **Why it exists** | Several fundamental requirements existed only in Claude session history (Decision Register DR-006). |
 | **Related** | [`DECISION_REGISTER.md`](DECISION_REGISTER.md) · [`architecture/source-model.md`](architecture/source-model.md) · [`architecture/decisions/`](architecture/decisions/README.md) · [`OPEN_QUESTIONS.md`](OPEN_QUESTIONS.md) · [`CONFLICTS.md`](CONFLICTS.md) |
 
@@ -56,7 +56,7 @@ Every item has one classification:
 | PR-010 | Help users examine a question through structured, traceable reasoning rather than receiving an unexplained answer. | APPROVED | PO-brief | DR-002 |
 | PR-011 | Reason over structured, traceable knowledge instead of treating LLM output as fact. | APPROVED | PO-source | DR-003 |
 | PR-012 | Support research-oriented knowledge discovery with provenance-first scholarship (original RiseWise scope). | APPROVED | PO-brief (history) | DR-001 |
-| PR-013 | Target users, personas and the primary use cases have **not** been defined. | OPEN | — (gap identified while writing this document) | DR-060 |
+| PR-013 | Primary user: the **Evidence-driven Researcher**, who investigates a question using traceable evidence and produces a defensible, challengeable conclusion with explicit provenance, assumptions, contradictions and uncertainty (the Tarka chain, PR-040). Primary MVP specialization: Vedic/Sanskrit Researcher/Scholar (first deeply supported context, not a restriction on Tarka). Secondary MVP pathway: researcher using their own legitimately obtained sources (PR-190). Individual researcher first; institutional/team use later; students/learners not an MVP persona (not prohibited later); decision-makers not a separate primary persona. *(Was OPEN 2026-10-26: "target users, personas and use cases have not been defined".)* | APPROVED | PO approval of DR-060 (2026-10-27) | DR-060 |
 
 ## 3. RiseWise vs Tarka
 
@@ -257,7 +257,6 @@ Consolidated list of OPEN items above, plus related open decisions:
 
 | ID | Decision needed | DR |
 |---|---|---|
-| PR-013 | Target users, personas, primary use cases | DR-060 |
 | PR-044 / PR-093 | Status definitions and thresholds | DR-003 |
 | PR-082 | Meaning of EVIDENCE as an epistemic kind | DR-058 |
 | PR-083 | Human review before FACT? | DR-003 |

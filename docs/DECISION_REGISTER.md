@@ -42,8 +42,8 @@ Verified against the entries below (66 entries; every entry appears exactly once
 
 | Status | Count | Entries |
 |---|---|---|
-| APPROVED | 32 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-062, DR-063 |
-| OPEN | 15 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-058, DR-060, DR-061, DR-064, DR-065, DR-066 |
+| APPROVED | 33 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-062, DR-063 |
+| OPEN | 14 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-058, DR-061, DR-064, DR-065, DR-066 |
 | REVIEW_REQUIRED | 14 | DR-030, DR-031, DR-034, DR-035, DR-036, DR-037, DR-038, DR-039, DR-040, DR-044, DR-045, DR-046, DR-050, DR-051 |
 | BLOCKED | 1 | DR-033 |
 | TEMPORARY | 1 | DR-029 |
@@ -116,7 +116,7 @@ Verified against the entries below (66 entries; every entry appears exactly once
 | DR-057 | ROOT_TEXT designation | TECHNICAL, DATA, SCHOLARLY | APPROVED |
 | DR-058 | "EVIDENCE" as epistemic kind and as entity | PRODUCT, ARCHITECTURE | OPEN |
 | DR-059 | Terminology: Source, Manifest, Version | ARCHITECTURE | RESOLVED |
-| DR-060 | Target users, personas and use cases undefined | PRODUCT | OPEN |
+| DR-060 | Target user, primary job and MVP specialization | PRODUCT | APPROVED |
 | DR-061 | GENERAL domain scope undefined | PRODUCT | OPEN |
 | DR-062 | Schema technology: TypeScript + Zod (only) | TECHNICAL, ARCHITECTURE | APPROVED |
 | DR-063 | Python prototype retired as the core implementation path | TECHNICAL, ARCHITECTURE | APPROVED |
@@ -738,15 +738,23 @@ Verified against the entries below (66 entries; every entry appears exactly once
 - **Revisit if:** schema naming review
 - **Reviewer:** — · **Review trigger:** —
 
-### DR-060 — Target users, personas and use cases undefined
-`PRODUCT` · **OPEN** · 2026-10-26
-- **Finding:** No target users, personas or primary use cases have been defined. Identified while writing PRODUCT_REQUIREMENTS.md.
+### DR-060 — Target user, primary job and MVP specialization
+`PRODUCT` · **APPROVED** · 2026-10-27
+- **Decision (approved 2026-10-27):**
+  - **Primary user/persona — Evidence-driven Researcher:** a researcher who needs to investigate a question using traceable evidence and produce a defensible, challengeable conclusion.
+  - **Primary job:** investigate a question using traceable evidence and produce a defensible, challengeable conclusion with explicit provenance, assumptions, contradictions and uncertainty — mapping to the Tarka reasoning chain (Question → Claims → Evidence → Sources → Arguments → Counterarguments → Assumptions → Inferences → Contradictions → Uncertainty → Conclusion → Provenance).
+  - **Primary MVP specialization:** Vedic/Sanskrit Researcher/Scholar — the first deeply supported research context, not a restriction on the Tarka engine and not the universal primary user.
+  - **Secondary MVP pathway:** a researcher working with their own legitimately obtained sources (the approved `USER_SUPPLIED` route, DR-028).
+  - **Model:** RiseWise → Evidence-driven Researcher → research context (Vedic/Sanskrit — primary MVP specialization; own sources — secondary MVP pathway). Tarka remains the structured reasoning capability inside RiseWise.
+  - **Positioning (product definition, not marketing copy):** RiseWise — a provenance-first research and reasoning platform; Tarka — the structured reasoning capability inside RiseWise. The prototype-era line "A provenance-first AI reasoning engine for defensible decisions" is retired as the product definition. Final marketing copy is not decided.
+  - **Scope:** individual researcher first; institutional/team use is later, not MVP. Private `USER_SUPPLIED` sources are acceptable as an MVP pathway. Students/learners are not an MVP persona (future support is not prohibited). Decision-makers are not a separate primary persona; the retired prototype framing does not determine product identity.
 - **Why:** Evaluation cases, UI and MVP priorities depend on who RiseWise serves.
-- **Sources:** [PRODUCT_REQUIREMENTS.md](PRODUCT_REQUIREMENTS.md) PR-013 · **Related:** DR-001, DR-061
-- **Allowed:** foundation work that does not depend on personas · **Not allowed:** assuming a target audience in requirements
-- **Risk if ignored:** features built for an imagined user
-- **Revisit if:** product owner defines users/use cases
+- **Sources:** product-owner approval (session, 2026-10-27); [PRODUCT_REQUIREMENTS.md](PRODUCT_REQUIREMENTS.md) PR-013 · **Related:** DR-001, DR-002, DR-004, DR-028, DR-033, DR-061, DR-063
+- **Allowed:** designing MVP work around the evidence-driven researcher with the two research contexts above · **Not allowed:** treating Vedic scholars as the only user; adding decision-makers or students as MVP personas; inventing a marketing tagline as an approved decision; reading this as a decision on DR-061 (GENERAL scope), DR-009 (deployment) or DR-010 (commercial intent)
+- **Risk if ignored:** features built for an imagined user; the retired prototype framing redefining the product
+- **Revisit if:** institutional/team use or learners are brought into scope; the Vedic corpus remains unusable for shared evidence (DR-033)
 - **Reviewer:** product owner · **Review trigger:** before Tarka or UI design
+- **History:** opened 2026-10-26 as "Target users, personas and use cases undefined" (OPEN) — "No target users, personas or primary use cases have been defined. Identified while writing PRODUCT_REQUIREMENTS.md."
 
 ### DR-061 — GENERAL domain scope undefined
 `PRODUCT` · **OPEN** · 2026-10-26
@@ -814,6 +822,7 @@ Verified against the entries below (66 entries; every entry appears exactly once
 
 | Date | Change |
 |---|---|
+| 2026-10-27 | DR-060 approved: Evidence-driven Researcher; primary job; Vedic/Sanskrit as primary MVP specialization; own sources (USER_SUPPLIED) as secondary pathway; individual first; prototype-era positioning retired. |
 | 2026-10-27 | DR-052 … DR-057 approved (ADR-0015 … ADR-0020); ADR-0021 reconciles ADR-0005 with DR-052. Unapproved remainders split out as DR-064 (passage granularity), DR-065 (dataset evidence eligibility), DR-066 (layer type for non-Vedic base texts). Notes added to DR-015, DR-049, DR-051. |
 | 2026-10-26 | Added DR-063 (Python prototype retired as core path; ADR-0014). Added dated correction to DR-005 (earlier prototype exists on `main`). |
 | 2026-10-26 | Added DR-062 (TypeScript + Zod approved for domain models/schemas only; ADR-0013). DR-008 updated: remainder of stack still PROPOSED. |

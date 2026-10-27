@@ -1,11 +1,13 @@
 # RiseWise
-A provenance-first AI reasoning engine for defensible decisions.
+A provenance-first research and reasoning platform.
 
 RiseWise is a provenance-first knowledge, research and reasoning platform. Every important conclusion should be traceable to the exact source passages behind it, and RiseWise says honestly when it does not have a source.
 
 **Tarka** is the structured reasoning capability within RiseWise. It is not a chatbot: it examines a question through claims, evidence, arguments, counterarguments, assumptions, contradictions and uncertainty, and supports "Why?" and "Challenge this conclusion". An LLM-generated statement is never automatically treated as a fact.
 
 The first two domains are **GENERAL** and **VEDIC_SANSKRIT** (Pāṇini, Siddhānta Kaumudī, Ṛgveda, Taittirīya Saṃhitā and related scholarship).
+
+RiseWise is built first for the individual **evidence-driven researcher**. Vedic/Sanskrit research is the first deeply supported specialization; researchers can also work privately with their own legitimately obtained sources ([DR-060](docs/DECISION_REGISTER.md)).
 
 ## Current state
 
