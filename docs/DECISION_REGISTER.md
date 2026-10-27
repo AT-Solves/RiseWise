@@ -38,11 +38,11 @@
 
 ## Status summary
 
-Verified against the entries below (66 entries; every entry appears exactly once in the index).
+Verified against the entries below (67 entries; every entry appears exactly once in the index).
 
 | Status | Count | Entries |
 |---|---|---|
-| APPROVED | 35 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063, DR-064 |
+| APPROVED | 36 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063, DR-064, DR-067 |
 | OPEN | 12 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-058, DR-065, DR-066 |
 | REVIEW_REQUIRED | 14 | DR-030, DR-031, DR-034, DR-035, DR-036, DR-037, DR-038, DR-039, DR-040, DR-044, DR-045, DR-046, DR-050, DR-051 |
 | BLOCKED | 1 | DR-033 |
@@ -51,7 +51,7 @@ Verified against the entries below (66 entries; every entry appears exactly once
 | RESOLVED | 2 | DR-006, DR-059 |
 | SUPERSEDED | 0 | — |
 | REJECTED | 0 | — |
-| **Total** | **66** | |
+| **Total** | **67** | |
 
 ## Index
 
@@ -123,6 +123,7 @@ Verified against the entries below (66 entries; every entry appears exactly once
 | DR-064 | Passage granularity and cross-passage evidence spans | TECHNICAL, DATA | APPROVED |
 | DR-065 | Evidence eligibility of human-curated annotation datasets | TECHNICAL, DATA, SCHOLARLY | OPEN |
 | DR-066 | Layer type for non-Vedic base texts | TECHNICAL, DATA | OPEN |
+| DR-067 | EvidenceAnchor semantics | TECHNICAL, DATA | APPROVED |
 
 ---
 
@@ -833,12 +834,29 @@ Verified against the entries below (66 entries; every entry appears exactly once
 - **Revisit if:** decided
 - **Reviewer:** engineering (+ Sanskrit expert) · **Review trigger:** schema design
 
+### DR-067 — EvidenceAnchor semantics
+`TECHNICAL` `DATA` · **APPROVED** · 2026-10-27
+- **Decision (approved 2026-10-27):** An EvidenceAnchor is a value object representing one cited textual selection, consisting of one or more ordered, passage-local segments belonging to exactly one SourceSnapshot.
+  - EvidenceAnchor remains a value object and is not a persisted entity or ULID-bearing entity.
+  - One EvidenceAnchor represents one cited textual selection, potentially crossing Passage boundaries. Multiple independent pieces of evidence are represented by multiple EvidenceAnchors at the Tarka claim/evidence layer.
+  - Each segment is local to one Passage and is independently verifiable using the approved Passage identity, Passage content hash, DR-052 span, exact stored `original` text and quoted-text verification rules.
+  - The complete anchor must be deterministically verifiable as an ordered whole. Verification must be capable of detecting changes to SourceSnapshot identity, segment membership/count, segment ordering, Passage identity, Passage content hash, span or quoted text.
+  - The representation must remain extensible for future join/omission semantics; no join or omission vocabulary or semantics are defined.
+  - No particular composite hash construction, canonical byte encoding, canonical serialisation, passage-order rule, segment well-formedness rule, verification-state vocabulary, storage representation, API or UI is approved.
+- **Why:** Makes multi-segment evidence exact and tamper-evident without prematurely fixing hashing, ordering or join rules.
+- **Sources:** [ADR-0023](architecture/decisions/0023-evidenceanchor-semantics.md); [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md) OQ-E11 (resolved), OQ-E12 … OQ-E21 · **Related:** DR-052, DR-054, DR-055, DR-056, DR-064
+- **Allowed:** one anchor per cited selection; several anchors per claim at the Tarka layer · **Not allowed:** treating EvidenceAnchor as an entity with a ULID; anchors spanning SourceSnapshots; reading this decision as approving `CONTIGUOUS` or any join vocabulary, gap/ellipsis, overlap, repeated-passage or reverse-order rules, passage ordering, a hash byte encoding, a composite hash algorithm, verification-state names or snapshot-migration semantics
+- **Risk if ignored:** evidence selections that can be silently altered, reordered or truncated
+- **Revisit if:** OQ-E12, OQ-E16, OQ-E18 or OQ-E20 cannot be satisfied within these semantics
+- **Reviewer:** — · **Review trigger:** —
+
 ---
 
 ## Change log
 
 | Date | Change |
 |---|---|
+| 2026-10-27 | DR-067 approved (ADR-0023): EvidenceAnchor semantics; OQ-E11 resolved (semantics); follow-ups OQ-E15 … OQ-E21 added; OQ-E12 wording extended to join/omission semantics. |
 | 2026-10-27 | DR-064 approved (ADR-0022): flat non-overlapping Passages, one segmentation per snapshot; structure via Locus/PassageLocus; ordered multi-segment EvidenceAnchors within one snapshot; no span splits an extended grapheme cluster. Follow-ups OQ-E11 … OQ-E14. |
 | 2026-10-27 | DR-061 approved: GENERAL is a structural, domain-neutral baseline extension; MVP sources are legitimately supplied user sources; live web retrieval, captured web pages and a curated GENERAL corpus outside the MVP; USER_SUPPLIED is a domain-neutral route. PR-120/121/122/213/222 reconciled; PR-214 split from PR-213. |
 | 2026-10-27 | DR-060 approved: Evidence-driven Researcher; primary job; Vedic/Sanskrit as primary MVP specialization; own sources (USER_SUPPLIED) as secondary pathway; individual first; prototype-era positioning retired. |
