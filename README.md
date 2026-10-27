@@ -1,5 +1,5 @@
 # RiseWise
-A provenance-first research and reasoning platform.
+A provenance-first knowledge, research and reasoning platform.
 
 RiseWise is a provenance-first knowledge, research and reasoning platform. Every important conclusion should be traceable to the exact source passages behind it, and RiseWise says honestly when it does not have a source.
 
