@@ -27,3 +27,4 @@ ADR-0001 … 0011 were accepted with the RiseWise Knowledge Source Model v0.1 ([
 | [0019](0019-annotation-alignment.md) | Annotation alignment | Accepted |
 | [0020](0020-root-text-designation.md) | ROOT_TEXT is a reviewed designation, not a layer or an authority tier | Accepted |
 | [0021](0021-acquired-bytes-and-decoded-passage-text.md) | Acquired bytes and decoded passage text (amends 0005) | Accepted |
+| [0022](0022-passage-granularity-and-cross-passage-evidence-spans.md) | Passage granularity and cross-passage evidence spans | Accepted |

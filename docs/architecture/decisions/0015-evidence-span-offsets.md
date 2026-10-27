@@ -1,6 +1,6 @@
 # ADR-0015: Evidence span offsets
 
-- **Status:** Accepted (2026-10-27)
+- **Status:** Accepted (2026-10-27) · **Refined by** ADR-0022 (2026-10-27): multi-segment anchors within one snapshot; spans must not split an extended grapheme cluster
 - **Decision Register:** DR-052
 - **Related:** ADR-0004, ADR-0005, ADR-0021
 

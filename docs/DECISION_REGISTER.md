@@ -42,8 +42,8 @@ Verified against the entries below (66 entries; every entry appears exactly once
 
 | Status | Count | Entries |
 |---|---|---|
-| APPROVED | 34 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063 |
-| OPEN | 13 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-058, DR-064, DR-065, DR-066 |
+| APPROVED | 35 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063, DR-064 |
+| OPEN | 12 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-058, DR-065, DR-066 |
 | REVIEW_REQUIRED | 14 | DR-030, DR-031, DR-034, DR-035, DR-036, DR-037, DR-038, DR-039, DR-040, DR-044, DR-045, DR-046, DR-050, DR-051 |
 | BLOCKED | 1 | DR-033 |
 | TEMPORARY | 1 | DR-029 |
@@ -120,7 +120,7 @@ Verified against the entries below (66 entries; every entry appears exactly once
 | DR-061 | GENERAL domain | PRODUCT, ARCHITECTURE | APPROVED |
 | DR-062 | Schema technology: TypeScript + Zod (only) | TECHNICAL, ARCHITECTURE | APPROVED |
 | DR-063 | Python prototype retired as the core implementation path | TECHNICAL, ARCHITECTURE | APPROVED |
-| DR-064 | Passage granularity and cross-passage spans | TECHNICAL, DATA | OPEN |
+| DR-064 | Passage granularity and cross-passage evidence spans | TECHNICAL, DATA | APPROVED |
 | DR-065 | Evidence eligibility of human-curated annotation datasets | TECHNICAL, DATA, SCHOLARLY | OPEN |
 | DR-066 | Layer type for non-Vedic base texts | TECHNICAL, DATA | OPEN |
 
@@ -796,15 +796,22 @@ Verified against the entries below (66 entries; every entry appears exactly once
 - **Revisit if:** a supporting Python tool is proposed; or `main` and the design branch are integrated (removal of prototype files and the old `docs/adr-0001` … `0004` numbering collision are separate, undecided items)
 - **Reviewer:** — · **Review trigger:** branch integration
 
-### DR-064 — Passage granularity and cross-passage spans
-`TECHNICAL` `DATA` · **OPEN** · 2026-10-27
-- **Question:** Flat vs hierarchical passages (e.g. sūkta ⊃ ṛc ⊃ pāda); how evidence spans crossing passage boundaries are represented; whether span boundaries inside grapheme clusters are allowed.
-- **Why:** Split from DR-052, whose approval covered offsets only.
-- **Sources:** [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md) OQ-E08; [ADR-0015](architecture/decisions/0015-evidence-span-offsets.md) · **Related:** DR-052
-- **Allowed:** — · **Not allowed:** fixing passage granularity in schema without a decision
-- **Risk if ignored:** evidence that cannot span verses or sentences
-- **Revisit if:** decided
-- **Reviewer:** engineering (+ Sanskrit expert) · **Review trigger:** before schema design
+### DR-064 — Passage granularity and cross-passage evidence spans
+`TECHNICAL` `DATA` · **APPROVED** · 2026-10-27
+- **Decision (approved 2026-10-27):**
+  - **Passage model:** Passages are flat, non-overlapping, immutable, text-bearing units within exactly one SourceSnapshot, created as part of the snapshot's declared segmentation. A SourceSnapshot has one declared Passage segmentation. Passages must not be nested or overlapping. No synthetic or containing Passages are created to represent larger scholarly structures or cross-passage evidence.
+  - **Structure:** scholarly and document structure is represented separately from Passage identity, using Locus, PassageLocus, explicit locus mappings and optional span mappings within a Passage. A Locus is an address defined by its CitationScheme, not textual evidence. No nested Passages for sections, pādas, sūktas, chapters, paragraphs, pages, etc.
+  - **Evidence spans:** DR-052 unchanged — Unicode code-point offsets, zero-based, half-open `[start,end)`, over the exact stored `original` Passage text; normalised/search text is never the coordinate system.
+  - **Cross-passage evidence:** an EvidenceAnchor may contain multiple ordered, passage-local segments. All segments of one EvidenceAnchor must belong to the same SourceSnapshot, reference their own Passage, use DR-052 span coordinates and preserve explicit ordering. A cross-passage EvidenceAnchor does not create a new Passage; no EvidenceAnchor crosses a SourceSnapshot boundary.
+  - **Unicode grapheme safety:** an evidence span must not split a Unicode extended grapheme cluster, validated against a pinned, explicit Unicode segmentation version. This is an additional boundary constraint; it does not replace DR-052's code-point coordinate system.
+- **Not decided (follow-up):** exact schema of a multi-segment EvidenceAnchor; composite hash/join encoding; whether gaps/ellipsis are permitted; exact Unicode segmentation library/version; domain-specific Passage segmentation rules (OQ-E11 … OQ-E14); UI rendering, database/index implementation and API representation.
+- **Why:** One textual identity per character and immutable snapshots, while still allowing quotations that cross structural boundaries.
+- **Sources:** [ADR-0022](architecture/decisions/0022-passage-granularity-and-cross-passage-evidence-spans.md); [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md) OQ-E08, OQ-E11 … OQ-E14 · **Related:** DR-052, DR-053, DR-055, DR-056, DR-057, DR-051
+- **Allowed:** ordered multi-segment anchors within one snapshot; structural loci mapped to passages or passage spans · **Not allowed:** nested, overlapping, synthetic or containing Passages; anchors crossing SourceSnapshots; spans splitting an extended grapheme cluster; normalised-text coordinates
+- **Risk if ignored:** duplicated textual identities, mutable snapshots, or quotations that misrepresent accented text
+- **Revisit if:** a source cannot be represented with one flat segmentation per snapshot
+- **Reviewer:** — · **Review trigger:** —
+- **History:** split from DR-052 on 2026-10-27 as OPEN — "Flat vs hierarchical passages (e.g. sūkta ⊃ ṛc ⊃ pāda); how evidence spans crossing passage boundaries are represented; whether span boundaries inside grapheme clusters are allowed."
 
 ### DR-065 — Evidence eligibility of human-curated annotation datasets
 `TECHNICAL` `DATA` `SCHOLARLY` · **OPEN** · 2026-10-27
@@ -832,6 +839,7 @@ Verified against the entries below (66 entries; every entry appears exactly once
 
 | Date | Change |
 |---|---|
+| 2026-10-27 | DR-064 approved (ADR-0022): flat non-overlapping Passages, one segmentation per snapshot; structure via Locus/PassageLocus; ordered multi-segment EvidenceAnchors within one snapshot; no span splits an extended grapheme cluster. Follow-ups OQ-E11 … OQ-E14. |
 | 2026-10-27 | DR-061 approved: GENERAL is a structural, domain-neutral baseline extension; MVP sources are legitimately supplied user sources; live web retrieval, captured web pages and a curated GENERAL corpus outside the MVP; USER_SUPPLIED is a domain-neutral route. PR-120/121/122/213/222 reconciled; PR-214 split from PR-213. |
 | 2026-10-27 | DR-060 approved: Evidence-driven Researcher; primary job; Vedic/Sanskrit as primary MVP specialization; own sources (USER_SUPPLIED) as secondary pathway; individual first; prototype-era positioning retired. |
 | 2026-10-27 | DR-052 … DR-057 approved (ADR-0015 … ADR-0020); ADR-0021 reconciles ADR-0005 with DR-052. Unapproved remainders split out as DR-064 (passage granularity), DR-065 (dataset evidence eligibility), DR-066 (layer type for non-Vedic base texts). Notes added to DR-015, DR-049, DR-051. |

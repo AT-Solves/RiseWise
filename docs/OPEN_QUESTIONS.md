@@ -6,7 +6,7 @@ Unresolved items from the RiseWise Knowledge Source Model v0.1. **Nothing here i
 
 Categories: **L** licensing/legal · **V** Vedic/Sanskrit facts and conventions · **E** engineering/model · **P** product/people.
 
-**Before schema design (Step 2)** at minimum: OQ-E08 should be resolved or given an explicit provisional answer (OQ-E01, OQ-E02, OQ-E04, OQ-E05 were resolved on 2026-10-27; OQ-E03, OQ-E07 and OQ-E10 remain open).
+**Before schema design (Step 2):** OQ-E01, OQ-E02, OQ-E04, OQ-E05 and OQ-E08 were resolved on 2026-10-27. OQ-E03, OQ-E07 and OQ-E10 remain open; OQ-E11 and OQ-E12 must be answered during schema design.
 
 ---
 
@@ -61,9 +61,13 @@ Categories: **L** licensing/legal · **V** Vedic/Sanskrit facts and conventions 
 | ~~OQ-E05~~ | **Resolved 2026-10-27** — a constrained Relation `LOCUS_MAPS_TO` with type, basis and provenance, only where established (DR-053, [ADR-0016](architecture/decisions/0016-citation-scheme-scope-and-locus-mappings.md)). | ADR-0002 |
 | ~~OQ-E06~~ | **Resolved 2026-10-27** — every annotation is bound to a specific SourceSnapshot and Passage; no silent migration (DR-056, [ADR-0019](architecture/decisions/0019-annotation-alignment.md)). Which snapshot the Zurich data actually aligns to is a fact to establish at import. | ex. 01 |
 | OQ-E07 | Layer type for non-Vedic base texts (e.g. sūtra texts). *(Partly resolved 2026-10-27: `ROOT_TEXT` is a reviewed designation, not a layer — DR-057, [ADR-0020](architecture/decisions/0020-root-text-designation.md). The layer-type question remains open as DR-066.)* | ex. 03 |
-| OQ-E08 | **Passage granularity:** one level (e.g. ṛc) or hierarchical (sūkta ⊃ ṛc ⊃ pāda)? How do evidence spans cross passage boundaries? May span boundaries fall inside grapheme clusters? *(Still open — DR-064.)* | pre-schema |
+| ~~OQ-E08~~ | **Resolved 2026-10-27** — flat non-overlapping Passages, one segmentation per snapshot; structure via Locus/PassageLocus; ordered multi-segment EvidenceAnchors within one snapshot; spans must not split an extended grapheme cluster (DR-064, [ADR-0022](architecture/decisions/0022-passage-granularity-and-cross-passage-evidence-spans.md)). Follow-ups: OQ-E11 … OQ-E14. | pre-schema |
 | ~~OQ-E09~~ | **Resolved 2026-10-27** — SourceSnapshot is the immutable version boundary per Source; metadata-only changes create no new snapshot (DR-055, [ADR-0018](architecture/decisions/0018-sourcesnapshot-granularity.md)). | §4 |
 | OQ-E10 | Evidence eligibility of human-curated annotation datasets (e.g. Zurich morphology): eligible after `ANNOTATION_SPOT_CHECK`, or immediately with origin `DATASET`? *(Still open — DR-065.)* | ex. 01 |
+| OQ-E11 | Schema representation of a multi-segment EvidenceAnchor, and its composite hash / join encoding (DR-064). | schema design |
+| OQ-E12 | May multi-segment evidence omit text between segments (gaps, ellipsis), and if so how is that shown and verified? (DR-064) | schema design |
+| OQ-E13 | Which Unicode segmentation library and version is pinned for extended-grapheme-cluster validation, and how is the version recorded with each anchor? (DR-064) | implementation |
+| OQ-E14 | Domain-specific Passage segmentation rules: which granularity each extension or source declares (e.g. ṛc, sūtra, paragraph). (DR-064) | per extension |
 
 ## P — Product and people
 

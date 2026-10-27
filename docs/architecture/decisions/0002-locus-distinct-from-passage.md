@@ -1,6 +1,6 @@
 # ADR-0002: Locus (address) is distinct from Passage (text)
 
-- **Status:** Accepted (2026-10-26) · **Amended by** ADR-0016 (2026-10-27): mappings only where established, explicit and provenance-bearing
+- **Status:** Accepted (2026-10-26) · **Amended by** ADR-0016 (2026-10-27): mappings only where established, explicit and provenance-bearing · **Refined by** ADR-0022 (2026-10-27): PassageLocus may carry an optional span; structure is never modelled as nested Passages
 - **Design reference:** source-model.md §3, §4, §11
 
 ## Context
