@@ -4,7 +4,7 @@
 |---|---|
 | **Status** | v0.1 — records requirements established so far. Documentation only. |
 | **Created** | 2026-10-26 |
-| **Counts** | 101 items: 69 APPROVED · 18 PROVISIONAL · 14 OPEN (§23 consolidates the OPEN items and related open decisions). |
+| **Counts** | 102 items: 72 APPROVED · 17 PROVISIONAL · 13 OPEN (§23 consolidates the OPEN items and related open decisions). |
 | **Why it exists** | Several fundamental requirements existed only in Claude session history (Decision Register DR-006). |
 | **Related** | [`DECISION_REGISTER.md`](DECISION_REGISTER.md) · [`architecture/source-model.md`](architecture/source-model.md) · [`architecture/decisions/`](architecture/decisions/README.md) · [`OPEN_QUESTIONS.md`](OPEN_QUESTIONS.md) · [`CONFLICTS.md`](CONFLICTS.md) |
 
@@ -158,9 +158,9 @@ Every item has one classification:
 
 | ID | Requirement | Status | Source | DR |
 |---|---|---|---|---|
-| PR-120 | GENERAL is an MVP domain, and the core source model must work beyond Vedic Sanskrit (later History, Science, Law, Product/Business, general research). | APPROVED | PO-approval-1, PO-source | DR-004, DR-020 |
-| PR-121 | In the MVP, GENERAL operates over user-supplied sources (documents the user adds). | PROVISIONAL | Claude-rev1 | DR-061 |
-| PR-122 | What GENERAL covers (question types, source types, whether any curated general corpus exists). | OPEN | — (gap) | DR-061 |
+| PR-120 | GENERAL is an MVP domain, and the core source model must work beyond Vedic Sanskrit (later History, Science, Law, Product/Business, general research). *(Clarified 2026-10-27 by DR-061: the phrase "general research" is preserved as originally stated; it does not define GENERAL, which is a structural baseline extension, not a topical domain.)* | APPROVED | PO-approval-1, PO-source | DR-004, DR-020 |
+| PR-121 | In the MVP, GENERAL operates over legitimately supplied user sources, through the `USER_SUPPLIED` route. That route is domain-neutral and also serves VEDIC_SANSKRIT; it is a source/rights route, not a domain. *(Was PROVISIONAL, Claude-rev1: "GENERAL operates over user-supplied sources (documents the user adds)". Approved in this form by DR-061, 2026-10-27.)* | APPROVED | Claude-rev1; PO approval of DR-061 | DR-061, DR-028 |
+| PR-122 | GENERAL is a structural, domain-neutral baseline extension: generic source, citation, provenance and reasoning behaviour for material that needs no specialised domain rules. It is not topical, not "everything that is not Vedic", not a general-knowledge model, and not the historical decision-analysis prototype. Tarka's core rules apply; model knowledge never becomes supported evidence. A curated GENERAL corpus is outside the MVP (strategy: DR-043). MVP includes baseline GENERAL evaluation of generic reasoning, provenance and evidence behaviour, with no separate subject-matter expert role. Document ingestion and formats are a separate future decision. *(Was OPEN 2026-10-26: "what GENERAL covers (question types, source types, whether any curated general corpus exists)".)* | APPROVED | PO approval of DR-061 (2026-10-27) | DR-061 |
 
 ## 14. Source/Knowledge Requirements
 
@@ -241,7 +241,8 @@ Every item has one classification:
 | PR-210 | LLM output is never a source. | APPROVED | PO-source, SM-v0.1 | DR-017 |
 | PR-211 | Source-layer integrity and security controls: content hashes, safe import, source text treated as untrusted data for LLMs, rights checks at every exit, append-only audit. | APPROVED | SM-v0.1 (approved; architecture §19) | DR-023 |
 | PR-212 | Never request, display, commit or hard-code secrets. | PROVISIONAL | Claude-rev1 (standard practice; not stated by PO for RiseWise) | — |
-| PR-213 | No open-web retrieval and no LLM tool use in the MVP. | PROVISIONAL | Claude-rev1 | DR-008 |
+| PR-213 | No LLM tool use in the MVP. *(Originally "No open-web retrieval and no LLM tool use in the MVP" — Claude-rev1. The open-web part is now approved separately as PR-214; the tool-use part remains provisional.)* | PROVISIONAL | Claude-rev1 | DR-008 |
+| PR-214 | No live open-web retrieval in the MVP; captured web pages are also outside the MVP unless separately approved. Detailed web-capture policy beyond this exclusion is not decided. | APPROVED | PO approval of DR-061 (2026-10-27); split from PR-213 | DR-061 |
 
 ## 22. Explicit Non-Goals for the Current Phase
 
@@ -249,7 +250,7 @@ Every item has one classification:
 |---|---|---|---|---|
 | PR-220 | Current phase is documentation only. Not yet: database schemas, TypeScript types, Zod schemas, migrations, source ingestion, corpus downloads, scraping, Tarka, LLM integration, embeddings, UI, authentication/tiers, billing, additional technology choices; no resolving scholarly questions without evidence; no resolving legal questions. | APPROVED | PO-steps | DR-007 |
 | PR-221 | Other domain adapters are out of MVP scope (PR-101). | APPROVED | PO-approval-1 | DR-004 |
-| PR-222 | MVP excludes team auth, open-web retrieval, embeddings and Sanskrit morphological analysis. | PROVISIONAL | Claude-rev1 | DR-008 |
+| PR-222 | MVP excludes team auth, open-web retrieval, embeddings and Sanskrit morphological analysis. *(Note 2026-10-27: the open-web exclusion is now approved (PR-214, DR-061) and team/institutional use is approved as post-MVP (DR-060); the other items remain provisional.)* | PROVISIONAL | Claude-rev1 | DR-008 |
 
 ## 23. Requirements Still Requiring Product Decisions
 
@@ -261,7 +262,6 @@ Consolidated list of OPEN items above, plus related open decisions:
 | PR-082 | Meaning of EVIDENCE as an epistemic kind | DR-058 |
 | PR-083 | Human review before FACT? | DR-003 |
 | PR-114 | Vedic corpora and editions (blocked by licensing) | DR-033–DR-037 |
-| PR-122 | GENERAL domain scope | DR-061 |
 | PR-133 | First-party corpus strategy | DR-043, DR-044 |
 | PR-173 | Code licence | DR-042 |
 | PR-174, PR-192 | Cloud LLM provider; deployment target | DR-009 |

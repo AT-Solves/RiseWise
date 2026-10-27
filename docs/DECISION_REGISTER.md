@@ -42,8 +42,8 @@ Verified against the entries below (66 entries; every entry appears exactly once
 
 | Status | Count | Entries |
 |---|---|---|
-| APPROVED | 33 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-062, DR-063 |
-| OPEN | 14 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-058, DR-061, DR-064, DR-065, DR-066 |
+| APPROVED | 34 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063 |
+| OPEN | 13 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-058, DR-064, DR-065, DR-066 |
 | REVIEW_REQUIRED | 14 | DR-030, DR-031, DR-034, DR-035, DR-036, DR-037, DR-038, DR-039, DR-040, DR-044, DR-045, DR-046, DR-050, DR-051 |
 | BLOCKED | 1 | DR-033 |
 | TEMPORARY | 1 | DR-029 |
@@ -117,7 +117,7 @@ Verified against the entries below (66 entries; every entry appears exactly once
 | DR-058 | "EVIDENCE" as epistemic kind and as entity | PRODUCT, ARCHITECTURE | OPEN |
 | DR-059 | Terminology: Source, Manifest, Version | ARCHITECTURE | RESOLVED |
 | DR-060 | Target user, primary job and MVP specialization | PRODUCT | APPROVED |
-| DR-061 | GENERAL domain scope undefined | PRODUCT | OPEN |
+| DR-061 | GENERAL domain | PRODUCT, ARCHITECTURE | APPROVED |
 | DR-062 | Schema technology: TypeScript + Zod (only) | TECHNICAL, ARCHITECTURE | APPROVED |
 | DR-063 | Python prototype retired as the core implementation path | TECHNICAL, ARCHITECTURE | APPROVED |
 | DR-064 | Passage granularity and cross-passage spans | TECHNICAL, DATA | OPEN |
@@ -756,15 +756,25 @@ Verified against the entries below (66 entries; every entry appears exactly once
 - **Reviewer:** product owner · **Review trigger:** before Tarka or UI design
 - **History:** opened 2026-10-26 as "Target users, personas and use cases undefined" (OPEN) — "No target users, personas or primary use cases have been defined. Identified while writing PRODUCT_REQUIREMENTS.md."
 
-### DR-061 — GENERAL domain scope undefined
-`PRODUCT` · **OPEN** · 2026-10-26
-- **Finding:** GENERAL is an approved MVP domain, but its scope (question types, source types, any curated corpus) is undefined; "user-supplied sources only" is a Claude proposal, not approved.
-- **Why:** Determines what the GENERAL extension must support.
-- **Sources:** [PRODUCT_REQUIREMENTS.md](PRODUCT_REQUIREMENTS.md) PR-121, PR-122 · **Related:** DR-004, DR-020
-- **Allowed:** domain-neutral core work · **Not allowed:** treating the proposal as approved
+### DR-061 — GENERAL domain
+`PRODUCT` `ARCHITECTURE` · **APPROVED** · 2026-10-27
+- **Decision (approved 2026-10-27):** GENERAL is a structural, domain-neutral baseline extension of RiseWise/Tarka. It applies generic source, citation, provenance and reasoning behaviour to material that does not require specialised domain rules. For the MVP, GENERAL operates over legitimately supplied user sources. GENERAL is not a topical catch-all, a general-knowledge model, or the historical decision-analysis system. Live open-web retrieval and a curated GENERAL corpus are outside the MVP unless separately approved. `USER_SUPPLIED` is a domain-neutral source/rights route and may be used by both GENERAL and specialised domains such as VEDIC_SANSKRIT.
+- **Scope interpretation:**
+  - GENERAL is structural, not topical; it is not "everything that is not Vedic".
+  - MVP source scope: legitimately supplied user sources. `USER_SUPPLIED` is a source/rights route, not a domain, and may serve both GENERAL and VEDIC_SANSKRIT.
+  - Tarka's domain-neutral core rules apply; LLM/model knowledge cannot become supported evidence merely because a question is in GENERAL.
+  - Live open-web retrieval is outside the MVP; captured web pages are also outside the MVP unless separately approved.
+  - A curated GENERAL corpus is outside the MVP; its strategy remains with DR-043.
+  - The historical RITA decision-analysis prototype is not part of GENERAL.
+  - MVP includes baseline GENERAL evaluation focused on generic reasoning, provenance and evidence behaviour, without a separate subject-matter expert role.
+- **Not resolved or changed by this decision (each keeps its current status):** DR-009 (deployment), DR-010 (commercial intent), DR-030 (tier/source rights), DR-031 (external processing), DR-023 (safe import controls), DR-024 (workspace isolation), DR-043 (first-party corpus), DR-064 (passage granularity), document ingestion and supported formats, detailed web-capture policy beyond the MVP exclusion, detailed GENERAL evaluation design.
+- **Why:** Determines what the GENERAL extension must support and prevents an unbounded domain.
+- **Sources:** product-owner approval (session, 2026-10-27); [PRODUCT_REQUIREMENTS.md](PRODUCT_REQUIREMENTS.md) PR-120, PR-121, PR-122, PR-213, PR-214; [source-model.md](architecture/source-model.md) §12; [ADR-0011](architecture/decisions/0011-domain-specifics-via-extensions.md) · **Related:** DR-004, DR-020, DR-028, DR-043, DR-060, DR-063
+- **Allowed:** GENERAL reasoning over legitimately supplied user sources under core rules · **Not allowed:** treating GENERAL as a topical catch-all or general-knowledge model; live web retrieval, captured web pages or a curated GENERAL corpus in the MVP without separate approval; equating `USER_SUPPLIED` with GENERAL
 - **Risk if ignored:** GENERAL becomes an empty or unbounded domain
-- **Revisit if:** product owner decides
+- **Revisit if:** web retrieval/capture or a curated corpus is proposed; DR-043 is decided
 - **Reviewer:** product owner · **Review trigger:** before GENERAL extension design
+- **History:** opened 2026-10-26 as "GENERAL domain scope undefined" (OPEN) — "GENERAL is an approved MVP domain, but its scope (question types, source types, any curated corpus) is undefined; 'user-supplied sources only' is a Claude proposal, not approved."
 
 ### DR-062 — Schema technology: TypeScript + Zod (only)
 `TECHNICAL` `ARCHITECTURE` · **APPROVED** · 2026-10-26
@@ -822,6 +832,7 @@ Verified against the entries below (66 entries; every entry appears exactly once
 
 | Date | Change |
 |---|---|
+| 2026-10-27 | DR-061 approved: GENERAL is a structural, domain-neutral baseline extension; MVP sources are legitimately supplied user sources; live web retrieval, captured web pages and a curated GENERAL corpus outside the MVP; USER_SUPPLIED is a domain-neutral route. PR-120/121/122/213/222 reconciled; PR-214 split from PR-213. |
 | 2026-10-27 | DR-060 approved: Evidence-driven Researcher; primary job; Vedic/Sanskrit as primary MVP specialization; own sources (USER_SUPPLIED) as secondary pathway; individual first; prototype-era positioning retired. |
 | 2026-10-27 | DR-052 … DR-057 approved (ADR-0015 … ADR-0020); ADR-0021 reconciles ADR-0005 with DR-052. Unapproved remainders split out as DR-064 (passage granularity), DR-065 (dataset evidence eligibility), DR-066 (layer type for non-Vedic base texts). Notes added to DR-015, DR-049, DR-051. |
 | 2026-10-26 | Added DR-063 (Python prototype retired as core path; ADR-0014). Added dated correction to DR-005 (earlier prototype exists on `main`). |

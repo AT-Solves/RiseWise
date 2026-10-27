@@ -402,6 +402,8 @@ The `vedic-sanskrit` extension **declares** structures. Values always come from 
 | Identifiers | DOI, ISBN, URL + capture hash |
 | Rules | Web captures store URL, retrieval time and content hash; a changed page is a new snapshot |
 
+**MVP scope (DR-061, 2026-10-27).** GENERAL is a structural, domain-neutral baseline extension, not a topical domain. In the MVP it operates over legitimately supplied user sources (`USER_SUPPLIED`, a domain-neutral route also used by VEDIC_SANSKRIT). Live open-web retrieval, captured web pages and a curated GENERAL corpus are outside the MVP unless separately approved; the `WEB_PAGE` work kind, `url.fragment` scheme and web-capture rule above are retained as extension vocabulary only.
+
 Later domains reuse the core unchanged — **History** (primary/secondary roles; dating as attributed interpretation), **Law** (jurisdiction; effective dates as validity intervals; authority hierarchy), **Science** (study type; retraction status as a VerificationRecord), **Product/Business** (internal documents; recency weighting). Validity intervals and authority are therefore generic fields, not Vedic ones.
 
 ## 13–17. Worked examples
