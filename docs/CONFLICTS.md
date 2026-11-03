@@ -7,7 +7,7 @@ Contradictions between requirements, design decisions, or sources. **Product beh
 | ID | Area | Status |
 |---|---|---|
 | C-001 | Availability states: requirement vs design | Resolved (approved with Source Model v0.1) |
-| C-002 | "EVIDENCE" as both an epistemic kind and an entity | Open |
+| C-002 | "EVIDENCE" as both an epistemic kind and an entity | Resolved (DR-074 / ADR-0030, 2026-11-03); relationship representation open |
 | C-003 | Terminology: "Source", "Manifest", "Version" | Resolved (mapping recorded) |
 | C-004 | VedaWeb translation licences vs underlying rights | Open |
 | C-005 | DCS licence version: 3.0 vs 4.0 | Open |
@@ -32,6 +32,7 @@ Contradictions between requirements, design decisions, or sources. **Product beh
 - **Requirement:** epistemic kinds include `EVIDENCE` alongside `FACT`, `INFERENCE`, etc.; the reasoning chain also has an "Evidence" step.
 - **Design:** evidence is modelled as a *link* (EvidenceAnchor → passage span) used by claims. The architecture proposal (rev. 1) suggested `EVIDENCE` as a kind label for statements that directly report what a source says.
 - **Status:** open. Belongs to Tarka design; does not affect the source model, which only provides EvidenceAnchor. Needs a definition before Tarka schema work.
+- **Resolution (2026-11-03):** [DR-074](DECISION_REGISTER.md) / [ADR-0030](architecture/decisions/0030-evidence-is-an-asserted-epistemic-kind.md). `EVIDENCE` is an asserted epistemic kind describing a proposition that reports or represents what a source says or contains; it is not the EvidenceAnchor, not the evidence link and not a verdict. The EvidenceAnchor (unchanged) grounds such propositions; the relationship between evidential material and a claim is represented separately and carries supporting/contradicting polarity. The exact representation of that relationship remains a Tarka architecture decision. The source model is unaffected.
 
 ## C-003 — Terminology: "Source", "Manifest", "Version"
 

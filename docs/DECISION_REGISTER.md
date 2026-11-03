@@ -38,20 +38,20 @@
 
 ## Status summary
 
-Verified against the entries below (73 entries; every entry appears exactly once in the index).
+Verified against the entries below (74 entries; every entry appears exactly once in the index).
 
 | Status | Count | Entries |
 |---|---|---|
-| APPROVED | 42 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063, DR-064, DR-067, DR-068, DR-069, DR-070, DR-071, DR-072, DR-073 |
-| OPEN | 12 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-058, DR-065, DR-066 |
+| APPROVED | 43 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063, DR-064, DR-067, DR-068, DR-069, DR-070, DR-071, DR-072, DR-073, DR-074 |
+| OPEN | 11 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-065, DR-066 |
 | REVIEW_REQUIRED | 14 | DR-030, DR-031, DR-034, DR-035, DR-036, DR-037, DR-038, DR-039, DR-040, DR-044, DR-045, DR-046, DR-050, DR-051 |
 | BLOCKED | 1 | DR-033 |
 | TEMPORARY | 1 | DR-029 |
 | PROPOSED | 1 | DR-008 |
-| RESOLVED | 2 | DR-006, DR-059 |
+| RESOLVED | 3 | DR-006, DR-058, DR-059 |
 | SUPERSEDED | 0 | — |
 | REJECTED | 0 | — |
-| **Total** | **73** | |
+| **Total** | **74** | |
 
 ## Index
 
@@ -114,7 +114,7 @@ Verified against the entries below (73 entries; every entry appears exactly once
 | DR-055 | SourceSnapshot granularity | TECHNICAL, DATA | APPROVED |
 | DR-056 | Annotation alignment | TECHNICAL, DATA | APPROVED |
 | DR-057 | ROOT_TEXT designation | TECHNICAL, DATA, SCHOLARLY | APPROVED |
-| DR-058 | "EVIDENCE" as epistemic kind and as entity | PRODUCT, ARCHITECTURE | OPEN |
+| DR-058 | "EVIDENCE" as epistemic kind and as entity | PRODUCT, ARCHITECTURE | RESOLVED |
 | DR-059 | Terminology: Source, Manifest, Version | ARCHITECTURE | RESOLVED |
 | DR-060 | Target user, primary job and MVP specialization | PRODUCT | APPROVED |
 | DR-061 | GENERAL domain | PRODUCT, ARCHITECTURE | APPROVED |
@@ -130,6 +130,7 @@ Verified against the entries below (73 entries; every entry appears exactly once
 | DR-071 | Canonical byte encoding for source text hashes | TECHNICAL, DATA | APPROVED |
 | DR-072 | SourceSnapshot content identity for hashing | TECHNICAL, DATA | APPROVED |
 | DR-073 | FACT is an asserted epistemic kind, distinct from evidential status | PRODUCT, ARCHITECTURE | APPROVED |
+| DR-074 | EVIDENCE is an asserted epistemic kind, distinct from grounding, evidence relationships and status | PRODUCT, ARCHITECTURE | APPROVED |
 
 ---
 
@@ -727,7 +728,7 @@ Verified against the entries below (73 entries; every entry appears exactly once
 - **History:** opened 2026-10-26 as "Root-text layer for non-Vedic śāstra works" (OQ-E07). The remaining question — which layer type non-Vedic base texts use — moved to DR-066 (OPEN). `ROOT_TEXT_EDITION` tier naming moved to DR-049.
 
 ### DR-058 — "EVIDENCE" as epistemic kind and as entity
-`PRODUCT` `ARCHITECTURE` · **OPEN** · 2026-10-26
+`PRODUCT` `ARCHITECTURE` · **RESOLVED** · 2026-10-26 (resolved 2026-11-03 by DR-074)
 - **Question:** How the epistemic kind EVIDENCE relates to the EvidenceAnchor/evidence link.
 - **Why:** Affects how users read "known vs inferred".
 - **Sources:** [C-002](CONFLICTS.md) · **Related:** DR-003
@@ -735,6 +736,7 @@ Verified against the entries below (73 entries; every entry appears exactly once
 - **Risk if ignored:** inconsistent labelling in Tarka
 - **Revisit if:** Tarka design
 - **Reviewer:** product owner · **Review trigger:** before Tarka schema work
+- **Resolution (2026-11-03):** Resolved at the semantic level by [DR-074](#dr-074--evidence-is-an-asserted-epistemic-kind-distinct-from-grounding-evidence-relationships-and-status) ([ADR-0030](architecture/decisions/0030-evidence-is-an-asserted-epistemic-kind.md)): `EVIDENCE` is an asserted epistemic kind for a proposition that reports or represents what a source says or contains; its grounding (source/provenance structures and EvidenceAnchor) and its relationship to a claim are represented separately; supporting/contradicting polarity belongs to the evidence-to-claim relationship, not to the EvidenceAnchor. The original status (OPEN) and question above are retained as history. **Still open (not resolved by this entry):** the exact representation of the evidence-to-claim relationship and of grounding (entity form, cardinality, polarity values) — a Tarka architecture (GAP-1) decision recorded as not decided in DR-074.
 
 ### DR-059 — Terminology: Source, Manifest, Version
 `ARCHITECTURE` · **RESOLVED** · 2026-10-26
@@ -954,10 +956,28 @@ Verified against the entries below (73 entries; every entry appears exactly once
 
 ---
 
+### DR-074 — EVIDENCE is an asserted epistemic kind, distinct from grounding, evidence relationships and status
+`PRODUCT` `ARCHITECTURE` · **APPROVED** · 2026-11-03
+- **Decision (approved 2026-11-03; product owner explicitly selected option P2-A1):** `EVIDENCE` is an asserted epistemic kind describing a proposition that reports or represents what a source says or contains (e.g. "Source S states that P"). `EVIDENCE` does not by itself establish that the reported proposition is true, authoritative, relevant, sufficient, or supportive of any claim. Its grounding in source material and its relationship to a claim are represented separately. Detailed rules: ADR-0030.
+- **Clarifications:** (1) `EVIDENCE` is a kind, not an evidence-strength verdict. (2) It does not mean true, proven, authoritative, sufficient, relevant, `SUPPORTED`, or source verification. (3) It does not itself determine claim status; evidence and verification rules do (DR-003, PR-032). (4) Grounding is represented separately, through source/provenance structures and the EvidenceAnchor. (5) The relationship between evidential material and a claim is represented separately from the kind. (6) Supporting/contradicting polarity belongs to that evidence-to-claim relationship, not to the EvidenceAnchor. (7) The EvidenceAnchor remains the exact textual selection and value object governed by DR-067. (8) Structural validity of an EvidenceAnchor remains distinct from evidential sufficiency (DR-070). (9) A verified source does not automatically make a claim `SUPPORTED`. (10) An `EVIDENCE` proposition can exist without being sufficient to establish the claim it concerns.
+- **Asserted, not gated:** assigning the kind does not require an eligible EvidenceAnchor or evidence-eligibility (DR-022) to have been established; grounding, validity, eligibility, sufficiency and status remain separate dimensions.
+- **Semantic chain (not a schema):** Source → SourceSnapshot → Passage → EvidenceAnchor → `EVIDENCE` proposition → evidence relationship to Claim → status computation. There is one evidence-to-claim relationship concept; its exact representation, entity form and cardinality are a Tarka architecture (GAP-1) decision.
+- **Why:** Keeps the approved six-kind vocabulary (DR-003, PR-080) with a defined meaning, makes the step from "Source S states P" to "P" explicit (PR-054 Source vs Claim), keeps evidence, relationship and status distinguishable for "Why?" (PR-041, PR-050, PR-051), and follows the asserted-kind pattern of DR-073. A future "Why?" trace must be able to distinguish the `EVIDENCE` proposition, the EvidenceAnchor / source passage grounding it, its relationship to a claim, and the independently computed claim status (trace UI and schema not defined here).
+- **Rejected:** P2-A2 (kind only for propositions grounded in an eligible anchor — would make the kind gated); P2-B (`EVIDENCE` only as the claim ↔ anchor relationship — conflicts with DR-003/PR-080); P2-C (kind plus a second, equivalent evidential representation duplicating the relationship — two parallel routes); P2-D (`EVIDENCE` as an argument role — blurs kind, relationship, sufficiency and status).
+- **Not decided:** whether `FACT` and `EVIDENCE` (or any kinds) may coexist on one reasoning object, and kind exclusivity; the representation of the evidence-to-claim relationship and of grounding (what it connects, entity form, cardinality, polarity values beyond supporting and contradicting); the meaning of `INFERRED`; initial `UNVERIFIED` vs `INSUFFICIENT_EVIDENCE`; whether and how an LLM may locate passages, propose EvidenceAnchors, `EVIDENCE` propositions, evidence relationships or polarity, or receive human confirmation; treatment of unsourced GENERAL model knowledge (existing governance stands: model knowledge is not evidence, DR-017, DR-061); the relationship between the Source Model `Interpretation` entity, the `INTERPRETATION` kind, commentary, Tarka-generated interpretations and the evidential status of interpretations; status meanings, thresholds and propagation (PR-044, PR-093); evidence sufficiency; authority and contradiction weighting; human review (PR-083); the FACT path; LLM-origin evidence eligibility; inference semantics; circularity rules; the reasoning-record schema; unavailable evidence (OQ-E21).
+- **Sources:** product-owner decision (session, 2026-11-03; P2 product-semantics study, option P2-A1); [ADR-0030](architecture/decisions/0030-evidence-is-an-asserted-epistemic-kind.md); resolves DR-058, PR-082 and [C-002](CONFLICTS.md) at the semantic level · **Related:** DR-003, DR-017, DR-022, DR-058, DR-067, DR-069, DR-070, DR-073, ADR-0003, ADR-0008, ADR-0019, PR-040, PR-041, PR-050, PR-051, PR-053, PR-054, PR-080, PR-082, PR-090 … PR-093, [source-model.md](architecture/source-model.md) §3
+- **Allowed:** classifying a proposition that reports what a source says or contains as `EVIDENCE`, independently of its grounding, eligibility, sufficiency and the claim's status · **Not allowed:** treating `EVIDENCE` as true, authoritative, relevant, sufficient, supportive or `SUPPORTED`; treating it as the EvidenceAnchor, passage or source; requiring eligibility to assign the kind; placing polarity on the EvidenceAnchor; creating a second evidential representation parallel to the evidence-to-claim relationship; reading this decision as expanding LLM authority or as resolving any item listed under *Not decided*
+- **Risk if ignored:** `EVIDENCE` becomes a back-door verdict or status; evidence, grounding and support become indistinguishable in "Why?"
+- **Revisit if:** the evidence-relationship architecture or status definitions make the asserted-kind reading unworkable
+- **Reviewer:** product owner · **Review trigger:** Tarka evidence-relationship architecture (GAP-1); definition of claim statuses (PR-044, PR-093)
+
+---
+
 ## Change log
 
 | Date | Change |
 |---|---|
+| 2026-11-03 | DR-074 approved (ADR-0030): `EVIDENCE` is an asserted epistemic kind for propositions reporting what a source says or contains; grounding and the evidence-to-claim relationship (which carries polarity) are separate. DR-058 → RESOLVED at the semantic level (relationship representation still open); PR-082 → APPROVED; C-002 resolved. No status defined; DR-073 unchanged. |
 | 2026-11-03 | DR-073 approved (ADR-0029): `FACT` is an asserted epistemic kind, not a status or verdict; lower-case "fact" in product prose is ordinary language. Dated note added to DR-003 (wording unchanged). No status defined; DR-058, PR-081, PR-083, PR-044/PR-093 and OQ-E21 remain as they were. |
 | 2026-11-03 | DR-072 approved (ADR-0028): SourceSnapshot content identity for hashing; OQ-E17 resolved at identity/requirements level; exact serialisation remains open. |
 | 2026-11-03 | DR-071 approved (ADR-0027): canonical byte encoding for source text hashes; OQ-E16 resolved. |

@@ -35,3 +35,4 @@ ADR-0001 … 0011 were accepted with the RiseWise Knowledge Source Model v0.1 ([
 | [0027](0027-canonical-byte-encoding-for-source-text-hashes.md) | Canonical byte encoding for source text hashes | Accepted |
 | [0028](0028-sourcesnapshot-content-identity-for-hashing.md) | SourceSnapshot content identity for hashing | Accepted |
 | [0029](0029-fact-is-an-asserted-epistemic-kind.md) | FACT is an asserted epistemic kind distinct from evidential status | Accepted |
+| [0030](0030-evidence-is-an-asserted-epistemic-kind.md) | EVIDENCE is an asserted epistemic kind | Accepted |

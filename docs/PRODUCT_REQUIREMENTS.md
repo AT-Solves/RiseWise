@@ -4,7 +4,7 @@
 |---|---|
 | **Status** | v0.1 — records requirements established so far. Documentation only. |
 | **Created** | 2026-10-26 |
-| **Counts** | 102 items: 72 APPROVED · 17 PROVISIONAL · 13 OPEN (§23 consolidates the OPEN items and related open decisions). |
+| **Counts** | 102 items: 73 APPROVED · 17 PROVISIONAL · 12 OPEN (§23 consolidates the OPEN items and related open decisions). |
 | **Why it exists** | Several fundamental requirements existed only in Claude session history (Decision Register DR-006). |
 | **Related** | [`DECISION_REGISTER.md`](DECISION_REGISTER.md) · [`architecture/source-model.md`](architecture/source-model.md) · [`architecture/decisions/`](architecture/decisions/README.md) · [`OPEN_QUESTIONS.md`](OPEN_QUESTIONS.md) · [`CONFLICTS.md`](CONFLICTS.md) |
 
@@ -122,9 +122,9 @@ Every item has one classification:
 
 | ID | Requirement | Status | Source | DR |
 |---|---|---|---|---|
-| PR-080 | Tarka distinguishes FACT · EVIDENCE · INFERENCE · ASSUMPTION · INTERPRETATION · UNCERTAINTY. *(Note 2026-11-03: `FACT` is an asserted epistemic kind describing what kind of proposition a claim is; it is not a status and does not mean proven, supported or established — DR-073.)* | APPROVED | PO-brief, PO-source | DR-003, DR-073 |
+| PR-080 | Tarka distinguishes FACT · EVIDENCE · INFERENCE · ASSUMPTION · INTERPRETATION · UNCERTAINTY. *(Note 2026-11-03: `FACT` is an asserted epistemic kind describing what kind of proposition a claim is; it is not a status and does not mean proven, supported or established — DR-073.)* *(Note 2026-11-03: `EVIDENCE` is an asserted epistemic kind for propositions reporting what a source says or contains; it is not a verdict or status — DR-074.)* | APPROVED | PO-brief, PO-source | DR-003, DR-073 |
 | PR-081 | No agent (LLM or person) can directly assign FACT; FACT is reachable only through evidence and verification rules. *(Note 2026-11-03: DR-073 records `FACT` as an asserted epistemic kind, not an earned standing; reading this item as making `FACT` an evidential standing is not adopted — evidential standing is expressed by status. Whether and by whom the `FACT` kind may be assigned remains undecided.)* | PROVISIONAL | Claude-rev1, Claude-rev2 (derived from PR-031/PR-032; exact definition not approved) | DR-003 |
-| PR-082 | How the kind EVIDENCE relates to evidence links/entities. | OPEN | CONFLICT C-002 | DR-058 |
+| PR-082 | `EVIDENCE` is an asserted epistemic kind describing a proposition that reports or represents what a source says or contains; it is not a verdict, status or source verification. Its grounding (EvidenceAnchor) and its relationship to a claim, which carries supporting/contradicting polarity, are represented separately. The exact relationship representation is not decided. *(Originally OPEN: "How the kind EVIDENCE relates to evidence links/entities." — CONFLICT C-002. Resolved 2026-11-03 by DR-074.)* | APPROVED | PO approval of DR-074 (2026-11-03); was OPEN (C-002) | DR-058, DR-074 |
 | PR-083 | Whether human review is required before a statement may be labelled FACT. *(Note 2026-11-03: under DR-073 `FACT` is a kind, not an evidential verdict; this question remains open.)* | OPEN | Claude-rev1 decision list (Claude-rev2 proposed "rules decide; reviewers confirm inputs" — not approved) | DR-003 |
 
 ## 10. Claim/Conclusion Statuses
@@ -259,7 +259,7 @@ Consolidated list of OPEN items above, plus related open decisions:
 | ID | Decision needed | DR |
 |---|---|---|
 | PR-044 / PR-093 | Status definitions and thresholds | DR-003 |
-| PR-082 | Meaning of EVIDENCE as an epistemic kind | DR-058 |
+| ~~PR-082~~ | ~~Meaning of EVIDENCE as an epistemic kind~~ — resolved 2026-11-03 (DR-074); evidence-relationship representation remains a Tarka architecture decision | DR-058, DR-074 |
 | PR-083 | Human review before FACT? | DR-003 |
 | PR-114 | Vedic corpora and editions (blocked by licensing) | DR-033–DR-037 |
 | PR-133 | First-party corpus strategy | DR-043, DR-044 |
