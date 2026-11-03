@@ -1,6 +1,6 @@
 # ADR-0022: Passage granularity and cross-passage evidence spans
 
-- **Status:** Accepted (2026-10-27) · **Refined by** ADR-0023 (2026-10-27): EvidenceAnchor semantics (OQ-E11) · **Refined by** ADR-0024 (2026-10-27): the declared segmentation carries a logical reading order over Passages
+- **Status:** Accepted (2026-10-27) · **Refined by** ADR-0023 (2026-10-27): EvidenceAnchor semantics (OQ-E11) · **Refined by** ADR-0024 (2026-10-27): the declared segmentation carries a logical reading order over Passages · **Refined by** ADR-0025 (2026-11-03): join relations between segments (OQ-E12)
 - **Decision Register:** DR-064
 - **Related:** ADR-0002, ADR-0015 (DR-052), ADR-0016 (DR-053), ADR-0018 (DR-055), ADR-0019 (DR-056), ADR-0020 (DR-057)
 

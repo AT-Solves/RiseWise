@@ -1,6 +1,6 @@
 # ADR-0023: EvidenceAnchor semantics
 
-- **Status:** Accepted (2026-10-27) · **Refined by** ADR-0024 (2026-10-27): SourceSnapshot Passage order is now defined by DR-068.
+- **Status:** Accepted (2026-10-27) · **Refined by** ADR-0024 (2026-10-27): SourceSnapshot Passage order is now defined by DR-068. · **Refined by** ADR-0025 (2026-11-03): join relations `CONTINUOUS` / `DISCONTINUOUS` defined by DR-069.
 - **Decision Register:** DR-067
 - **Resolves:** OQ-E11 (semantics only; representation details remain implementation-level)
 - **Related:** ADR-0015 (DR-052), ADR-0017 (DR-054), ADR-0018 (DR-055), ADR-0019 (DR-056), ADR-0022 (DR-064)

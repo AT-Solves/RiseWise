@@ -38,11 +38,11 @@
 
 ## Status summary
 
-Verified against the entries below (68 entries; every entry appears exactly once in the index).
+Verified against the entries below (69 entries; every entry appears exactly once in the index).
 
 | Status | Count | Entries |
 |---|---|---|
-| APPROVED | 37 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063, DR-064, DR-067, DR-068 |
+| APPROVED | 38 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063, DR-064, DR-067, DR-068, DR-069 |
 | OPEN | 12 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-058, DR-065, DR-066 |
 | REVIEW_REQUIRED | 14 | DR-030, DR-031, DR-034, DR-035, DR-036, DR-037, DR-038, DR-039, DR-040, DR-044, DR-045, DR-046, DR-050, DR-051 |
 | BLOCKED | 1 | DR-033 |
@@ -51,7 +51,7 @@ Verified against the entries below (68 entries; every entry appears exactly once
 | RESOLVED | 2 | DR-006, DR-059 |
 | SUPERSEDED | 0 | — |
 | REJECTED | 0 | — |
-| **Total** | **68** | |
+| **Total** | **69** | |
 
 ## Index
 
@@ -125,6 +125,7 @@ Verified against the entries below (68 entries; every entry appears exactly once
 | DR-066 | Layer type for non-Vedic base texts | TECHNICAL, DATA | OPEN |
 | DR-067 | EvidenceAnchor semantics | TECHNICAL, DATA | APPROVED |
 | DR-068 | Passage order within a SourceSnapshot | TECHNICAL, DATA | APPROVED |
+| DR-069 | Join relations between EvidenceAnchor segments | TECHNICAL, DATA | APPROVED |
 
 ---
 
@@ -867,12 +868,31 @@ Verified against the entries below (68 entries; every entry appears exactly once
 - **Revisit if:** a source cannot be given a single declared logical reading order
 - **Reviewer:** — · **Review trigger:** —
 
+### DR-069 — Join relations between EvidenceAnchor segments
+`TECHNICAL` `DATA` · **APPROVED** · 2026-11-03
+- **Decision (approved 2026-11-03):** Consecutive segments of one EvidenceAnchor are joined by a declared relation, verified against the SourceSnapshot's citable textual content in DR-068 order:
+  - **`CONTINUOUS`** — the next segment begins exactly where the previous segment ends;
+  - **`DISCONTINUOUS`** — citable source text lies between the segments that is not part of the anchor.
+  - A declared relation that does not match the mechanically derived relationship fails verification.
+  - The relation is a structural fact about the cited selection only. It does not state or imply why the intervening text is excluded, nor any intent of an author, editor or citer; any such interpretation requires a separate, evidenced claim.
+  - An ellipsis is the presentation of `DISCONTINUOUS` and is never stored as source text or quoted text. Ellipsis or lacuna marks that are part of the source text remain source text.
+  - Material that is not part of the citable textual content (missing, damaged, or excluded by ingestion/segmentation rules) does not by itself create a `DISCONTINUOUS` join; such absence is recorded through availability/coverage and segmentation rules.
+  - Each segment's quoted text remains exact; no representation may present `DISCONTINUOUS` text as continuous.
+- **Not decided:** reverse order, repeated Passages, overlap and merging — validity and representation remain OQ-E20 (no relation is defined for them); composite hash and serialisation (OQ-E18, OQ-E16, OQ-E17); placement of complex material (OQ-E14); Tarka/UI presentation (OQ-E21); any additional join relation; field names, storage, API and UI.
+- **Why:** Lets one elided quotation be one verifiable selection while preventing a structural fact ("text was skipped") from becoming an unsupported interpretation ("someone intentionally omitted it").
+- **Sources:** [ADR-0025](architecture/decisions/0025-join-relations-between-evidenceanchor-segments.md); [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md) OQ-E12 (resolved) · **Related:** DR-052, DR-064, DR-067, DR-068, DR-017
+- **Allowed:** `CONTINUOUS` and `DISCONTINUOUS` joins, declared and mechanically verified · **Not allowed:** inferring author, editor or citer intent from a join; storing a presentation ellipsis as source or quoted text; presenting `DISCONTINUOUS` text as continuous; reading this decision as resolving OQ-E14, OQ-E16, OQ-E17, OQ-E18, OQ-E20 or OQ-E21
+- **Risk if ignored:** misquotation by silent omission, or unsupported claims about why text was omitted
+- **Revisit if:** OQ-E20 needs a relation for reverse order or repeated Passages, or a further join relation is proposed
+- **Reviewer:** — · **Review trigger:** —
+
 ---
 
 ## Change log
 
 | Date | Change |
 |---|---|
+| 2026-11-03 | DR-069 approved (ADR-0025): `CONTINUOUS` / `DISCONTINUOUS` join relations, declared and mechanically verified; structural only, no intent; OQ-E12 resolved. |
 | 2026-10-27 | DR-068 approved (ADR-0024): declared logical reading order over Passages per SourceSnapshot; OQ-E15 resolved. |
 | 2026-10-27 | DR-067 approved (ADR-0023): EvidenceAnchor semantics; OQ-E11 resolved (semantics); follow-ups OQ-E15 … OQ-E21 added; OQ-E12 wording extended to join/omission semantics. |
 | 2026-10-27 | DR-064 approved (ADR-0022): flat non-overlapping Passages, one segmentation per snapshot; structure via Locus/PassageLocus; ordered multi-segment EvidenceAnchors within one snapshot; no span splits an extended grapheme cluster. Follow-ups OQ-E11 … OQ-E14. |
