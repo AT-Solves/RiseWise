@@ -38,11 +38,11 @@
 
 ## Status summary
 
-Verified against the entries below (71 entries; every entry appears exactly once in the index).
+Verified against the entries below (72 entries; every entry appears exactly once in the index).
 
 | Status | Count | Entries |
 |---|---|---|
-| APPROVED | 40 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063, DR-064, DR-067, DR-068, DR-069, DR-070, DR-071 |
+| APPROVED | 41 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063, DR-064, DR-067, DR-068, DR-069, DR-070, DR-071, DR-072 |
 | OPEN | 12 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-058, DR-065, DR-066 |
 | REVIEW_REQUIRED | 14 | DR-030, DR-031, DR-034, DR-035, DR-036, DR-037, DR-038, DR-039, DR-040, DR-044, DR-045, DR-046, DR-050, DR-051 |
 | BLOCKED | 1 | DR-033 |
@@ -51,7 +51,7 @@ Verified against the entries below (71 entries; every entry appears exactly once
 | RESOLVED | 2 | DR-006, DR-059 |
 | SUPERSEDED | 0 | — |
 | REJECTED | 0 | — |
-| **Total** | **71** | |
+| **Total** | **72** | |
 
 ## Index
 
@@ -128,6 +128,7 @@ Verified against the entries below (71 entries; every entry appears exactly once
 | DR-069 | Join relations between EvidenceAnchor segments | TECHNICAL, DATA | APPROVED |
 | DR-070 | EvidenceAnchor structural well-formedness | TECHNICAL, DATA | APPROVED |
 | DR-071 | Canonical byte encoding for source text hashes | TECHNICAL, DATA | APPROVED |
+| DR-072 | SourceSnapshot content identity for hashing | TECHNICAL, DATA | APPROVED |
 
 ---
 
@@ -920,12 +921,26 @@ Verified against the entries below (71 entries; every entry appears exactly once
 - **Revisit if:** the text-encoding scheme changes; the hash algorithm remains governed by ADR-0004.
 - **Reviewer:** — · **Review trigger:** —
 
+### DR-072 — SourceSnapshot content identity for hashing
+`TECHNICAL` `DATA` · **APPROVED** · 2026-11-03
+- **Decision (approved 2026-11-03):** The SourceSnapshot content hash is derived from the ordered sequence of the snapshot's Passage `contentHash` values, in the snapshot's DR-068 logical Passage order, and nothing else. PassageLocus/locus information, entity IDs, acquisition/provenance/decoding/licence/verification/parser metadata, storage state (including `contentState`) and derived/search data are excluded. The hash algorithm remains governed by ADR-0004 and each Passage `contentHash` by DR-071 / ADR-0027. The eventual serialisation must be deterministic, preserve Passage order and boundaries, distinguish an empty Passage from an absent Passage, use a snapshot-hash domain distinct from other hash types, and have an identifiable format/version. The exact serialisation is not chosen. Detailed rules: ADR-0028.
+- **Why:** Passage `contentHash` values identify citable text exactly, keep Passage boundaries, and remain available when text is `HASH_ONLY`, `WITHHELD` or tombstoned (ADR-0004, ADR-0005), so the snapshot hash stays recomputable. Excluding addressing and metadata keeps metadata-only changes from altering content identity (DR-055).
+- **Scope:** which inputs constitute SourceSnapshot content identity for its content hash, and the requirements its serialisation must meet.
+- **Not in scope:** exact serialisation framing, field tags, count or length encoding, domain tag value, representation of the format/version, any structured serialisation format, storage fields; the text-to-bytes rule (DR-071); the hash algorithm (ADR-0004); empty-Passage validity (OQ-E14); composite EvidenceAnchor hashing (OQ-E18). E17's snapshot-hash domain must remain distinct from other hash types, including the eventual EvidenceAnchor hash domain; E18 remains responsible for deciding its own domain and serialisation.
+- **Consequences:** identical segmentation, order and Passage text give the same snapshot hash regardless of entity IDs or metadata; locus corrections and other metadata revisions do not change it; a snapshot hash can be recomputed from retained Passage hashes without the text.
+- **Sources:** [ADR-0028](architecture/decisions/0028-sourcesnapshot-content-identity-for-hashing.md); [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md) OQ-E17 (resolved at identity/requirements level) · **Related:** ADR-0004, ADR-0005, ADR-0021, DR-053, DR-054, DR-055, DR-064, DR-067, DR-068, DR-071
+- **Allowed:** snapshot hashing over ordered Passage `contentHash` values · **Not allowed:** including PassageLocus, entity IDs, metadata, storage state or derived data in snapshot content identity; ordering by IDs, loci or insertion order; reading this decision as choosing a serialisation format, framing, tag or version representation, or as resolving OQ-E13, OQ-E14, OQ-E18, OQ-E19 or OQ-E21
+- **Risk if ignored:** snapshot hashes that change with metadata, or cannot be recomputed for withheld content
+- **Revisit if:** the exact serialisation is chosen, or an identity input proves insufficient
+- **Reviewer:** — · **Review trigger:** —
+
 ---
 
 ## Change log
 
 | Date | Change |
 |---|---|
+| 2026-11-03 | DR-072 approved (ADR-0028): SourceSnapshot content identity for hashing; OQ-E17 resolved at identity/requirements level; exact serialisation remains open. |
 | 2026-11-03 | DR-071 approved (ADR-0027): canonical byte encoding for source text hashes; OQ-E16 resolved. |
 | 2026-11-03 | DR-070 approved (ADR-0026): EvidenceAnchor structural well-formedness; OQ-E20 resolved. |
 | 2026-11-03 | DR-069 approved (ADR-0025): `CONTINUOUS` / `DISCONTINUOUS` join relations, declared and mechanically verified; structural only, no intent; OQ-E12 resolved. |

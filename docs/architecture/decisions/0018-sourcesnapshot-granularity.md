@@ -1,6 +1,6 @@
 # ADR-0018: SourceSnapshot granularity
 
-- **Status:** Accepted (2026-10-27) · **Refined by** ADR-0024 (2026-10-27): the declared logical Passage order is immutable snapshot state
+- **Status:** Accepted (2026-10-27) · **Refined by** ADR-0024 (2026-10-27): the declared logical Passage order is immutable snapshot state · **Refined by** ADR-0028 (2026-11-03): snapshot content identity for hashing (OQ-E17); exact serialisation still open
 - **Decision Register:** DR-055
 - **Refines:** ADR-0004
 

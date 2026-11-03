@@ -33,3 +33,4 @@ ADR-0001 … 0011 were accepted with the RiseWise Knowledge Source Model v0.1 ([
 | [0025](0025-join-relations-between-evidenceanchor-segments.md) | Join relations between EvidenceAnchor segments | Accepted |
 | [0026](0026-evidenceanchor-structural-well-formedness.md) | EvidenceAnchor structural well-formedness | Accepted |
 | [0027](0027-canonical-byte-encoding-for-source-text-hashes.md) | Canonical byte encoding for source text hashes | Accepted |
+| [0028](0028-sourcesnapshot-content-identity-for-hashing.md) | SourceSnapshot content identity for hashing | Accepted |
