@@ -38,11 +38,11 @@
 
 ## Status summary
 
-Verified against the entries below (69 entries; every entry appears exactly once in the index).
+Verified against the entries below (70 entries; every entry appears exactly once in the index).
 
 | Status | Count | Entries |
 |---|---|---|
-| APPROVED | 38 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063, DR-064, DR-067, DR-068, DR-069 |
+| APPROVED | 39 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063, DR-064, DR-067, DR-068, DR-069, DR-070 |
 | OPEN | 12 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-058, DR-065, DR-066 |
 | REVIEW_REQUIRED | 14 | DR-030, DR-031, DR-034, DR-035, DR-036, DR-037, DR-038, DR-039, DR-040, DR-044, DR-045, DR-046, DR-050, DR-051 |
 | BLOCKED | 1 | DR-033 |
@@ -51,7 +51,7 @@ Verified against the entries below (69 entries; every entry appears exactly once
 | RESOLVED | 2 | DR-006, DR-059 |
 | SUPERSEDED | 0 | — |
 | REJECTED | 0 | — |
-| **Total** | **69** | |
+| **Total** | **70** | |
 
 ## Index
 
@@ -126,6 +126,7 @@ Verified against the entries below (69 entries; every entry appears exactly once
 | DR-067 | EvidenceAnchor semantics | TECHNICAL, DATA | APPROVED |
 | DR-068 | Passage order within a SourceSnapshot | TECHNICAL, DATA | APPROVED |
 | DR-069 | Join relations between EvidenceAnchor segments | TECHNICAL, DATA | APPROVED |
+| DR-070 | EvidenceAnchor structural well-formedness | TECHNICAL, DATA | APPROVED |
 
 ---
 
@@ -886,12 +887,33 @@ Verified against the entries below (69 entries; every entry appears exactly once
 - **Revisit if:** OQ-E20 needs a relation for reverse order or repeated Passages, or a further join relation is proposed
 - **Reviewer:** — · **Review trigger:** —
 
+### DR-070 — EvidenceAnchor structural well-formedness
+`TECHNICAL` `DATA` · **APPROVED** · 2026-11-03
+- **Decision (approved 2026-11-03):**
+  1. That an EvidenceAnchor contains one or more segments is a restatement of DR-067, not a new rule.
+  2. Every segment has a non-empty span (`start < end`). This restricts EvidenceAnchor well-formedness only; it does not alter DR-052's general half-open span model.
+  3. For every pair of consecutive segments, the relation mechanically derived under DR-069 must be `CONTINUOUS` or `DISCONTINUOUS`. Therefore reverse ordering, overlapping segments and identical/repeated spans are not well-formed. No new ordering formula or join relation is introduced.
+  4. A Passage identity may repeat only in consecutive segments; a repeated Passage with separated spans is well-formed and joined by `DISCONTINUOUS` (e.g. `A[0,10) → A[20,30)`). `A[0,10) → B[0,10) → A[20,30)` is not well-formed.
+  5. A well-formed EvidenceAnchor contains no pair of consecutive segments within the same Passage joined `CONTINUOUS`; such a selection must be expressed as a single segment (e.g. `A[0,20)`, not `A[0,10) → A[10,20)`).
+  6. `DISCONTINUOUS` segments are never merged.
+  7. These rules define structural well-formedness only; they do not determine whether an EvidenceAnchor provides sufficient evidence for a claim.
+  8. E20 presupposes, and does not restate or redefine, DR-064 and DR-067: every segment resolves to a Passage in the anchor's single SourceSnapshot; spans are valid and grapheme-safe; the anchor remains within one SourceSnapshot.
+  9. A well-formed EvidenceAnchor is structurally valid only if every consecutive boundary has exactly one mechanically valid DR-069 relation.
+- **Not decided:** hashing and serialisation (OQ-E16, OQ-E17, OQ-E18); Unicode version policy (OQ-E13); complex material and segmentation (OQ-E14); snapshot migration (OQ-E19); normalisation implementation and violation reporting; Tarka/UI representation (OQ-E21); evidential sufficiency.
+- **Why:** Gives every cited selection one coherent, verifiable structure without new join relations, and keeps structural validity separate from evidential sufficiency.
+- **Sources:** [ADR-0026](architecture/decisions/0026-evidenceanchor-structural-well-formedness.md); [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md) OQ-E20 (resolved) · **Related:** DR-052, DR-064, DR-067, DR-068, DR-069
+- **Allowed:** forward-progressing anchors; repeated Passages across `DISCONTINUOUS` joins · **Not allowed:** empty segments; reverse order; overlap; identical repeated spans; returning to an earlier Passage; same-Passage `CONTINUOUS` neighbours; reading this decision as deciding normalisation behaviour, violation reporting, hashing, Tarka/UI treatment or evidential sufficiency
+- **Risk if ignored:** rearranged or inflated quotations, and multiple representations of the same selection
+- **Revisit if:** a new join relation is ever approved, or OQ-E18 requires a different structural representation
+- **Reviewer:** — · **Review trigger:** —
+
 ---
 
 ## Change log
 
 | Date | Change |
 |---|---|
+| 2026-11-03 | DR-070 approved (ADR-0026): EvidenceAnchor structural well-formedness; OQ-E20 resolved. |
 | 2026-11-03 | DR-069 approved (ADR-0025): `CONTINUOUS` / `DISCONTINUOUS` join relations, declared and mechanically verified; structural only, no intent; OQ-E12 resolved. |
 | 2026-10-27 | DR-068 approved (ADR-0024): declared logical reading order over Passages per SourceSnapshot; OQ-E15 resolved. |
 | 2026-10-27 | DR-067 approved (ADR-0023): EvidenceAnchor semantics; OQ-E11 resolved (semantics); follow-ups OQ-E15 … OQ-E21 added; OQ-E12 wording extended to join/omission semantics. |

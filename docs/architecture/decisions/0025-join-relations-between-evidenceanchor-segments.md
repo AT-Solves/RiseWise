@@ -1,6 +1,6 @@
 # ADR-0025: Join relations between EvidenceAnchor segments
 
-- **Status:** Accepted (2026-11-03)
+- **Status:** Accepted (2026-11-03) · **Refined by** ADR-0026 (2026-11-03): segment well-formedness (OQ-E20); a repeated Passage with separated spans is joined by `DISCONTINUOUS`
 - **Decision Register:** DR-069
 - **Resolves:** OQ-E12
 - **Related:** ADR-0015 (DR-052), ADR-0022 (DR-064), ADR-0023 (DR-067), ADR-0024 (DR-068)

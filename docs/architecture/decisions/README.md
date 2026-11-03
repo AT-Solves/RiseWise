@@ -31,3 +31,4 @@ ADR-0001 … 0011 were accepted with the RiseWise Knowledge Source Model v0.1 ([
 | [0023](0023-evidenceanchor-semantics.md) | EvidenceAnchor semantics | Accepted |
 | [0024](0024-passage-order-within-a-sourcesnapshot.md) | Passage order within a SourceSnapshot | Accepted |
 | [0025](0025-join-relations-between-evidenceanchor-segments.md) | Join relations between EvidenceAnchor segments | Accepted |
+| [0026](0026-evidenceanchor-structural-well-formedness.md) | EvidenceAnchor structural well-formedness | Accepted |
