@@ -36,3 +36,4 @@ ADR-0001 … 0011 were accepted with the RiseWise Knowledge Source Model v0.1 ([
 | [0028](0028-sourcesnapshot-content-identity-for-hashing.md) | SourceSnapshot content identity for hashing | Accepted |
 | [0029](0029-fact-is-an-asserted-epistemic-kind.md) | FACT is an asserted epistemic kind distinct from evidential status | Accepted |
 | [0030](0030-evidence-is-an-asserted-epistemic-kind.md) | EVIDENCE is an asserted epistemic kind | Accepted |
+| [0031](0031-inferred-as-a-derivation-status.md) | INFERRED as a derivation status | Accepted |

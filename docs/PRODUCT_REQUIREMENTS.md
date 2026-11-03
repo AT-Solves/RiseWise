@@ -85,7 +85,7 @@ Every item has one classification:
 | ID | Requirement | Status | Source | DR |
 |---|---|---|---|---|
 | PR-040 | Tarka examines a question through: Question → Claims → Definitions → Evidence → Sources → Arguments → Counterarguments → Assumptions → Inferences → Contradictions → Uncertainty → Conclusion → Provenance. | APPROVED | PO-brief, PO-approval-1 | DR-002 |
-| PR-041 | The user must be able to understand: what Tarka thinks; why it thinks that; what evidence supports it; what evidence contradicts it; what assumptions are involved; what is known versus inferred; what remains uncertain. | APPROVED | PO-approval-1 | DR-002 |
+| PR-041 | The user must be able to understand: what Tarka thinks; why it thinks that; what evidence supports it; what evidence contradicts it; what assumptions are involved; what is known versus inferred; what remains uncertain. *(Note 2026-11-03: "known versus inferred" is product language; the technical status `INFERRED` (DR-075) is not automatically assumed to define lower-case "inferred" or "known" here, analogous to DR-073's treatment of "fact". "Known" remains undefined.)* | APPROVED | PO-approval-1 | DR-002, DR-075 |
 | PR-042 | A 14-stage pipeline with typed stage contracts, a deterministic status-rule function, and a rules-only (no-LLM) mode for testing. | PROVISIONAL | Claude-rev1 | DR-008 |
 | PR-043 | Statuses computed by deterministic rules over the reasoning graph, with the LLM drafting wording only. | PROVISIONAL | Claude-rev1, Claude-rev2 (refines PR-032; mechanism not approved) | DR-003 |
 | PR-044 | Status thresholds (e.g. what counts as SUPPORTED vs CONTESTED). | OPEN | Claude-rev1 draft rules only | DR-003 |
@@ -131,10 +131,10 @@ Every item has one classification:
 
 | ID | Requirement | Status | Source | DR |
 |---|---|---|---|---|
-| PR-090 | Statuses: SUPPORTED · PARTIALLY_SUPPORTED · CONTRADICTED · CONTESTED · UNVERIFIED · INSUFFICIENT_EVIDENCE · INFERRED. | APPROVED | PO-brief, PO-source | DR-003 |
+| PR-090 | Statuses: SUPPORTED · PARTIALLY_SUPPORTED · CONTRADICTED · CONTESTED · UNVERIFIED · INSUFFICIENT_EVIDENCE · INFERRED. *(Note 2026-11-03: `INFERRED` indicates that the proposition is derived through reasoning from premises; it is not confidence, LLM origin, evidence-free or computed from the `INFERENCE` kind — DR-075. Whether statuses can coexist remains open.)* | APPROVED | PO-brief, PO-source | DR-003, DR-075 |
 | PR-091 | Statuses apply to claims (PR-032) and to conclusions. | APPROVED | PO-brief ("possible conclusion statuses"), PO-approval-1 ("status of a claim") | DR-003 |
 | PR-092 | Source verification states (fidelity/integrity) are separate from claim statuses. | APPROVED | SM-v0.1 (architecture, ADR-0008) | DR-016 |
-| PR-093 | Status definitions and thresholds. | OPEN | see PR-044 | DR-003 |
+| PR-093 | Status definitions and thresholds. *(Note 2026-11-03: the meaning of `INFERRED` is recorded by DR-075; its computation, all other status definitions, thresholds, precedence, propagation and status coexistence remain open.)* | OPEN | see PR-044 | DR-003, DR-075 |
 
 ## 11. MVP Domains
 

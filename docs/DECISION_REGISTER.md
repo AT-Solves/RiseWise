@@ -38,11 +38,11 @@
 
 ## Status summary
 
-Verified against the entries below (74 entries; every entry appears exactly once in the index).
+Verified against the entries below (75 entries; every entry appears exactly once in the index).
 
 | Status | Count | Entries |
 |---|---|---|
-| APPROVED | 43 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063, DR-064, DR-067, DR-068, DR-069, DR-070, DR-071, DR-072, DR-073, DR-074 |
+| APPROVED | 44 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063, DR-064, DR-067, DR-068, DR-069, DR-070, DR-071, DR-072, DR-073, DR-074, DR-075 |
 | OPEN | 11 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-065, DR-066 |
 | REVIEW_REQUIRED | 14 | DR-030, DR-031, DR-034, DR-035, DR-036, DR-037, DR-038, DR-039, DR-040, DR-044, DR-045, DR-046, DR-050, DR-051 |
 | BLOCKED | 1 | DR-033 |
@@ -51,7 +51,7 @@ Verified against the entries below (74 entries; every entry appears exactly once
 | RESOLVED | 3 | DR-006, DR-058, DR-059 |
 | SUPERSEDED | 0 | — |
 | REJECTED | 0 | — |
-| **Total** | **74** | |
+| **Total** | **75** | |
 
 ## Index
 
@@ -131,6 +131,7 @@ Verified against the entries below (74 entries; every entry appears exactly once
 | DR-072 | SourceSnapshot content identity for hashing | TECHNICAL, DATA | APPROVED |
 | DR-073 | FACT is an asserted epistemic kind, distinct from evidential status | PRODUCT, ARCHITECTURE | APPROVED |
 | DR-074 | EVIDENCE is an asserted epistemic kind, distinct from grounding, evidence relationships and status | PRODUCT, ARCHITECTURE | APPROVED |
+| DR-075 | INFERRED is a derivation status, not a confidence, origin or kind marker | PRODUCT, ARCHITECTURE | APPROVED |
 
 ---
 
@@ -155,6 +156,7 @@ Verified against the entries below (74 entries; every entry appears exactly once
 - **Risk if ignored:** unexplainable conclusions
 - **Revisit if:** Tarka design begins (requirements must be recorded first, DR-006)
 - **Reviewer:** — · **Review trigger:** start of Tarka design
+- **Note (2026-11-03):** The wording above is retained unchanged. "Known vs inferred" is product language; per [DR-075](#dr-075--inferred-is-a-derivation-status-not-a-confidence-origin-or-kind-marker) ([ADR-0031](architecture/decisions/0031-inferred-as-a-derivation-status.md)) the technical status `INFERRED` is not automatically assumed to define every occurrence of lower-case "inferred" or "known" (analogous to DR-073's treatment of "fact"). "Known" remains undefined.
 
 ### DR-003 — LLM statements are never automatically facts; status comes from evidence and rules
 `PRODUCT` `ARCHITECTURE` · **APPROVED** · 2026-10-26
@@ -166,6 +168,7 @@ Verified against the entries below (74 entries; every entry appears exactly once
 - **Revisit if:** never relaxed without product-owner decision
 - **Reviewer:** — · **Review trigger:** —
 - **Note (2026-11-03):** The wording above is retained unchanged. Under [DR-073](#dr-073--fact-is-an-asserted-epistemic-kind-distinct-from-evidential-status) ([ADR-0029](architecture/decisions/0029-fact-is-an-asserted-epistemic-kind.md)), the lower-case "facts" in this entry's title and risk line is ordinary product language for an established, trustworthy fact; it is not the Tarka `FACT` epistemic kind. `FACT` is an asserted epistemic kind and is not a status or a verdict; a claim's evidential standing is determined by evidence and verification rules through its status (definitions open: PR-044, PR-093).
+- **Note (2026-11-03):** The meaning of the status `INFERRED` is recorded by [DR-075](#dr-075--inferred-is-a-derivation-status-not-a-confidence-origin-or-kind-marker) ([ADR-0031](architecture/decisions/0031-inferred-as-a-derivation-status.md)): derivation through reasoning from premises; not confidence, LLM origin, evidence-free or computed from the `INFERENCE` kind. No other status is defined, and status coexistence remains open.
 
 ### DR-004 — MVP domains: GENERAL and VEDIC_SANSKRIT
 `PRODUCT` · **APPROVED** · 2026-10-26
@@ -953,6 +956,7 @@ Verified against the entries below (74 entries; every entry appears exactly once
 - **Risk if ignored:** `FACT` becomes an unruled second status; users read a classification as a verdict
 - **Revisit if:** status definitions or the kind/status relationship make the asserted-kind reading unworkable
 - **Reviewer:** product owner · **Review trigger:** definition of claim statuses (PR-044, PR-093)
+- **Note (2026-11-03):** The meaning of `INFERRED` is now recorded by [DR-075](#dr-075--inferred-is-a-derivation-status-not-a-confidence-origin-or-kind-marker); the interaction of `FACT` with `INFERENCE` and all other items listed under *Not decided* remain not decided. This entry is otherwise unchanged.
 
 ---
 
@@ -970,6 +974,26 @@ Verified against the entries below (74 entries; every entry appears exactly once
 - **Risk if ignored:** `EVIDENCE` becomes a back-door verdict or status; evidence, grounding and support become indistinguishable in "Why?"
 - **Revisit if:** the evidence-relationship architecture or status definitions make the asserted-kind reading unworkable
 - **Reviewer:** product owner · **Review trigger:** Tarka evidence-relationship architecture (GAP-1); definition of claim statuses (PR-044, PR-093)
+- **Note (2026-11-03):** The meaning of `INFERRED`, listed above as not decided, is now recorded by [DR-075](#dr-075--inferred-is-a-derivation-status-not-a-confidence-origin-or-kind-marker), which confirms that an evidence relationship by itself is not an inference and does not make a claim `INFERRED`. All other items listed under *Not decided* remain not decided. This entry is otherwise unchanged.
+
+---
+
+### DR-075 — INFERRED is a derivation status, not a confidence, origin or kind marker
+`PRODUCT` `ARCHITECTURE` · **APPROVED** · 2026-11-03
+- **Decision (approved 2026-11-03; product owner explicitly selected the refined Candidate 3 of the P3 study):** `INFERRED` is a claim/conclusion status indicating that the proposition is derived through reasoning from premises. `INFERRED` does not mean that the proposition is weakly supported, unsupported, uncertain, evidence-free, or produced by an LLM. `INFERRED` is not computed merely from the `INFERENCE` epistemic kind. An evidence relationship by itself does not make a claim `INFERRED`. Whether `INFERRED` can coexist with another claim status, and how inference affects status computation, remain open. Detailed rules: ADR-0031.
+- **Not equivalent to:** weakly supported; unsupported; uncertain; evidence-free (an inference may be derived from premises that themselves have evidence); LLM-generated (origin is provenance, ADR-0008; a human, a deterministic rule or another approved reasoning mechanism could participate in an inference); automatically the `INFERENCE` kind; automatically `UNVERIFIED`, `INSUFFICIENT_EVIDENCE`, `PARTIALLY_SUPPORTED` or `SUPPORTED`. `INFERRED` is not a confidence or strength level and implies no ordering such as `SUPPORTED > INFERRED > PARTIALLY_SUPPORTED`; PR-163 remains provisional.
+- **Kind/status separation:** the existence or assignment of the `INFERENCE` kind must not itself directly set the `INFERRED` status, preserving DR-003 (no model or person sets a status directly). The meaning of the `INFERENCE` kind remains open.
+- **Evidence-relationship boundary:** an evidence relationship between a claim and evidential material (DR-074) does not, by itself, constitute an inference and does not by itself cause the claim to receive `INFERRED`. This does not mean reasoning can never use evidence; whether a particular step from evidence to a proposition is an inference in a specific reasoning record, and the exact relationship between evidence, premises, inference and conclusion, remain open.
+- **Premises (minimum only):** an `INFERRED` proposition is derived through reasoning from premises. Premise entity type, cardinality, claims vs evidence propositions as premises, graph structure, warrants, inference rules and inference categories are not decided.
+- **Kept open:** whether `INFERRED` can coexist with another claim status, including `SUPPORTED` (neither permitted nor forbidden); whether the seven status tokens form one mutually exclusive dimension or more than one; status precedence and propagation; status definitions and thresholds (PR-044, PR-093); whether a conclusion is automatically `INFERRED`; P4 (initial `UNVERIFIED` vs `INSUFFICIENT_EVIDENCE`; the claim-status vs source-verification `UNVERIFIED` name collision); whether insufficient or unavailable premise evidence changes a status (OQ-E21 not resolved); circularity; the compatibility matrix between kinds and statuses and kind exclusivity; inference reproducibility and rule/warrant versioning (CorpusState governance unchanged).
+- **Product language:** the technical status `INFERRED` is not automatically assumed to define every occurrence of lower-case "inferred" or "known" (e.g. "known versus inferred", PR-041, DR-002) unless explicitly stated — analogous to DR-073's treatment of "fact". "Known" remains undefined.
+- **LLM boundary (unchanged):** the LLM does not directly assign status (DR-003); LLM output is not a source (DR-017) and not automatically evidence; an LLM-origin inference is not `INFERRED` merely because of its origin. Whether an LLM may propose inferences, premises, inference relationships or warrants, human confirmation, acceptance workflow and provenance requirements remain open (P5).
+- **Why:** gives the approved status a meaning that does not collide with confidence, verification, insufficiency, origin, the `INFERENCE` kind or DR-074's evidence relationship, while leaving the inference architecture and status model undecided. Rejected readings: weak-confidence (strength scale), evidence-free (conflicts with PR-050), mirror of the `INFERENCE` kind (conflicts with DR-003), LLM-origin marker (conflicts with DR-003, ADR-0008), and derivation definitions that decide status coexistence either way.
+- **Sources:** product-owner decision (session, 2026-11-03; P3 product-semantics study, refined Candidate 3); [ADR-0031](architecture/decisions/0031-inferred-as-a-derivation-status.md) · **Related:** DR-002, DR-003, DR-014, DR-017, DR-073, DR-074, ADR-0008, PR-022, PR-032, PR-040, PR-041, PR-044, PR-050, PR-090 … PR-093, PR-160 … PR-163, [source-model.md](architecture/source-model.md) §3, §6
+- **Allowed:** using `INFERRED` to indicate that a proposition is derived through reasoning from premises · **Not allowed:** treating `INFERRED` as confidence, strength, uncertainty, evidence-free, insufficiency, unverified or LLM origin; setting it from the `INFERENCE` kind alone; treating an evidence relationship by itself as an inference; reading this decision as permitting or forbidding status coexistence, or as defining any other status, precedence, propagation, premise model, inference graph or LLM permission
+- **Risk if ignored:** `INFERRED` becomes a back-door confidence scale or origin label, or swallows every source-backed claim
+- **Revisit if:** status coexistence/dimensionality or the inference architecture make this definition unworkable
+- **Reviewer:** product owner · **Review trigger:** decision on status coexistence and dimensionality; definition of claim statuses (PR-044, PR-093)
 
 ---
 
@@ -977,6 +1001,7 @@ Verified against the entries below (74 entries; every entry appears exactly once
 
 | Date | Change |
 |---|---|
+| 2026-11-03 | DR-075 approved (ADR-0031): `INFERRED` is a claim/conclusion status indicating derivation through reasoning from premises; not confidence, LLM origin, evidence-free or computed from the `INFERENCE` kind; an evidence relationship by itself is not an inference. Status coexistence and dimensionality remain open. Dated notes added to DR-002, DR-003, DR-073 and DR-074 (wording unchanged). |
 | 2026-11-03 | DR-074 approved (ADR-0030): `EVIDENCE` is an asserted epistemic kind for propositions reporting what a source says or contains; grounding and the evidence-to-claim relationship (which carries polarity) are separate. DR-058 → RESOLVED at the semantic level (relationship representation still open); PR-082 → APPROVED; C-002 resolved. No status defined; DR-073 unchanged. |
 | 2026-11-03 | DR-073 approved (ADR-0029): `FACT` is an asserted epistemic kind, not a status or verdict; lower-case "fact" in product prose is ordinary language. Dated note added to DR-003 (wording unchanged). No status defined; DR-058, PR-081, PR-083, PR-044/PR-093 and OQ-E21 remain as they were. |
 | 2026-11-03 | DR-072 approved (ADR-0028): SourceSnapshot content identity for hashing; OQ-E17 resolved at identity/requirements level; exact serialisation remains open. |
