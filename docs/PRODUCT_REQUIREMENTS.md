@@ -72,7 +72,7 @@ Every item has one classification:
 |---|---|---|---|---|
 | PR-030 | Tarka is **not** a normal chatbot. | APPROVED | PO-brief, PO-approval-1 | DR-002 |
 | PR-031 | An LLM-generated statement is never automatically considered a fact. *(Note 2026-11-03: "fact" here is ordinary product language for an established, trustworthy fact, not the Tarka `FACT` epistemic kind — DR-073.)* | APPROVED | PO-brief, PO-approval-1 | DR-003, DR-073 |
-| PR-032 | Evidence and verification rules determine the status of a claim. | APPROVED | PO-approval-1 | DR-003 |
+| PR-032 | Evidence and verification rules determine the status of a claim. *(Note 2026-11-03: here "verification rules" refers to the rules used to evaluate claim status and evidential standing; Source Model source verification remains separate and acts through evidence eligibility — DR-076.)* | APPROVED | PO-approval-1 | DR-003, DR-076 |
 | PR-033 | Every important conclusion must be explainable. | APPROVED | PO-brief | DR-002 |
 | PR-034 | The core engine is domain-neutral; domain adapters provide specialised knowledge and validation. | APPROVED | PO-brief, PO-approval-1 | DR-020 |
 | PR-035 | Do not implement fake scholarly knowledge. If a corpus is not available, represent that limitation explicitly. | APPROVED | PO-brief | DR-019, DR-047 |
@@ -131,10 +131,10 @@ Every item has one classification:
 
 | ID | Requirement | Status | Source | DR |
 |---|---|---|---|---|
-| PR-090 | Statuses: SUPPORTED · PARTIALLY_SUPPORTED · CONTRADICTED · CONTESTED · UNVERIFIED · INSUFFICIENT_EVIDENCE · INFERRED. *(Note 2026-11-03: `INFERRED` indicates that the proposition is derived through reasoning from premises; it is not confidence, LLM origin, evidence-free or computed from the `INFERENCE` kind — DR-075. Whether statuses can coexist remains open.)* | APPROVED | PO-brief, PO-source | DR-003, DR-075 |
+| PR-090 | Statuses: SUPPORTED · PARTIALLY_SUPPORTED · CONTRADICTED · CONTESTED · UNVERIFIED · INSUFFICIENT_EVIDENCE · INFERRED. *(Note 2026-11-03: `INFERRED` indicates that the proposition is derived through reasoning from premises; it is not confidence, LLM origin, evidence-free or computed from the `INFERENCE` kind — DR-075. Whether statuses can coexist remains open.)* *(Note 2026-11-03: `UNVERIFIED` means status evaluation has not yet been completed (origin-neutral); `INSUFFICIENT_EVIDENCE` is an evaluation outcome; they are distinct, and claim-status `UNVERIFIED` is not source- or licence-verification `UNVERIFIED` — DR-076.)* | APPROVED | PO-brief, PO-source | DR-003, DR-075, DR-076 |
 | PR-091 | Statuses apply to claims (PR-032) and to conclusions. | APPROVED | PO-brief ("possible conclusion statuses"), PO-approval-1 ("status of a claim") | DR-003 |
 | PR-092 | Source verification states (fidelity/integrity) are separate from claim statuses. | APPROVED | SM-v0.1 (architecture, ADR-0008) | DR-016 |
-| PR-093 | Status definitions and thresholds. *(Note 2026-11-03: the meaning of `INFERRED` is recorded by DR-075; its computation, all other status definitions, thresholds, precedence, propagation and status coexistence remain open.)* | OPEN | see PR-044 | DR-003, DR-075 |
+| PR-093 | Status definitions and thresholds. *(Note 2026-11-03: the meaning of `INFERRED` is recorded by DR-075; its computation, all other status definitions, thresholds, precedence, propagation and status coexistence remain open.)* *(Note 2026-11-03: the meanings of `UNVERIFIED` and `INSUFFICIENT_EVIDENCE` are recorded by DR-076; thresholds, transitions, persistence, propagation and coexistence remain open.)* | OPEN | see PR-044 | DR-003, DR-075, DR-076 |
 
 ## 11. MVP Domains
 
@@ -193,7 +193,7 @@ Every item has one classification:
 |---|---|---|---|---|
 | PR-160 | The user must see what remains uncertain (PR-041). | APPROVED | PO-approval-1 | DR-002 |
 | PR-161 | The model must support "we don't have this source" honestly. | APPROVED | PO-source | DR-021 |
-| PR-162 | INSUFFICIENT_EVIDENCE is a valid outcome (PR-090), including when a corpus is unavailable. | APPROVED | PO-brief | DR-003, DR-019 |
+| PR-162 | INSUFFICIENT_EVIDENCE is a valid outcome (PR-090), including when a corpus is unavailable. *(Note 2026-11-03: `INSUFFICIENT_EVIDENCE` is an evaluation outcome indicating that the evidence available to the evaluation is insufficient to establish the claim's evidential standing; an unavailable corpus is one such case, not the definition — DR-076.)* | APPROVED | PO-brief | DR-003, DR-019, DR-076 |
 | PR-163 | Confidence is shown as qualitative bands (LOW / MEDIUM / HIGH), never numeric scores. | PROVISIONAL | Claude-rev1, Claude-rev2 | DR-008 |
 | PR-164 | Corpus unavailability is reported at the start of an inquiry. | PROVISIONAL | Claude-rev1 | — |
 

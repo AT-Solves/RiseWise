@@ -38,11 +38,11 @@
 
 ## Status summary
 
-Verified against the entries below (75 entries; every entry appears exactly once in the index).
+Verified against the entries below (76 entries; every entry appears exactly once in the index).
 
 | Status | Count | Entries |
 |---|---|---|
-| APPROVED | 44 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063, DR-064, DR-067, DR-068, DR-069, DR-070, DR-071, DR-072, DR-073, DR-074, DR-075 |
+| APPROVED | 45 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063, DR-064, DR-067, DR-068, DR-069, DR-070, DR-071, DR-072, DR-073, DR-074, DR-075, DR-076 |
 | OPEN | 11 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-065, DR-066 |
 | REVIEW_REQUIRED | 14 | DR-030, DR-031, DR-034, DR-035, DR-036, DR-037, DR-038, DR-039, DR-040, DR-044, DR-045, DR-046, DR-050, DR-051 |
 | BLOCKED | 1 | DR-033 |
@@ -51,7 +51,7 @@ Verified against the entries below (75 entries; every entry appears exactly once
 | RESOLVED | 3 | DR-006, DR-058, DR-059 |
 | SUPERSEDED | 0 | — |
 | REJECTED | 0 | — |
-| **Total** | **75** | |
+| **Total** | **76** | |
 
 ## Index
 
@@ -132,6 +132,7 @@ Verified against the entries below (75 entries; every entry appears exactly once
 | DR-073 | FACT is an asserted epistemic kind, distinct from evidential status | PRODUCT, ARCHITECTURE | APPROVED |
 | DR-074 | EVIDENCE is an asserted epistemic kind, distinct from grounding, evidence relationships and status | PRODUCT, ARCHITECTURE | APPROVED |
 | DR-075 | INFERRED is a derivation status, not a confidence, origin or kind marker | PRODUCT, ARCHITECTURE | APPROVED |
+| DR-076 | UNVERIFIED means status evaluation not completed; INSUFFICIENT_EVIDENCE is an evaluation outcome | PRODUCT, ARCHITECTURE | APPROVED |
 
 ---
 
@@ -169,6 +170,7 @@ Verified against the entries below (75 entries; every entry appears exactly once
 - **Reviewer:** — · **Review trigger:** —
 - **Note (2026-11-03):** The wording above is retained unchanged. Under [DR-073](#dr-073--fact-is-an-asserted-epistemic-kind-distinct-from-evidential-status) ([ADR-0029](architecture/decisions/0029-fact-is-an-asserted-epistemic-kind.md)), the lower-case "facts" in this entry's title and risk line is ordinary product language for an established, trustworthy fact; it is not the Tarka `FACT` epistemic kind. `FACT` is an asserted epistemic kind and is not a status or a verdict; a claim's evidential standing is determined by evidence and verification rules through its status (definitions open: PR-044, PR-093).
 - **Note (2026-11-03):** The meaning of the status `INFERRED` is recorded by [DR-075](#dr-075--inferred-is-a-derivation-status-not-a-confidence-origin-or-kind-marker) ([ADR-0031](architecture/decisions/0031-inferred-as-a-derivation-status.md)): derivation through reasoning from premises; not confidence, LLM origin, evidence-free or computed from the `INFERENCE` kind. No other status is defined, and status coexistence remains open.
+- **Note (2026-11-03):** The wording above is retained unchanged. Per [DR-076](#dr-076--unverified-means-status-evaluation-not-completed-insufficient_evidence-is-an-evaluation-outcome) ([ADR-0032](architecture/decisions/0032-unverified-and-insufficient-evidence-claim-statuses.md)): claim-status `UNVERIFIED` means status evaluation has not yet been completed and is origin-neutral; "candidate claims, labelled UNVERIFIED" is an application of that status, not a definition of `UNVERIFIED` as an LLM-origin status. `INSUFFICIENT_EVIDENCE` is an evaluation outcome. In "evidence and verification rules determine a claim's status", "verification rules" refers to the rules used to evaluate claim status and evidential standing; it does not make a Source Model source-verification state a claim status.
 
 ### DR-004 — MVP domains: GENERAL and VEDIC_SANSKRIT
 `PRODUCT` · **APPROVED** · 2026-10-26
@@ -994,6 +996,25 @@ Verified against the entries below (75 entries; every entry appears exactly once
 - **Risk if ignored:** `INFERRED` becomes a back-door confidence scale or origin label, or swallows every source-backed claim
 - **Revisit if:** status coexistence/dimensionality or the inference architecture make this definition unworkable
 - **Reviewer:** product owner · **Review trigger:** decision on status coexistence and dimensionality; definition of claim statuses (PR-044, PR-093)
+- **Note (2026-11-03):** The P4 item kept open above is now addressed by [DR-076](#dr-076--unverified-means-status-evaluation-not-completed-insufficient_evidence-is-an-evaluation-outcome): the meanings of `UNVERIFIED` and `INSUFFICIENT_EVIDENCE` are defined, and claim-status `UNVERIFIED` is distinguished from source- and licence-verification `UNVERIFIED` (no token renamed). Coexistence of `INFERRED` with `UNVERIFIED` or `INSUFFICIENT_EVIDENCE`, and every other item kept open above, remain open. This entry is otherwise unchanged.
+
+---
+
+### DR-076 — UNVERIFIED means status evaluation not completed; INSUFFICIENT_EVIDENCE is an evaluation outcome
+`PRODUCT` `ARCHITECTURE` · **APPROVED** · 2026-11-03
+- **Decision (approved 2026-11-03; product owner explicitly approved the P4 decision):** `UNVERIFIED` is a claim/conclusion status indicating that status evaluation has not yet been completed. It is origin-neutral and does not mean LLM-generated, untrusted, false, uncertain, unsupported, source-unverified, licence-unverified or low-confidence. The existing rule that LLM candidate claims begin as `UNVERIFIED` (DR-003) is an application of the status, not its definition. `INSUFFICIENT_EVIDENCE` is an evaluation outcome indicating that the evidence available to the evaluation is insufficient to establish the claim's evidential standing. `UNVERIFIED` and `INSUFFICIENT_EVIDENCE` are distinct. Exact thresholds, transitions, persistence, propagation, run relativity, unavailable-evidence handling and coexistence with other statuses remain open. Detailed rules: ADR-0032.
+- **UNVERIFIED is not:** an origin marker; an LLM-origin marker; a provenance judgment; a source-verification state; a licence-verification state; a truth judgment; a confidence level; a synonym for `INSUFFICIENT_EVIDENCE`. An LLM-proposed claim is initially `UNVERIFIED` because it has not yet been evaluated, not because it came from an LLM; the status applies equally to claims proposed by people, rules or other mechanisms.
+- **INSUFFICIENT_EVIDENCE is not defined as:** "truth is unknown"; "the claim is false"; "the claim is weak"; "the claim has no evidence"; "the source is unavailable"; "the claim is less supported than another status". No status ordering is introduced. PR-162, DR-019, ADR-0010 and source-model.md §22 are preserved: it remains a valid outcome, including when a corpus is unavailable.
+- **Conceptual distinction (not a lifecycle):** before status evaluation is completed a claim is `UNVERIFIED`; after evaluation it has an applicable evaluation outcome, which may be `INSUFFICIENT_EVIDENCE`. Whether every evaluation replaces `UNVERIFIED` with exactly one other status is not decided.
+- **Semantic layers of `UNVERIFIED`:** claim-status `UNVERIFIED` (this entry) is distinct from source-verification `UNVERIFIED` (source-model.md §8) and licence-verification `UNVERIFIED` (`LicenceRecord.verificationStatus`, §7; USER_SUPPLIED licence, DR-028). These are prose distinctions only; no field is renamed and no schema changes. Source and licence verification do not set claim status (§3, PR-092, ADR-0008); they affect evidence eligibility (DR-022). Lower-case "unverified" in ordinary product prose is not reinterpreted.
+- **"Verification rules":** where DR-003 and PR-032 say "evidence and verification rules" determine a claim's status, "verification rules" refers to the rules used to evaluate claim status and evidential standing; source verification (§8 checks and extension domain verification rules such as VR-101 … VR-105) remains a Source Model concern acting through evidence eligibility. The historical wording is retained.
+- **Not decided:** the status transition lifecycle; when evaluation begins or ends operationally; whether status is run-relative or globally persisted; persistence model; whether statuses are mutually exclusive; coexistence of `INFERRED` with another status, including with `UNVERIFIED` and `INSUFFICIENT_EVIDENCE`; evidence, support and contradiction thresholds (PR-044, PR-093); unavailable-corpus transitions and unavailable or unverifiable evidence (OQ-E21); partial-evaluation rules; propagation; confidence (PR-163 remains provisional) and uncertainty semantics; a reason-code schema; storage, API and UI representation; the status engine; Claim vs Statement; the evidence-relationship representation; LLM evidence-link proposal rights (P5); unsourced GENERAL knowledge (P6); Source Interpretation vs `INTERPRETATION` (P7); E18; E17 framing; ingestion and segmentation; any renaming of `UNVERIFIED` tokens.
+- **Why:** gives both approved statuses distinct meanings, removes the LLM-origin reading of `UNVERIFIED`, keeps source and licence verification out of claim status, and preserves honest insufficient-evidence outcomes, without deciding the status engine. Rejected readings: "not yet sufficient evidence" and "truth/standing not established" (duplicate `INSUFFICIENT_EVIDENCE`), untrusted provenance and LLM-generated (status from origin, contrary to DR-003, ADR-0008, DR-075), a workflow label outside status computation (reinterprets an approved status), and "cannot support a stronger status" (implies ordering).
+- **Sources:** product-owner decision (session, 2026-11-03; P4 product-semantics study); [ADR-0032](architecture/decisions/0032-unverified-and-insufficient-evidence-claim-statuses.md) · **Related:** DR-003, DR-014, DR-017, DR-019, DR-021, DR-022, DR-028, DR-073, DR-074, DR-075, ADR-0008, ADR-0010, PR-031, PR-032, PR-090 … PR-093, PR-160 … PR-163, OQ-E21, [source-model.md](architecture/source-model.md) §3, §7, §8, §22
+- **Allowed:** using `UNVERIFIED` for claims whose status evaluation has not been completed, whatever their origin; using `INSUFFICIENT_EVIDENCE` as an evaluation outcome · **Not allowed:** treating `UNVERIFIED` as origin, provenance, truth, confidence, source verification or licence verification; treating the two statuses as synonyms; reading source- or licence-verification `UNVERIFIED` as claim status; introducing a status ordering; reading this decision as deciding any item listed under *Not decided*
+- **Risk if ignored:** `UNVERIFIED` becomes an LLM badge or a duplicate of `INSUFFICIENT_EVIDENCE`; source verification is mistaken for claim standing
+- **Revisit if:** the status lifecycle, coexistence or persistence decisions make these definitions unworkable
+- **Reviewer:** product owner · **Review trigger:** decision on status coexistence, lifecycle and persistence; definition of claim statuses (PR-044, PR-093)
 
 ---
 
@@ -1001,6 +1022,7 @@ Verified against the entries below (75 entries; every entry appears exactly once
 
 | Date | Change |
 |---|---|
+| 2026-11-03 | DR-076 approved (ADR-0032): claim-status `UNVERIFIED` = status evaluation not yet completed (origin-neutral; DR-003's LLM rule is an application); `INSUFFICIENT_EVIDENCE` = evaluation outcome; the two are distinct; claim-status `UNVERIFIED` separated from source- and licence-verification `UNVERIFIED` (no rename); "verification rules" in DR-003/PR-032 clarified. Dated notes added to DR-003 and DR-075 (wording unchanged). Lifecycle, thresholds, persistence, propagation, coexistence and OQ-E21 remain open. |
 | 2026-11-03 | DR-075 approved (ADR-0031): `INFERRED` is a claim/conclusion status indicating derivation through reasoning from premises; not confidence, LLM origin, evidence-free or computed from the `INFERENCE` kind; an evidence relationship by itself is not an inference. Status coexistence and dimensionality remain open. Dated notes added to DR-002, DR-003, DR-073 and DR-074 (wording unchanged). |
 | 2026-11-03 | DR-074 approved (ADR-0030): `EVIDENCE` is an asserted epistemic kind for propositions reporting what a source says or contains; grounding and the evidence-to-claim relationship (which carries polarity) are separate. DR-058 → RESOLVED at the semantic level (relationship representation still open); PR-082 → APPROVED; C-002 resolved. No status defined; DR-073 unchanged. |
 | 2026-11-03 | DR-073 approved (ADR-0029): `FACT` is an asserted epistemic kind, not a status or verdict; lower-case "fact" in product prose is ordinary language. Dated note added to DR-003 (wording unchanged). No status defined; DR-058, PR-081, PR-083, PR-044/PR-093 and OQ-E21 remain as they were. |
