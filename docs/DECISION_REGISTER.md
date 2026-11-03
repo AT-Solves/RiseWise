@@ -38,11 +38,11 @@
 
 ## Status summary
 
-Verified against the entries below (72 entries; every entry appears exactly once in the index).
+Verified against the entries below (73 entries; every entry appears exactly once in the index).
 
 | Status | Count | Entries |
 |---|---|---|
-| APPROVED | 41 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063, DR-064, DR-067, DR-068, DR-069, DR-070, DR-071, DR-072 |
+| APPROVED | 42 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063, DR-064, DR-067, DR-068, DR-069, DR-070, DR-071, DR-072, DR-073 |
 | OPEN | 12 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-058, DR-065, DR-066 |
 | REVIEW_REQUIRED | 14 | DR-030, DR-031, DR-034, DR-035, DR-036, DR-037, DR-038, DR-039, DR-040, DR-044, DR-045, DR-046, DR-050, DR-051 |
 | BLOCKED | 1 | DR-033 |
@@ -51,7 +51,7 @@ Verified against the entries below (72 entries; every entry appears exactly once
 | RESOLVED | 2 | DR-006, DR-059 |
 | SUPERSEDED | 0 | — |
 | REJECTED | 0 | — |
-| **Total** | **72** | |
+| **Total** | **73** | |
 
 ## Index
 
@@ -129,6 +129,7 @@ Verified against the entries below (72 entries; every entry appears exactly once
 | DR-070 | EvidenceAnchor structural well-formedness | TECHNICAL, DATA | APPROVED |
 | DR-071 | Canonical byte encoding for source text hashes | TECHNICAL, DATA | APPROVED |
 | DR-072 | SourceSnapshot content identity for hashing | TECHNICAL, DATA | APPROVED |
+| DR-073 | FACT is an asserted epistemic kind, distinct from evidential status | PRODUCT, ARCHITECTURE | APPROVED |
 
 ---
 
@@ -163,6 +164,7 @@ Verified against the entries below (72 entries; every entry appears exactly once
 - **Risk if ignored:** hallucinations presented as established facts
 - **Revisit if:** never relaxed without product-owner decision
 - **Reviewer:** — · **Review trigger:** —
+- **Note (2026-11-03):** The wording above is retained unchanged. Under [DR-073](#dr-073--fact-is-an-asserted-epistemic-kind-distinct-from-evidential-status) ([ADR-0029](architecture/decisions/0029-fact-is-an-asserted-epistemic-kind.md)), the lower-case "facts" in this entry's title and risk line is ordinary product language for an established, trustworthy fact; it is not the Tarka `FACT` epistemic kind. `FACT` is an asserted epistemic kind and is not a status or a verdict; a claim's evidential standing is determined by evidence and verification rules through its status (definitions open: PR-044, PR-093).
 
 ### DR-004 — MVP domains: GENERAL and VEDIC_SANSKRIT
 `PRODUCT` · **APPROVED** · 2026-10-26
@@ -936,10 +938,27 @@ Verified against the entries below (72 entries; every entry appears exactly once
 
 ---
 
+### DR-073 — FACT is an asserted epistemic kind, distinct from evidential status
+`PRODUCT` `ARCHITECTURE` · **APPROVED** · 2026-11-03
+- **Decision (approved 2026-11-03; product owner explicitly selected option P1-E):** `FACT` is an asserted epistemic kind describing what kind of proposition a claim is. `FACT` does not mean that the proposition has been proven true, sufficiently supported, or otherwise established as true. Detailed rules: ADR-0029.
+- **Clarification:** The lower-case word "fact" in existing product prose — such as the DR-003 title and risk line, PR-011 and PR-031 — is ordinary product language referring to an established, trustworthy fact. It is not a technical synonym for the Tarka `FACT` epistemic kind. That wording is retained unchanged.
+- **Consequence:** `FACT` must not be treated as synonymous with any claim status, including `SUPPORTED`: `FACT` ≠ `SUPPORTED`, and `FACT` ≠ established truth. A `FACT` kind alone must not be presented, including in "Why?" traces, as proof, truth or an evidential verdict.
+- **Governance boundary:** Evidence and verification rules determine a claim's status (DR-003, PR-032); the evidential standing of a claim is determined separately through Tarka's status, evidence and rule machinery. This decision defines none of the seven statuses; their definitions, thresholds and propagation remain open (PR-044, PR-093).
+- **Why:** Preserves the approved six-kind vocabulary (DR-003, PR-080) while avoiding duplication of the seven-status vocabulary, and avoids silently turning `FACT` into a second status.
+- **Not decided:** whether kinds are mutually exclusive or a claim may have more than one kind; which `FACT` + status combinations are valid; who assigns kinds; whether an LLM may assign a kind; whether an LLM-origin claim may later receive `FACT`; whether human review is required (PR-083) or may confer any status; how `FACT` interacts with `INFERENCE` or `EVIDENCE`; the meaning of the `EVIDENCE` kind (DR-058, PR-082, C-002); status definitions, thresholds and propagation (PR-044, PR-093); contradiction semantics, including `CONTESTED` vs `CONTRADICTED`; `UNVERIFIED` vs `INSUFFICIENT_EVIDENCE`; evidence sufficiency; source authority (DR-049); interpretation semantics, including the Source Model Interpretation entity vs the `INTERPRETATION` kind; unavailable evidence (OQ-E21); the general relationship between kinds and statuses; the remaining Tarka product-semantics questions (meaning of `EVIDENCE`, meaning of `INFERRED`, how initial `UNVERIFIED` is established, the LLM evidence-proposal boundary, unsourced GENERAL knowledge, Source Interpretation vs `INTERPRETATION`).
+- **Sources:** product-owner decision (session, 2026-11-03; P1 product-semantics study, option P1-E); [ADR-0029](architecture/decisions/0029-fact-is-an-asserted-epistemic-kind.md) · **Related:** DR-003, DR-017, DR-022, DR-058, ADR-0008, PR-011, PR-031, PR-032, PR-041, PR-080, PR-081, PR-083, PR-090 … PR-093, [source-model.md](architecture/source-model.md) §3
+- **Allowed:** using `FACT` to classify what kind of proposition a claim is, independently of its status · **Not allowed:** treating `FACT` as a status, as `SUPPORTED` or as established truth; presenting a `FACT` kind alone as proof; reading lower-case "fact" in product prose as the `FACT` kind; reading this decision as defining any status or as resolving any item listed under *Not decided*
+- **Risk if ignored:** `FACT` becomes an unruled second status; users read a classification as a verdict
+- **Revisit if:** status definitions or the kind/status relationship make the asserted-kind reading unworkable
+- **Reviewer:** product owner · **Review trigger:** definition of claim statuses (PR-044, PR-093)
+
+---
+
 ## Change log
 
 | Date | Change |
 |---|---|
+| 2026-11-03 | DR-073 approved (ADR-0029): `FACT` is an asserted epistemic kind, not a status or verdict; lower-case "fact" in product prose is ordinary language. Dated note added to DR-003 (wording unchanged). No status defined; DR-058, PR-081, PR-083, PR-044/PR-093 and OQ-E21 remain as they were. |
 | 2026-11-03 | DR-072 approved (ADR-0028): SourceSnapshot content identity for hashing; OQ-E17 resolved at identity/requirements level; exact serialisation remains open. |
 | 2026-11-03 | DR-071 approved (ADR-0027): canonical byte encoding for source text hashes; OQ-E16 resolved. |
 | 2026-11-03 | DR-070 approved (ADR-0026): EvidenceAnchor structural well-formedness; OQ-E20 resolved. |

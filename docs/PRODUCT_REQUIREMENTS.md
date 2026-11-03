@@ -54,7 +54,7 @@ Every item has one classification:
 | ID | Requirement | Status | Source | DR |
 |---|---|---|---|---|
 | PR-010 | Help users examine a question through structured, traceable reasoning rather than receiving an unexplained answer. | APPROVED | PO-brief | DR-002 |
-| PR-011 | Reason over structured, traceable knowledge instead of treating LLM output as fact. | APPROVED | PO-source | DR-003 |
+| PR-011 | Reason over structured, traceable knowledge instead of treating LLM output as fact. *(Note 2026-11-03: "fact" here is ordinary product language for an established, trustworthy fact, not the Tarka `FACT` epistemic kind — DR-073.)* | APPROVED | PO-source | DR-003, DR-073 |
 | PR-012 | Support research-oriented knowledge discovery with provenance-first scholarship (original RiseWise scope). | APPROVED | PO-brief (history) | DR-001 |
 | PR-013 | Primary user: the **Evidence-driven Researcher**, who investigates a question using traceable evidence and produces a defensible, challengeable conclusion with explicit provenance, assumptions, contradictions and uncertainty (the Tarka chain, PR-040). Primary MVP specialization: Vedic/Sanskrit Researcher/Scholar (first deeply supported context, not a restriction on Tarka). Secondary MVP pathway: researcher using their own legitimately obtained sources (PR-190). Individual researcher first; institutional/team use later; students/learners not an MVP persona (not prohibited later); decision-makers not a separate primary persona. *(Was OPEN 2026-10-26: "target users, personas and use cases have not been defined".)* | APPROVED | PO approval of DR-060 (2026-10-27) | DR-060 |
 
@@ -71,7 +71,7 @@ Every item has one classification:
 | ID | Requirement | Status | Source | DR |
 |---|---|---|---|---|
 | PR-030 | Tarka is **not** a normal chatbot. | APPROVED | PO-brief, PO-approval-1 | DR-002 |
-| PR-031 | An LLM-generated statement is never automatically considered a fact. | APPROVED | PO-brief, PO-approval-1 | DR-003 |
+| PR-031 | An LLM-generated statement is never automatically considered a fact. *(Note 2026-11-03: "fact" here is ordinary product language for an established, trustworthy fact, not the Tarka `FACT` epistemic kind — DR-073.)* | APPROVED | PO-brief, PO-approval-1 | DR-003, DR-073 |
 | PR-032 | Evidence and verification rules determine the status of a claim. | APPROVED | PO-approval-1 | DR-003 |
 | PR-033 | Every important conclusion must be explainable. | APPROVED | PO-brief | DR-002 |
 | PR-034 | The core engine is domain-neutral; domain adapters provide specialised knowledge and validation. | APPROVED | PO-brief, PO-approval-1 | DR-020 |
@@ -122,10 +122,10 @@ Every item has one classification:
 
 | ID | Requirement | Status | Source | DR |
 |---|---|---|---|---|
-| PR-080 | Tarka distinguishes FACT · EVIDENCE · INFERENCE · ASSUMPTION · INTERPRETATION · UNCERTAINTY. | APPROVED | PO-brief, PO-source | DR-003 |
-| PR-081 | No agent (LLM or person) can directly assign FACT; FACT is reachable only through evidence and verification rules. | PROVISIONAL | Claude-rev1, Claude-rev2 (derived from PR-031/PR-032; exact definition not approved) | DR-003 |
+| PR-080 | Tarka distinguishes FACT · EVIDENCE · INFERENCE · ASSUMPTION · INTERPRETATION · UNCERTAINTY. *(Note 2026-11-03: `FACT` is an asserted epistemic kind describing what kind of proposition a claim is; it is not a status and does not mean proven, supported or established — DR-073.)* | APPROVED | PO-brief, PO-source | DR-003, DR-073 |
+| PR-081 | No agent (LLM or person) can directly assign FACT; FACT is reachable only through evidence and verification rules. *(Note 2026-11-03: DR-073 records `FACT` as an asserted epistemic kind, not an earned standing; reading this item as making `FACT` an evidential standing is not adopted — evidential standing is expressed by status. Whether and by whom the `FACT` kind may be assigned remains undecided.)* | PROVISIONAL | Claude-rev1, Claude-rev2 (derived from PR-031/PR-032; exact definition not approved) | DR-003 |
 | PR-082 | How the kind EVIDENCE relates to evidence links/entities. | OPEN | CONFLICT C-002 | DR-058 |
-| PR-083 | Whether human review is required before a statement may be labelled FACT. | OPEN | Claude-rev1 decision list (Claude-rev2 proposed "rules decide; reviewers confirm inputs" — not approved) | DR-003 |
+| PR-083 | Whether human review is required before a statement may be labelled FACT. *(Note 2026-11-03: under DR-073 `FACT` is a kind, not an evidential verdict; this question remains open.)* | OPEN | Claude-rev1 decision list (Claude-rev2 proposed "rules decide; reviewers confirm inputs" — not approved) | DR-003 |
 
 ## 10. Claim/Conclusion Statuses
 
