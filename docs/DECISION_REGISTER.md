@@ -38,11 +38,11 @@
 
 ## Status summary
 
-Verified against the entries below (67 entries; every entry appears exactly once in the index).
+Verified against the entries below (68 entries; every entry appears exactly once in the index).
 
 | Status | Count | Entries |
 |---|---|---|
-| APPROVED | 36 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063, DR-064, DR-067 |
+| APPROVED | 37 | DR-001, DR-002, DR-003, DR-004, DR-005, DR-007, DR-011, DR-012, DR-013, DR-014, DR-015, DR-016, DR-017, DR-018, DR-019, DR-020, DR-021, DR-022, DR-023, DR-024, DR-025, DR-026, DR-027, DR-028, DR-052, DR-053, DR-054, DR-055, DR-056, DR-057, DR-060, DR-061, DR-062, DR-063, DR-064, DR-067, DR-068 |
 | OPEN | 12 | DR-009, DR-010, DR-032, DR-041, DR-042, DR-043, DR-047, DR-048, DR-049, DR-058, DR-065, DR-066 |
 | REVIEW_REQUIRED | 14 | DR-030, DR-031, DR-034, DR-035, DR-036, DR-037, DR-038, DR-039, DR-040, DR-044, DR-045, DR-046, DR-050, DR-051 |
 | BLOCKED | 1 | DR-033 |
@@ -51,7 +51,7 @@ Verified against the entries below (67 entries; every entry appears exactly once
 | RESOLVED | 2 | DR-006, DR-059 |
 | SUPERSEDED | 0 | — |
 | REJECTED | 0 | — |
-| **Total** | **67** | |
+| **Total** | **68** | |
 
 ## Index
 
@@ -124,6 +124,7 @@ Verified against the entries below (67 entries; every entry appears exactly once
 | DR-065 | Evidence eligibility of human-curated annotation datasets | TECHNICAL, DATA, SCHOLARLY | OPEN |
 | DR-066 | Layer type for non-Vedic base texts | TECHNICAL, DATA | OPEN |
 | DR-067 | EvidenceAnchor semantics | TECHNICAL, DATA | APPROVED |
+| DR-068 | Passage order within a SourceSnapshot | TECHNICAL, DATA | APPROVED |
 
 ---
 
@@ -850,12 +851,29 @@ Verified against the entries below (67 entries; every entry appears exactly once
 - **Revisit if:** OQ-E12, OQ-E16, OQ-E18 or OQ-E20 cannot be satisfied within these semantics
 - **Reviewer:** — · **Review trigger:** —
 
+### DR-068 — Passage order within a SourceSnapshot
+`TECHNICAL` `DATA` · **APPROVED** · 2026-10-27
+- **Decision (approved 2026-10-27):** A SourceSnapshot has a declared, deterministic logical reading order over its Passages — conceptually a snapshot-level ordered Passage sequence.
+  - The order is the logical textual/reading order of the SourceSnapshot's declared Passage segmentation; immutable as part of that segmentation; provenance-bearing; independent of physical acquisition order, scholarly/citation order and UI display order.
+  - It is never inferred from citation numbers, Locus numbering, page numbering, Passage IDs, sequential database IDs or matching numeric labels (consistent with DR-053).
+  - Separate orders: logical reading order → SourceSnapshot segmentation; physical/acquisition order → Acquisition / Manifest / provenance; scholarly/citation order → CitationScheme / Locus; structural order → Locus / PassageLocus; display order → UI.
+  - A materially different Passage order is a different segmentation state and requires a new SourceSnapshot (DR-055, DR-064).
+  - EvidenceAnchor segment order remains the anchor's explicit segment order as defined by DR-067. Passage order is the source-level order for future OQ-E12 / OQ-E20 rules.
+  - No storage representation, field names, ordinal format, `NEXT` links, API or UI ordering is decided. No source is declared physically "one linear text"; ingestion/segmentation rules decide what material enters the citable textual content.
+- **Why:** Provides the missing source-level order needed to reason about multi-segment evidence, without confusing it with citation, physical or display order.
+- **Sources:** [ADR-0024](architecture/decisions/0024-passage-order-within-a-sourcesnapshot.md); [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md) OQ-E15 (resolved) · **Related:** DR-053, DR-055, DR-064, DR-067
+- **Allowed:** one declared logical Passage order per SourceSnapshot, with provenance · **Not allowed:** inferring order from numbering or IDs; changing order without a new SourceSnapshot; reading this decision as resolving OQ-E12, OQ-E13, OQ-E14, OQ-E16, OQ-E17, OQ-E18, OQ-E19, OQ-E20 or OQ-E21, or the placement of footnotes, marginalia, tables, multi-column layouts, headers/footers, appendices or damaged/missing material
+- **Risk if ignored:** contiguity and order checks on evidence that change on replay, or that rely on unsafe numbering
+- **Revisit if:** a source cannot be given a single declared logical reading order
+- **Reviewer:** — · **Review trigger:** —
+
 ---
 
 ## Change log
 
 | Date | Change |
 |---|---|
+| 2026-10-27 | DR-068 approved (ADR-0024): declared logical reading order over Passages per SourceSnapshot; OQ-E15 resolved. |
 | 2026-10-27 | DR-067 approved (ADR-0023): EvidenceAnchor semantics; OQ-E11 resolved (semantics); follow-ups OQ-E15 … OQ-E21 added; OQ-E12 wording extended to join/omission semantics. |
 | 2026-10-27 | DR-064 approved (ADR-0022): flat non-overlapping Passages, one segmentation per snapshot; structure via Locus/PassageLocus; ordered multi-segment EvidenceAnchors within one snapshot; no span splits an extended grapheme cluster. Follow-ups OQ-E11 … OQ-E14. |
 | 2026-10-27 | DR-061 approved: GENERAL is a structural, domain-neutral baseline extension; MVP sources are legitimately supplied user sources; live web retrieval, captured web pages and a curated GENERAL corpus outside the MVP; USER_SUPPLIED is a domain-neutral route. PR-120/121/122/213/222 reconciled; PR-214 split from PR-213. |
